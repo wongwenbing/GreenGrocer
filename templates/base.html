@@ -9,13 +9,19 @@
     <link rel="icon" href="./favicon.ico" type="image/x-icon">
   </head>
   <body>
-    {% block navbar %}
-      {% includes 'navbar.html' %}
-    {% endblock %}
-    <div class = "container-fluid">
-        {% block content %}
+    <div class="row"> 
+      <div class="col-3">
+        {% block navbar %}
+          {% include 'navbar.html' %}
         {% endblock %}
+      </div>
+      <div class="col-9">
+          {% block content %}
+          {% endblock %}
+      </div>
     </div>
+      <div class = "container-fluid">
+      </div>
 
     {% block scripts %}
 
