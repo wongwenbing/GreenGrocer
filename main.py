@@ -17,10 +17,3 @@ def staff_login():
 
 if __name__ == '__main__': 
     app.run() 
-
-
-print(mydb)
-
-cursor = mydb.cursor()
-
-cursor.execute("CREATE TABLE customers (name VARCHAR(255), address VARCHAR(255))")
