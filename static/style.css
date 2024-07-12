@@ -1,0 +1,33 @@
+@font-face {
+    font-family: Normal;
+    src: url(Poppins/Poppins-Light.ttf);
+}
+
+@font-face {
+    font-family: Light;
+    src: url(Poppins/Poppins-ExtraLight.ttf);
+}
+
+@font-face {
+    font-family: h1;
+    src: url(Poppins/Poppins-Bold.ttf);
+}
+
+@font-face {
+    font-family: h3;
+    src: url(Poppins/Poppins-SemiBold.ttf);
+}
+
+@font-face {
+    font-family: h4;
+    src: url(Poppins/Poppins-Medium.ttf);
+}
+
+*{
+    font-family: normal;
+    font-size: 16px; 
+}
+
+.navbar{
+    font-family: light; 
+}
