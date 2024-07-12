@@ -1,5 +1,5 @@
 from flask import Flask , render_template, request, redirect, url_for
-from db import establish_connection
+from db import establish_connection, db
 
 app = Flask(__name__)
 
