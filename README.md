@@ -11,6 +11,7 @@ Green Grocer is an initiative to promote sustainable sourcing. This is to ensure
 
 ## Prerequisites
 Before you proceed ensure you obtain the following: 
+- create a database with MYSQL. Donwload MYSQL Workbench.
 - requirements.txt is all installed
 
 ## Features
