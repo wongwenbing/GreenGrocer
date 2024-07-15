@@ -1,0 +1,130 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #e8f5e9; /* Light green background */
+}
+
+header {
+    background-color: #ffffff;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 20px;
+}
+
+.logo {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 0;
+}
+
+nav {
+    margin: 20px 0;
+}
+
+nav a {
+    margin: 0 15px;
+    color: #333;
+    text-decoration: none;
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+}
+
+nav a .nav-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+}
+
+.search-bar {
+    width: 50%;
+    margin: 0 auto 20px;
+}
+
+.main-content {
+    padding: 40px 20px;
+}
+
+.main-content h2 {
+    font-size: 3rem;
+    color: #5cb85c;
+    margin-bottom: 10px;
+}
+
+.main-content .lead {
+    font-size: 1.5rem;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.buttons {
+    margin-bottom: 40px;
+}
+
+.food-circle {
+    position: relative;
+    margin: 0 auto;
+    width: 300px;
+    height: 300px;
+}
+
+.main-dish {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.other-dishes {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.dish {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: absolute;
+}
+
+.dish:nth-child(1) {
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.dish:nth-child(2) {
+    top: 25%;
+    left: 87%;
+    transform: translate(-50%, -50%);
+}
+
+.dish:nth-child(3) {
+    top: 75%;
+    left: 87%;
+    transform: translate(-50%, -50%);
+}
+
+.dish:nth-child(4) {
+    top: 100%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.dish:nth-child(5) {
+    top: 75%;
+    left: 13%;
+    transform: translate(-50%, -50%);
+}
+
+.dish:nth-child(6) {
+    top: 25%;
+    left: 13%;
+    transform: translate(-50%, -50%);
+}
