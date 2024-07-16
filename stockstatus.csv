@@ -1,0 +1,11 @@
+stock_status_id,stock_status
+SS1,In Stock
+SS2,Low Stock
+SS3,Out of Stock
+SS4,On Order
+SS5,Discontinued
+SS6,Backordered
+SS7,Available
+SS8,Arriving Soon
+SS9,Pre-order
+SS10,Sold Out
