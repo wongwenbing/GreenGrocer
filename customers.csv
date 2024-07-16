@@ -1,0 +1,70 @@
+customer_id,first_name,last_name,email,phone_number,address,block,postal_code,date_of_birth,points,preferred_contact_method
+CU2,John,Doe,johndoe@gmail.com,91234567,Ang Mo Kio Avenue 3,123,560016,8/17/1987,775,email
+CU3,Alice,Wong,alicewong@gmail.com,91234568,Choa Chu Kang Avenue 2,234,680543,12/23/1973,473,sms
+CU4,Bob,Smith,bobsmith@yahoo.com,91234569,Toa Payoh Central,345,320123,6/12/1990,896,email
+CU5,Charlie,Lim,charlielim@gmail.com,91234570,Woodlands Avenue 6,456,750123,3/29/2001,946,phone
+CU6,Diana,Lee,dianalee@gmail.com,91234571,Bukit Batok Street 11,567,650543,10/10/1983,52,phone
+CU7,Evan,Tan,evantan@yahoo.com,91234572,Hougang Avenue 8,678,530120,1/7/1978,453,email
+CU8,Fiona,Ng,fionang@gmail.com,91234573,Jurong East Street 21,789,610345,7/25/1992,953,email
+CU9,George,Teo,georgeteo@gmail.com,91234574,Sengkang East Road,890,540234,2/14/1985,370,phone
+CU10,Hannah,Koh,hannahkoh@gmail.com,91234575,MacPherson Road,901,370345,11/5/1969,874,phone
+CU11,Ivan,Chong,ivanchong@yahoo.com,91234576,Jurong West Avenue 5,112,600678,9/30/1997,913,email
+CU12,Julia,Tan,juliatan@gmail.com,91234577,Bukit Batok Central,223,650890,5/18/1981,746,phone
+CU13,Kevin,Loh,kevinloh@gmail.com,91234578,Yishun Avenue 9,334,760345,8/3/1975,692,phone
+CU14,Linda,Chan,lindachan@yahoo.com,91234579,Woodlands Ring Road,445,730678,3/11/1988,717,phone
+CU15,Mike,Goh,mikegoh@gmail.com,91234580,Serangoon North Avenue 4,556,550789,12/9/2000,217,phone
+CU16,Nina,Lim,ninalim@gmail.com,91234581,Bedok North Street 1,667,470890,7/4/1976,938,email
+CU17,Oliver,Wong,oliverwong@yahoo.com,91234582,Geylang East Avenue 2,778,380123,11/22/1993,849,phone
+CU18,Paul,Lee,paullee@gmail.com,91234583,Pasir Ris Drive 6,889,520234,1/30/1982,974,sms
+CU19,Quincy,Tan,quincytan@gmail.com,91234584,Bukit Panjang Ring Road,990,680678,6/28/1965,383,sms
+CU20,Rachel,Ng,rachelng@yahoo.com,91234585,Eunos Crescent,101,400123,9/15/1989,983,email
+CU21,Sam,Teo,samteo@gmail.com,91234586,Clementi Avenue 3,212,590345,4/21/1998,935,sms
+CU22,Tina,Koh,tinakoh@gmail.com,91234587,Taman Jurong,323,620456,11/17/1972,455,sms
+CU23,Umar,Chong,umarchong@yahoo.com,91234588,Upper Serangoon Road,434,580567,5/9/1984,573,phone
+CU24,Vera,Tan,veratan@gmail.com,91234589,Yew Tee Close,545,720678,8/26/1977,225,sms
+CU25,Will,Loh,willloh@gmail.com,91234590,Bishan Street 12,656,560789,10/14/1991,223,email
+CU26,Xena,Chan,xenachan@gmail.com,91234591,Bedok South Avenue 3,767,470890,2/7/2003,553,phone
+CU27,Yvonne,Goh,yvonnegoh@yahoo.com,91234592,Aljunied Crescent,878,370901,12/3/1980,650,email
+CU28,Zack,Lim,zacklim@gmail.com,91234593,Choa Chu Kang Drive,989,680012,3/27/1974,378,sms
+CU29,Amanda,Wong,amandawong@gmail.com,91234594,Hougang Street 21,100,530123,6/18/1994,218,sms
+CU30,Brian,Lee,brianlee@yahoo.com,91234595,Jurong East Avenue 1,211,610234,10/8/1986,614,sms
+CU31,Cindy,Tan,cindytan@gmail.com,91234596,Punggol Field,322,540345,1/22/1999,775,phone
+CU32,David,Ng,davidng@gmail.com,91234597,MacPherson Lane,433,370456,5/13/1968,788,email
+CU33,Ella,Teo,ellateo@yahoo.com,91234598,Bukit Batok Avenue 6,544,650567,8/20/1979,799,email
+CU34,Frank,Koh,frankkoh@gmail.com,91234599,Admiralty Drive,655,750678,4/10/2002,584,email
+CU35,Grace,Chong,gracechong@gmail.com,91234600,Toa Payoh Lorong 1,766,320789,9/4/1985,711,email
+CU36,Henry,Tan,henrytan@gmail.com,91234601,Clementi West Street 2,877,590890,12/29/1966,871,email
+CU37,Isla,Loh,islaloh@gmail.com,91234602,Bedok Reservoir Road,988,470123,2/15/1996,997,sms
+CU38,Jack,Chan,jackchan@yahoo.com,91234603,Tampines Avenue 1,199,520345,7/23/1981,18,sms
+CU39,Kathy,Goh,kathygoh@gmail.com,91234604,Bukit Panjang Road,210,680456,9/9/1973,654,email
+CU40,Leo,Lim,leolim@gmail.com,91234605,Hougang Avenue 10,321,530567,11/19/1990,568,email
+CU41,Mona,Wong,monawong@gmail.com,91234606,Toh Guan Road,432,610678,3/5/1975,521,sms
+CU42,Nick,Lee,nicklee@yahoo.com,91234607,Serangoon Central,543,580789,12/1/1987,165,email
+CU43,Olivia,Tan,oliviatan@gmail.com,91234608,Eunos Avenue 5,654,400890,8/7/2000,945,phone
+CU44,Pete,Ng,peteng@gmail.com,91234609,Taman Jurong Street 11,765,620123,10/25/1992,490,sms
+CU45,Quinn,Teo,quinnteo@yahoo.com,91234610,Yew Tee Avenue 3,876,720234,5/21/1978,220,phone
+CU46,Rita,Koh,ritakoh@gmail.com,91234611,Sengkang West Way,987,540345,6/16/1983,623,sms
+CU47,Steve,Chong,stevechong@gmail.com,91234612,Jurong West Central 1,198,600456,2/28/1967,1,email
+CU48,Tara,Tan,taratan@gmail.com,91234613,Bishan Street 13,309,560567,9/11/1991,209,email
+CU49,Uma,Loh,umaloh@yahoo.com,91234614,Toa Payoh East,420,320678,1/14/1997,979,sms
+CU50,Victor,Chan,victorchan@gmail.com,91234615,Bukit Batok West Avenue 7,531,650789,7/29/1974,978,email
+CU51,Sophia,Lim,sophia.lim@gmail.com,91234567,Bukit Batok East Avenue 4,420,650345,11/24/1989,86,sms
+CU52,Ethan,Tan,ethan.tan@gmail.com,87654321,Hougang Avenue 1,201,530890,1/18/1986,12,email
+CU53,Isabella,Ng,isabella.ng@gmail.com,82345678,Bedok North Road,312,470234,4/6/1994,45,email
+CU54,Liam,Ong,liam.ong@gmail.com,83456789,Upper Serangoon View,423,580901,12/31/1969,73,sms
+CU55,Olivia,Lee,olivia.lee@gmail.com,94567890,Yishun Street 51,534,760012,9/13/1980,27,phone
+CU56,Mason,Chong,mason.chong@gmail.com,97890123,Punggol Drive,645,540123,2/22/1976,59,email
+CU57,Ava,Koh,ava.koh@gmail.com,86543210,Jurong West Street 91,756,600234,6/3/1998,34,sms
+CU58,Noah,Teo,noah.teo@gmail.com,89012345,Bishan Street 22,867,560345,3/15/1982,92,sms
+CU59,Emma,Chan,emma.chan@gmail.com,90123456,Geylang Bahru,978,370123,8/11/1995,18,sms
+CU60,William,Low,william.low@gmail.com,83451234,Toa Payoh Lorong 8,109,320234,10/30/1971,67,phone
+CU61,Sophie,Yeo,sophie.yeo@gmail.com,82348901,Clementi Avenue 1,210,590456,5/27/1993,5,email
+CU62,Alexander,Goh,alexander.goh@gmail.com,94562134,Bukit Panjang Ring Road,321,680123,2/4/1984,700,email
+CU63,Charlotte,Tan,charlotte.tan@gmail.com,97893456,Bedok South Road,432,470345,6/19/1977,39,phone
+CU64,James,Wong,james.wong@gmail.com,91237890,Upper Serangoon Crescent,543,580234,11/1/2001,63,phone
+CU65,Amelia,Ang,amelia.ang@gmail.com,86546789,Woodlands Avenue 2,654,750567,7/8/1988,20,email
+CU66,Jacob,Chua,jacob.chua@gmail.com,89019012,Yishun Avenue 4,765,760345,4/24/1966,54,phone
+CU67,Mia,Lau,mia.lau@gmail.com,90122345,Sengkang Square,876,540456,12/5/1979,300,phone
+CU68,Michael,Foo,michael.foo@gmail.com,83456712,Hougang Central,987,530567,9/12/2003,16,phone
+CU69,Emily,Tan,emily.tan@gmail.com,82341234,Jurong East Street 24,198,610890,1/30/1990,71,phone
+CU70,Benjamin,Ho,benjamin.ho@gmail.com,94567893,Jurong West Avenue 2,309,600123,11/18/1981,30,email
