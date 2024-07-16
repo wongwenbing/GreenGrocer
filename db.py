@@ -15,14 +15,17 @@ def db_connector():
   user="avnadmin",
   write_timeout=timeout,
   )
-  return db
+  
+  cursor = db.cursor()
+  return db, cursor
 
-def establish_connection(connection): 
-  connection = connection.cursor()
-  return connection
+#def establish_connection(connection): 
+  #connection = connection.cursor()
+  
+ # return connection
 
-db= db_connector()
-cursor = establish_connection(db)
+#db= db_connector()
+#cursor = establish_connection(db)
 
 #DROP TABLE
 #cursor.execute("DROP TABLE suppliers")
@@ -30,23 +33,24 @@ cursor = establish_connection(db)
 #CREATE NEW TABLE 
 #cursor.execute("CREATE TABLE suppliers (supplier_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,supplier_name VARCHAR(255) NOT NULL,contact_name VARCHAR(255))")
 
-#test code to insert values
-sql = "INSERT INTO suppliers (supplier_name, contact_name) VALUES (%s, %s)"
-val = [
-  ('GrocerA', 'Iqbal'),
-  ('Redmart', 'Iggy'),
-  ('SAS', 'Rachel')
-]
-cursor.executemany(sql, val)
-#NEED TO COMMIT TO ENSURE TABLE AND DATABASE CAN BE UPDATED
-db.commit()
 
-print(cursor.rowcount,"record inserted.")
+
+#sql = """
+#INSERT INTO Products (product_ID, name, uom, usual_price, discount_percentage, category_id, country_of_origin, eco_info, ingredients, tags, stock_quantity)
+#VALUES ('PR1', 'Organic Apples', 'kg', '3.99', '1', 'CA101', 'USA', 'Products grown without synthetic pesticides or fertilizers prioritize natural cultivation methods.', 'Organic Apples', 'Organic, Fruits', 15);
+#"""
+
+
+#cursor.execute(sql)
+#NEED TO COMMIT TO ENSURE TABLE AND DATABASE CAN BE UPDATED
+#db.commit()
+
+#print(cursor.rowcount,"record inserted.")
 
 #SELECT statements
-cursor.execute("SElECT * FROM suppliers")
-result = cursor.fetchall()
-print("Results: ")
-for x in result: 
-  print(x)
+#cursor.execute("SElECT * FROM Products")
+#result = cursor.fetchall()
+#print("Results: ")
+#for x in result: 
+#  print(x)
 
