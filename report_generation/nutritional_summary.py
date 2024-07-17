@@ -1,11 +1,13 @@
 import pymysql 
 from db import establish_connection
 
-cursor = establish_connection()
+db,cursor = establish_connection()
 
 class cust_nut(): 
-    def __init(self, userid, purchase_date, item, category, qty, protein, carbs, fibre, keynutrients):
-        self.__userid = userid
+    count = 100
+    def __init(self, count, purchase_date, item, category, qty, protein, carbs, fibre, keynutrients):
+        count += 1
+        self.__userid = 'Nut' + count
         self.__purchase_date = purchase_date
         self.__item = item 
         self.__category = category
@@ -52,4 +54,8 @@ class cust_nut():
         return self.__fibre
     def get_keynutrients(self): 
         return self.__keynutrients
+    
+    def fetch_products(self):
+        query = "SELECT * FROM PRODUCTS"
+        cursor.execute(query)
         
