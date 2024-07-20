@@ -28,6 +28,44 @@
     font-size: 16px; 
 }
 
+.navbar h1{
+    font-family: h1;
+    font-size: 32px;
+}
+
 .navbar{
     font-family: light; 
+}
+
+.top{
+    display: flex; 
+}
+
+a.nav-link{
+    color: black;
+    padding: 6px 12px;
+}
+
+.nav-img{
+    display: flex;
+}
+
+.plus{
+    font-family: h3;
+}
+
+.nav-btn{
+    padding-left: 0;
+}
+
+.active{
+    background-color: rgba(27, 109, 0, 0.142);
+}
+
+.shit{
+    display: flex;
+}
+
+.leffot{
+    margin-right: 10px;
 }
