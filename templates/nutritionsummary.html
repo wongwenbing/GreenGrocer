@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %} My Nutrition Summary {% endblock %} 
+{% block content %} 
+<h1>My Nutritional Summary</h1>
+
+<div>
+    <table class="table table=striped">
+        <thead>
+            <tr>
+                <th>Month</th>
+                <th>Total Calories</th>
+                <th>Protein (g)</th>
+                <th>Carbohydrates (g)</th>
+                <th>Key Vitamins</th>
+                <th>View Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cust in customers %}
+            <tr>
+                <td>{{x.get_month()}}</td>
+                <td>{{x.get_calories()}}</td>
+                <td>{{x.get_protein()}}</td>
+                <td>{{x.get_carbs()}}</td>
+                <td>{{x.get_keynutrients()}}</td>
+                <td> <a href="/viewmonthly" class="btn">View</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

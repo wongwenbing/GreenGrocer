@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="2fd974b3-3471-480b-a237-3e19ff6c706d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/report_generation/Nut.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/report_generation/upload_nut.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/nutritionsummary.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/GreenGrocer.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography-42.0.8.dist-info/INSTALLER" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography-42.0.8.dist-info/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography-42.0.8.dist-info/LICENSE.APACHE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography-42.0.8.dist-info/LICENSE.BSD" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography-42.0.8.dist-info/METADATA" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography-42.0.8.dist-info/RECORD" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography-42.0.8.dist-info/REQUESTED" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography-42.0.8.dist-info/WHEEL" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography-42.0.8.dist-info/top_level.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/__about__.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/__about__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/_oid.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/_oid.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/backends/openssl/aead.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/backends/openssl/backend.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/backends/openssl/backend.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/backends/openssl/ciphers.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/backends/openssl/decode_asn1.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/bindings/_rust.abi3.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/bindings/_rust.abi3.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/bindings/_rust/__init__.pyi" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/bindings/_rust/__init__.pyi" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/bindings/_rust/asn1.pyi" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/bindings/_rust/asn1.pyi" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/bindings/_rust/ocsp.pyi" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/bindings/_rust/ocsp.pyi" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/bindings/_rust/openssl/__init__.pyi" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/bindings/_rust/openssl/__init__.pyi" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/bindings/_rust/openssl/aead.pyi" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/bindings/_rust/openssl/aead.pyi" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/bindings/_rust/openssl/keys.pyi" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/bindings/_rust/openssl/keys.pyi" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/bindings/_rust/pkcs7.pyi" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/bindings/_rust/pkcs7.pyi" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/bindings/_rust/x509.pyi" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/bindings/_rust/x509.pyi" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/bindings/openssl/_conditional.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/bindings/openssl/_conditional.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/bindings/openssl/binding.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/bindings/openssl/binding.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/primitives/_cipheralgorithm.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/primitives/_cipheralgorithm.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/primitives/asymmetric/ec.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/primitives/asymmetric/ec.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/primitives/asymmetric/rsa.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/primitives/asymmetric/rsa.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/primitives/ciphers/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/primitives/ciphers/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/primitives/ciphers/aead.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/primitives/ciphers/aead.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/primitives/ciphers/algorithms.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/primitives/ciphers/algorithms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/primitives/ciphers/base.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/primitives/ciphers/base.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/primitives/ciphers/modes.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/primitives/ciphers/modes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/primitives/hashes.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/primitives/hashes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/primitives/kdf/kbkdf.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/primitives/kdf/kbkdf.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/primitives/kdf/pbkdf2.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/primitives/kdf/pbkdf2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/primitives/keywrap.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/primitives/keywrap.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/primitives/padding.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/primitives/padding.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/primitives/serialization/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/primitives/serialization/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/primitives/serialization/pkcs12.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/primitives/serialization/pkcs12.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/primitives/serialization/pkcs7.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/primitives/serialization/pkcs7.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/primitives/serialization/ssh.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/hazmat/primitives/serialization/ssh.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/x509/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/x509/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/x509/base.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/x509/base.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/x509/extensions.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/x509/extensions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/x509/name.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/x509/name.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/x509/ocsp.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/x509/ocsp.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/x509/oid.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/x509/oid.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/x509/verification.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/cryptography/x509/verification.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy-2.0.0.dist-info/INSTALLER" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy-2.0.0.dist-info/LICENSE.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy-2.0.0.dist-info/METADATA" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy-2.0.0.dist-info/RECORD" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy-2.0.0.dist-info/WHEEL" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy-2.0.0.dist-info/entry_points.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/__config__.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/__config__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/_core/_multiarray_tests.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/_core/_multiarray_tests.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/_core/_multiarray_umath.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/_core/_multiarray_umath.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/_core/_operand_flag_tests.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/_core/_operand_flag_tests.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/_core/_rational_tests.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/_core/_rational_tests.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/_core/_simd.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/_core/_simd.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/_core/_struct_ufunc_tests.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/_core/_struct_ufunc_tests.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/_core/_umath_tests.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/_core/_umath_tests.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/_core/arrayprint.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/_core/arrayprint.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/_core/include/numpy/_numpyconfig.h" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/_core/include/numpy/_numpyconfig.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/_core/include/numpy/dtype_api.h" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/_core/include/numpy/dtype_api.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/_core/include/numpy/npy_2_compat.h" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/_core/include/numpy/npy_2_compat.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/_core/include/numpy/npy_common.h" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/_core/include/numpy/npy_common.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/_core/lib/libnpymath.a" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/_core/lib/libnpymath.a" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/_core/lib/pkgconfig/numpy.pc" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/_core/lib/pkgconfig/numpy.pc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/_core/numeric.pyi" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/_core/numeric.pyi" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/_core/tests/examples/limited_api/meson.build" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/_core/tests/examples/limited_api/meson.build" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/_core/tests/test_indexing.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/_core/tests/test_indexing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/_core/tests/test_limited_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/_core/tests/test_limited_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/_core/tests/test_multiarray.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/_core/tests/test_multiarray.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/_core/tests/test_stringdtype.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/_core/tests/test_stringdtype.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/_core/tests/test_strings.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/_core/tests/test_strings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/_pyinstaller/hook-numpy.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/_pyinstaller/hook-numpy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/f2py/_backends/_meson.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/f2py/_backends/_meson.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/f2py/_backends/meson.build.template" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/f2py/_backends/meson.build.template" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/f2py/f2py2e.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/f2py/f2py2e.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/f2py/tests/src/array_from_pyobj/wrapmodule.c" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/f2py/tests/src/array_from_pyobj/wrapmodule.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/f2py/tests/test_regression.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/f2py/tests/test_regression.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/f2py/tests/util.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/f2py/tests/util.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/fft/_pocketfft.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/fft/_pocketfft.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/fft/_pocketfft_umath.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/fft/_pocketfft_umath.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/fft/tests/test_pocketfft.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/fft/tests/test_pocketfft.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/lib/_arraysetops_impl.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/lib/_arraysetops_impl.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/lib/_function_base_impl.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/lib/_function_base_impl.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/lib/_npyio_impl.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/lib/_npyio_impl.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/lib/tests/test_arraysetops.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/lib/tests/test_arraysetops.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/lib/tests/test_function_base.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/lib/tests/test_function_base.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/lib/tests/test_loadtxt.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/lib/tests/test_loadtxt.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/linalg/_umath_linalg.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/linalg/_umath_linalg.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/linalg/lapack_lite.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/linalg/lapack_lite.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/ma/extras.pyi" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/ma/extras.pyi" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/random/_bounded_integers.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/random/_bounded_integers.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/random/_common.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/random/_common.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/random/_generator.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/random/_generator.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/random/_mt19937.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/random/_mt19937.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/random/_pcg64.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/random/_pcg64.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/random/_philox.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/random/_philox.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/random/_sfc64.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/random/_sfc64.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/random/bit_generator.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/random/bit_generator.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/random/lib/libnpyrandom.a" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/random/lib/libnpyrandom.a" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/random/mtrand.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/random/mtrand.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/version.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/numpy/version.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas-2.2.2.dist-info/RECORD" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas-2.2.2.dist-info/RECORD" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas-2.2.2.dist-info/WHEEL" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas-2.2.2.dist-info/WHEEL" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/algos.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/algos.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/arrays.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/arrays.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/byteswap.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/byteswap.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/groupby.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/groupby.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/hashing.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/hashing.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/hashtable.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/hashtable.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/index.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/index.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/indexing.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/indexing.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/internals.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/internals.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/interval.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/interval.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/join.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/join.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/json.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/json.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/lib.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/lib.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/missing.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/missing.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/ops.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/ops.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/ops_dispatch.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/ops_dispatch.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/pandas_datetime.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/pandas_datetime.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/pandas_parser.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/pandas_parser.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/parsers.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/parsers.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/properties.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/properties.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/reshape.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/reshape.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/sas.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/sas.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/sparse.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/sparse.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/testing.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/testing.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/tslib.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/tslib.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/tslibs/base.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/tslibs/base.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/tslibs/ccalendar.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/tslibs/ccalendar.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/tslibs/conversion.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/tslibs/conversion.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/tslibs/dtypes.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/tslibs/dtypes.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/tslibs/fields.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/tslibs/fields.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/tslibs/nattype.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/tslibs/nattype.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/tslibs/np_datetime.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/tslibs/np_datetime.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/tslibs/offsets.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/tslibs/offsets.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/tslibs/parsing.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/tslibs/parsing.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/tslibs/period.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/tslibs/period.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/tslibs/strptime.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/tslibs/strptime.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/tslibs/timedeltas.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/tslibs/timedeltas.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/tslibs/timestamps.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/tslibs/timestamps.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/tslibs/timezones.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/tslibs/timezones.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/tslibs/tzconversion.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/tslibs/tzconversion.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/tslibs/vectorized.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/tslibs/vectorized.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/window/aggregations.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/window/aggregations.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/window/indexers.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/window/indexers.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/writers.cpython-311-darwin.so" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/lib/python3.11/site-packages/pandas/_libs/writers.cpython-311-darwin.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/pyvenv.cfg" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/pyvenv.cfg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.vscode/launch.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
+  <component name="ProjectId" id="2jTBiNQAX9YbpcBw4eeNyGICPRw" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;wb__form&quot;
+  }
+}</component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="2fd974b3-3471-480b-a237-3e19ff6c706d" name="Changes" comment="" />
+      <created>1721401318104</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1721401318104</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+</project>
