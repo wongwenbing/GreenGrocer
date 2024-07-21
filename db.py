@@ -24,8 +24,7 @@ def db_connector():
   
  # return connection
 
-#db= db_connector()
-#cursor = establish_connection(db)
+#db, cursor= db_connector()
 
 #DROP TABLE
 #cursor.execute("DROP TABLE suppliers")
@@ -48,8 +47,9 @@ def db_connector():
 #print(cursor.rowcount,"record inserted.")
 
 #SELECT statements
-#cursor.execute("SElECT * FROM Products")
+#cursor.execute("SELECT * FROM Products WHERE product_id = 'PR1'")
 #result = cursor.fetchall()
+#print(result)
 #print("Results: ")
 #for x in result: 
 #  print(x)
