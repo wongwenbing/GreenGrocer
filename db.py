@@ -19,6 +19,7 @@ def db_connector():
   cursor = db.cursor()
   return db, cursor
 
+
 #def establish_connection(connection): 
   #connection = connection.cursor()
   

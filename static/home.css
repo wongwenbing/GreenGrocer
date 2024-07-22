@@ -29,8 +29,8 @@ nav a {
 }
 
 nav a .nav-icon {
-    width: 24px;
-    height: 24px;
+    width: 16px; /* Smaller size */
+    height: 16px; /* Smaller size */
     margin-right: 8px;
 }
 
@@ -53,10 +53,6 @@ nav a .nav-icon {
     font-size: 1.5rem;
     color: #555;
     margin-bottom: 20px;
-}
-
-.buttons {
-    margin-bottom: 40px;
 }
 
 .food-circle {
@@ -128,3 +124,82 @@ nav a .nav-icon {
     left: 13%;
     transform: translate(-50%, -50%);
 }
+
+
+   /* Your additional styles */
+   body {
+    font-family: Arial, sans-serif;
+    background-color: #e8f5e9; /* Light green background */
+  }
+
+  header {
+    background-color: #ffffff;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 20px;
+  }
+
+  .logo {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 0;
+  }
+
+  nav {
+    margin: 20px 0;
+  }
+
+  nav a {
+    margin: 0 15px;
+    color: #333;
+    text-decoration: none;
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .search-bar {
+    width: 50%;
+    margin: 0 auto 20px;
+  }
+
+  .main-content {
+    padding: 40px 20px;
+  }
+
+  .main-content h2 {
+    font-size: 3rem;
+    color: #5cb85c;
+    margin-bottom: 10px;
+  }
+
+  .main-content .lead {
+    font-size: 1.5rem;
+    color: #555;
+    margin-bottom: 20px;
+  }
+
+  /* New CSS styles for images */
+  .banner-image {
+    width: 100%;  /* Adjust width as needed */
+    height: 200px; /* Adjust height as needed */
+    object-fit: cover; /* Ensure the image covers the area */
+  }
+
+  .image-row {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping to multiple lines if needed */
+    justify-content: center; /* Center images horizontally */
+    gap: 20px; /* Space between images */
+    margin-top: 20px;
+  }
+
+  .square-image {
+    width: 150px; /* Adjust size as needed */
+    height: 150px; /* Adjust size as needed */
+    border-radius: 8px;  /* Rounded corners for a modern look */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .image-text {
+    text-align: center;
+  }
