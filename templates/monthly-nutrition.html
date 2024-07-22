@@ -1,19 +1,18 @@
 {% extends "base.html" %}
 {% block title %} My Nutrition Summary {% endblock %} 
 {% block content %} 
-<h1>My Nutritional Summary</h1>
+<h1>My Nutritional Summary for {{x.get_month}}</h1>
 
 <div>
     <table class="table table=striped">
         <thead>
             <tr>
-                <th>Month</th>
-                <th>Products</th>
+                <th>Item Purchased</th>
+                <th>Category</th>
                 <th>Total Calories</th>
                 <th>Protein (g)</th>
                 <th>Carbohydrates (g)</th>
                 <th>Key Vitamins</th>
-                <th>View Details</th>
             </tr>
         </thead>
         <tbody>

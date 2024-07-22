@@ -4,6 +4,7 @@ from report_generation.nutritional_summary import custnutrition
 
 app = Flask(__name__)
 
+db, cursor = db_connector()
 
 @app.route('/home')
 def home(): 
@@ -17,10 +18,8 @@ def customer_login():
 def staff_login():
     return render_template('/staff.html')
 
-@app.route('/nutrition')
+@app.route('/')
 def view_nutrition(): 
-    db, cursor = db_connector()
-    # Fetch data from database
     cursor.execute("SELECT nut_id, cust_id, month, total_calories, protein, carbs, vitamins FROM Customer_Nutrition")
     result = cursor.fetchall()
 
@@ -29,7 +28,14 @@ def view_nutrition():
     
     return render_template('nutritionsummary.html', count=len(nutrition_objects), customers = nutrition_objects)
 
+@app.route('/month-nutrition')
+def monthly_nutrition(): 
+    cursor.execute("")
+    return render_template('monthly-nutritional.html')
 
+#@app.route('/download-csv', methods=['GET'])
+#def download_csv(): 
+    
 
 if __name__ == '__main__': 
     app.run() 

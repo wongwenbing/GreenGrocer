@@ -28,14 +28,5 @@ class custnutrition:
         return self.carbs
     def get_vitamins(self): 
         return self.vitamins
-    
-
-# Fetch data from database
-cursor.execute("SELECT nut_id, cust_id, month, total_calories, protein, carbs, vitamins FROM Customer_Nutrition")
-result = cursor.fetchall()
-
-nutrition_objects = [custnutrition(**entry) for entry in result]
-
-# Display the objects
-for obj in nutrition_objects:
-    print(obj)
+    def get_custid(self): 
+        return self.cust_id
