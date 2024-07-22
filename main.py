@@ -17,17 +17,17 @@ def customer_login():
 def staff_login():
     return render_template('/staff.html')
 
-@app.route('/')
+@app.route('/nutrition')
 def view_nutrition(): 
     db, cursor = db_connector()
-    customer = []   
-    cursor.execute("SElECT * FROM Customer_Nutrition")
+    # Fetch data from database
+    cursor.execute("SELECT nut_id, cust_id, month, total_calories, protein, carbs, vitamins FROM Customer_Nutrition")
     result = cursor.fetchall()
-    print("Results: ")
-    for x in result: 
-        customer.append(x)
+
+    nutrition_objects = [custnutrition(**entry) for entry in result]
+
     
-    return render_template('nutritionsummary.html', count=len(customer), customers = customer, x=x)
+    return render_template('nutritionsummary.html', count=len(nutrition_objects), customers = nutrition_objects)
 
 
 
