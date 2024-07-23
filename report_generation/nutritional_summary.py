@@ -1,9 +1,3 @@
-import pymysql
-import sys
-sys.path.append('../GreenGrocer')
-from db import db_connector
-
-db, cursor = db_connector()
 
 class custnutrition:
     def __init__(self, nut_id, cust_id, month, total_calories, protein, carbs, vitamins):
