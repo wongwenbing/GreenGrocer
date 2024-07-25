@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %} My Nutrition Summary {% endblock %} 
+{% block content %} 
+<h1>Graphs</h1>
+
+<div id="pie-chart">
+    <script type="text/javascript">
+        var graph = {{ graph_json | safe }}; 
+
+        Plotly.plot('pie-chart', graph, {} );
+    </script>
+</div>
+
+{% endblock %}

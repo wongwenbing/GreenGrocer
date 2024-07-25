@@ -1,9 +1,11 @@
 from flask import Flask , render_template, request, redirect, url_for
 from db import db_connector
 from report_generation.nutritional_summary import custnutrition
+from report_generation.graphs import generate_pie_chart
 
 app = Flask(__name__)
 
+db,cursor = db_connector()
 
 @app.route('/home')
 def home(): 
@@ -17,9 +19,8 @@ def customer_login():
 def staff_login():
     return render_template('/staff.html')
 
-@app.route('/nutrition')
+@app.route('/nutritionn')
 def view_nutrition(): 
-    db, cursor = db_connector()
     # Fetch data from database
     cursor.execute("SELECT nut_id, cust_id, month, total_calories, protein, carbs, vitamins FROM Customer_Nutrition")
     result = cursor.fetchall()
@@ -29,7 +30,11 @@ def view_nutrition():
     
     return render_template('nutritionsummary.html', count=len(nutrition_objects), customers = nutrition_objects)
 
+@app.route('/')
+def reports(): 
+    graph_json = generate_pie_chart(cursor)
 
+    return render_template('graphs.html', graph_json=graph_json)
 
 if __name__ == '__main__': 
     app.run() 
