@@ -20,7 +20,7 @@ def db_connector():
   return db, cursor
   
 
-#db, cursor= db_connector()
+# db, cursor= db_connector()
 
 #DROP TABLE
 #cursor.execute("DROP TABLE suppliers")
@@ -43,10 +43,10 @@ def db_connector():
 #print(cursor.rowcount,"record inserted.")
 
 #SELECT statements
-#cursor.execute("SELECT * FROM Products")
-#result = cursor.fetchall()
-#print(result)
-#print("Results: ")
+# cursor.execute("SELECT * FROM Products")
+# result = cursor.fetchall()
+# print(result)
+# print("Results: ")
 #for x in result: 
 #  print(x)
 
