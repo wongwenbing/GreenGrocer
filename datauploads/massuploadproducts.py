@@ -8,14 +8,14 @@ from db import db_connector
 db, cursor = db_connector()
 
 sql = """
-INSERT INTO Products (product_ID, name, uom, usual_price,category_id, country_of_origin, eco_info, ingredients, tags)
-VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);
+INSERT INTO Products (product_ID, category_id, supplier_id, name, uom, usual_price, country_of_origin, eco_info, ingredients, tags, discount_id)
+VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
 """
-df = pd.read_csv('products.csv')
+df = pd.read_csv('products table - Sheet1.csv')
 df = df.astype(str)
-print(df.dtypes)
+print(df)
 list = []
-for i, row in df.iterrows(): 
+for i, row in df.iterrows():
     x = tuple(row)
     list.append(x)
 
@@ -25,6 +25,6 @@ db.commit()
 cursor.execute("SElECT * FROM Products")
 result = cursor.fetchall()
 print("Results: ")
-for x in result: 
+for x in result:
   print(x)
 

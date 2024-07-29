@@ -8,7 +8,7 @@ db, cursor = db_connector()
 
 db,cursor = db_connector()
 
-@app.route('/')
+@app.route('/home')
 def home(): 
     return render_template('homepage.html')
 
