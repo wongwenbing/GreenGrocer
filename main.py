@@ -11,9 +11,9 @@ db, cursor = db_connector()
 db,cursor = db_connector()
 >>>>>>> main
 
-@app.route('/home')
+@app.route('/')
 def home(): 
-    return render_template('custhome.html')
+    return render_template('homepage.html')
 
 @app.route('/customer')
 def customer_login(): 
@@ -23,11 +23,15 @@ def customer_login():
 def staff_login():
     return render_template('/staff.html')
 
+<<<<<<< Updated upstream
 <<<<<<< HEAD
 @app.route('/')
 def view_nutrition(): 
 =======
 @app.route('/nutritionn')
+=======
+@app.route('/nutrition')
+>>>>>>> Stashed changes
 def view_nutrition(): 
     # Fetch data from database
 >>>>>>> main
@@ -36,6 +40,7 @@ def view_nutrition():
     nutrition_objects = [custnutrition(**entry) for entry in result]
     return render_template('nutritionsummary.html', count=len(nutrition_objects), customers = nutrition_objects)
 
+<<<<<<< Updated upstream
 <<<<<<< HEAD
 @app.route('/month-nutrition')
 def monthly_nutrition(): 
@@ -47,6 +52,9 @@ def monthly_nutrition():
     
 =======
 @app.route('/')
+=======
+@app.route('/reports')
+>>>>>>> Stashed changes
 def reports(): 
     graph_json = generate_pie_chart(cursor)
 
