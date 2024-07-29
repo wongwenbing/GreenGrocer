@@ -1,24 +1,22 @@
 {% extends "base.html" %}
 {% block title %} My Nutrition Summary {% endblock %} 
 {% block content %} 
-<h1>My Nutritional Summary</h1>
-filter
-<a>
+<h1>My Nutritional Summary for {{x.get_month}}</h1>
+
 <div>
-    <table class="table table-striped">
+    <table class="table table=striped">
         <thead>
             <tr>
-                <th>Month</th>
+                <th>Item Purchased</th>
+                <th>Category</th>
                 <th>Total Calories</th>
                 <th>Protein (g)</th>
                 <th>Carbohydrates (g)</th>
                 <th>Key Vitamins</th>
-                <th>View Details</th>
             </tr>
         </thead>
         <tbody>
             {% for x in customers %}
-                {% if x.get_custid() == "CU2" %}
             <tr>
                 <td>{{x.get_month()}}</td>
                 <td>{{x.get_calories()}}</td>
@@ -26,7 +24,6 @@ filter
                 <td>{{x.get_carbs()}}</td>
                 <td>{{x.get_vitamins()}}</td>
                 <td> <a href="/viewmonthly" class="btn">View</a></td>
-                {% endif %}
             </tr>
             {% endfor %}
         </tbody>

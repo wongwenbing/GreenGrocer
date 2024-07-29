@@ -21,7 +21,6 @@ class CustomerReport():
     def set_lastupdated(self): 
         self.__lastupdated = date.today()
 
-    
     def get_report_id(self): 
         return self.__custreportid
     def get_custid(self): 
