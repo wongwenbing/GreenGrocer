@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %} My Order Invoice {% endblock %}
+{% block content %}
+
+<h2>Invoice</h2>
+<a href=""">Print</a>
+<a href="">Export</a>
+<div class="d-flex justify-content-between">
+    <div class="">
+        <p>To: {{cust.name}}
+            <br>
+            Address: {{cust.address}}<br>
+            Postal Code: {{cust.postal}} <br>
+        </p>
+</div>
+<div class="">
+    Invoice
+    ID: <br>
+    Issue Date: <br>
+    Status: <br>
+</div>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Description</th>
+            <th>Qty</th>
+            <th>Unit Price</th>
+            <th>Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+    {{for i in products}}
+    <tr>
+        <td></td>
+        <td>{{i.products}}</td>
+        <td>{{i.qty}}</td>
+        <td>{{i.unitprice}}</td>
+        <td>{{i.total}}</td>
+    </tr>
+    </tbody>
+</table>
+Subtotaal <br>
+GST (9%) <br>
+Total Amount
+
+
+{% endblock %}
