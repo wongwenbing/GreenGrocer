@@ -3,14 +3,14 @@
 {% block content %}
 
 <h2>Invoice</h2>
-<a href=""">Print</a>
+<a href="">Print</a>
 <a href="">Export</a>
 <div class="d-flex justify-content-between">
     <div class="">
-        <p>To: {{cust.name}}
+        <p>To:
             <br>
-            Address: {{cust.address}}<br>
-            Postal Code: {{cust.postal}} <br>
+            Address:<br>
+            Postal Code:  <br>
         </p>
 </div>
 <div class="">
@@ -31,19 +31,21 @@
         </tr>
     </thead>
     <tbody>
-    {{for i in products}}
+
+    {% for i in products %}
     <tr>
-        <td></td>
-        <td>{{i.products}}</td>
+        <td>{{loop.index}}</td>
+        <td>{{i.item}}</td>
         <td>{{i.qty}}</td>
-        <td>{{i.unitprice}}</td>
+        <td>{{i.price}}</td>
         <td>{{i.total}}</td>
     </tr>
+    {% endfor %}
     </tbody>
 </table>
-Subtotaal <br>
-GST (9%) <br>
-Total Amount
+Subtotaal {{ "%0.2f" | format(subtotal | float) }}<br>
+GST (9%) {{ "%0.2f" | format(gst | float) }}<br>
+Total Amount {{ "%0.2f" | format(grandtotal | float) }}
 
 
 {% endblock %}

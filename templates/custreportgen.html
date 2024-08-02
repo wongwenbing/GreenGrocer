@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %} Generate Reports {% endblock %}
+{% block content %}
+ <h1>Customer Report</h1>
+        <form method="POST" action="">
+            <div>
+                <label for="start_date">Report Dates</label>
+                {{ form.start_date() }}
+                {{ form.end_date() }}
+            </div>
+            <div>
+                <label for="fields_needed">Fields Needed</label>
+                {{ form.type_of_report() }}
+                <label for="description">Report Description</label>
+                {{ form.description() }}
+            </div>
+            <div>
+                <input type="submit" value="Submit">
+            </div>
+        </form>
+{% endblock %}
