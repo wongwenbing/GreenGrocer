@@ -1,9 +1,13 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from db import db_connector
+import pymysql
 from report_generation.nutritional_summary import custnutrition
 from report_generation.graphs import generate_pie_chart
 from report_generation.invoice import InvoiceCustomer, Items
 from report_generation.reportgen import CustReport, customer_report, StaffReport, staff_report
+from db import db_connector
+from account_management.forms import CreateUserForm
+
 
 app = Flask(__name__)
 
@@ -26,6 +30,109 @@ def staff_login():
 
 #Insert Account Generation here
 
+@app.route('/')
+def index():
+    return redirect(url_for('login'))
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        
+        db, c = db_connector()
+        c.execute('SELECT * FROM users WHERE email = %s', (email))
+        user = c.fetchone()
+        db.close()
+        
+        if user and user['password'] == password:
+            session['id'] = user['id']
+            flash('Logged in successfully!', 'success')
+            return redirect(url_for('profile'))
+        else:
+            flash('Invalid email or password', 'danger')
+    
+    return render_template('login_bootstrap.html')
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        phone_number = request.form['phone_number']
+        address = request.form['address']
+        date_of_birth = request.form['date_of_birth']
+        password = request.form['password']
+        
+        # Log the form data for debugging
+        print(f"Received signup data: {name}, {email}, {phone_number}, {address}, {date_of_birth}, {password}")
+        
+        if not email or not password:
+            flash('Email and Password are required fields.', 'danger')
+            return render_template('signup_bootstrap.html')
+
+        try:
+            db, c = db_connector()
+            c.execute('''
+                INSERT INTO users (name, email, phone_number, address, date_of_birth, password)
+                VALUES (%s, %s, %s, %s, %s, %s)
+            ''', (name, email, phone_number, address, date_of_birth, password))
+            db.commit()
+            flash('Account created successfully! Please login.', 'success')
+            print('success')
+            return redirect(url_for('login'))
+        except pymysql.IntegrityError:
+            flash('Email already registered.', 'danger')
+        except Exception as e:
+            flash(f'An error occurred: {str(e)}', 'danger')
+        finally:
+            db.close()
+    return render_template('signup_bootstrap.html')
+
+@app.route('/profile', methods=['GET', 'POST'])
+def profile():
+    if 'id' not in session:
+        flash('You are not logged in!', 'danger')
+        return redirect(url_for('login'))
+    
+    id = session['id']
+    db, c = db_connector()
+
+    if request.method == 'POST':
+        if 'delete_account' in request.form:
+            c.execute('DELETE FROM users WHERE id = %s', (id))
+            db.commit()
+            db.close()
+            session.pop('id', None)
+            flash('Account deleted successfully!', 'success')
+            return redirect(url_for('signup'))
+        else:
+            name = request.form['name']
+            email  = request.form['email']
+            phone_number = request.form['phone_number']
+            address = request.form['address']
+            date_of_birth = request.form['date_of_birth']
+            val = (name, email , phone_number, address, date_of_birth, id)
+            query = """
+UPDATE users
+SET name = %s, email  = %s, phone_number = %s, address = %s, date_of_birth = %s
+WHERE id = %s
+"""
+            c.execute(query, val)
+            db.commit()
+            flash('Profile updated successfully!', 'success')
+    
+    c.execute('SELECT * FROM users WHERE id = %s', (id))
+    user = c.fetchone()
+    db.close()
+    
+    return render_template('profile.html', user=user)
+
+@app.route('/logout')
+def logout():
+    session.pop('id', None)
+    flash('Logged out successfully!', 'success')
+    return redirect(url_for('login'))
 
 
 
@@ -95,7 +202,7 @@ def cust_generate_report():
     return render_template('custreportgen.html', form=form)
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/staffreport', methods=['GET', 'POST'])
 def staff_generate_report():
     form = StaffReport(request.form)
     if request.method == "POST" and form.validate():
