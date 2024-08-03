@@ -5,11 +5,13 @@ from report_generation.nutritional_summary import custnutrition
 from report_generation.graphs import generate_pie_chart
 from report_generation.invoice import InvoiceCustomer, Items
 from report_generation.reportgen import CustReport, customer_report, StaffReport, staff_report
-from db import db_connector
 from account_management.forms import CreateUserForm
-
+import os
 
 app = Flask(__name__)
+
+app.secret_key = os.urandom(24)  # Generates a random secret key each time
+
 
 db, cursor = db_connector()
 
@@ -28,7 +30,9 @@ def customer_login():
 def staff_login():
     return render_template('/staff.html')
 
-#Insert Account Generation here
+# Insert Account Generation here
+
+# Login, Sign up, Profile
 
 @app.route('/')
 def index():
@@ -40,9 +44,9 @@ def login():
         email = request.form['email']
         password = request.form['password']
         
-        db, c = db_connector()
-        c.execute('SELECT * FROM users WHERE email = %s', (email))
-        user = c.fetchone()
+        db, cursor = db_connector()
+        cursor.execute('SELECT * FROM users WHERE email = %s', (email))
+        user = cursor.fetchone()
         db.close()
         
         if user and user['password'] == password:
@@ -72,8 +76,8 @@ def signup():
             return render_template('signup_bootstrap.html')
 
         try:
-            db, c = db_connector()
-            c.execute('''
+            db, cursor = db_connector()
+            cursor.execute('''
                 INSERT INTO users (name, email, phone_number, address, date_of_birth, password)
                 VALUES (%s, %s, %s, %s, %s, %s)
             ''', (name, email, phone_number, address, date_of_birth, password))
@@ -96,11 +100,11 @@ def profile():
         return redirect(url_for('login'))
     
     id = session['id']
-    db, c = db_connector()
+    db, cursor = db_connector()
 
     if request.method == 'POST':
         if 'delete_account' in request.form:
-            c.execute('DELETE FROM users WHERE id = %s', (id))
+            cursor.execute('DELETE FROM users WHERE id = %s', (id))
             db.commit()
             db.close()
             session.pop('id', None)
@@ -118,12 +122,12 @@ UPDATE users
 SET name = %s, email  = %s, phone_number = %s, address = %s, date_of_birth = %s
 WHERE id = %s
 """
-            c.execute(query, val)
+            cursor.execute(query, val)
             db.commit()
             flash('Profile updated successfully!', 'success')
     
-    c.execute('SELECT * FROM users WHERE id = %s', (id))
-    user = c.fetchone()
+    cursor.execute('SELECT * FROM users WHERE id = %s', (id))
+    user = cursor.fetchone()
     db.close()
     
     return render_template('profile.html', user=user)
