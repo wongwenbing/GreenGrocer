@@ -1,14 +1,18 @@
 import sys
 sys.path.append('../GreenGrocer')
 from db import db_connector
+
+class Invoice:
+    def __init__(self, invoice_id, invoice_date):
+        self.invoice_id = invoice_id
+        self.invoice_date = invoice_date
+
 class InvoiceCustomer:
     def __init__(self):
-        self.name = ""
-        self.email = ""
-        self.phonenumber = ""
-        self.address = ""
-        self.block = ""
-        self.postal = ""
+        self.name = name
+        self.email = email
+        self.phonenumber = phone
+        self.address = address
         self.datetime = ""
         self.total = ""
 

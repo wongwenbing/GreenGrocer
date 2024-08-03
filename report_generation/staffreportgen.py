@@ -1,7 +1,19 @@
-from wtforms import Form, RadioField, SelectMultipleField, TextAreaField, validators
+import pandas as pd
+import json
+import sys
+#set system paath
+sys.path.append('../GreenGrocer')
+from db import db_connector
+db, cursor = db_connector()
 
-class CreateCustReport(Form): 
-    description = TextAreaField('Description', [validators.length(1)])
-    categories = SelectMultipleField(
-        choices = [('1', 'Customer Sign Up Date'), ('2', 'Customer Date')]
-    )
+class SalesReport:
+
+    def get_ordercount(self):
+        query = """
+        SELECT COUNT(order_id) AS orderCount FROM Orders;
+        """
+        cursor.execute(query)
+        rows = cursor.fetchone()
+        print(rows)
+        ordercount = rows['orderCount']
+        print(ordercount)

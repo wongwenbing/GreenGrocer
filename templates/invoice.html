@@ -41,11 +41,31 @@
         <td>{{i.total}}</td>
     </tr>
     {% endfor %}
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>Subtotal</td>
+        <td>{{ "%0.2f" | format(subtotal | float) }}</td>
+    </tr>
+        <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>GST (9%)</td>
+        <td>{{ "%0.2f" | format(gst | float) }}</td>
+    </tr>
+        <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>Total Amount</td>
+        <td>{{ "%0.2f" | format(grandtotal | float) }}</td>
+    </tr>
     </tbody>
 </table>
-Subtotaal {{ "%0.2f" | format(subtotal | float) }}<br>
-GST (9%) {{ "%0.2f" | format(gst | float) }}<br>
-Total Amount {{ "%0.2f" | format(grandtotal | float) }}
+ <br>
+ <br>
 
 
 {% endblock %}
