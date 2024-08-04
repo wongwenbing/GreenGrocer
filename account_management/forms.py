@@ -25,5 +25,6 @@ class CreateUserForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     phone_number = StringField('Phone', validators=[DataRequired()])
     address = StringField('Address', validators=[DataRequired()])
-    options = [('Admin'), ('Employee'), ('Manager')]
-    role = SelectField('Roles', choices=options)
+    date_of_birth = DateField('Date of Birth', validators=[DataRequired()])
+    submit = SubmitField('Submit')
+

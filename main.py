@@ -5,7 +5,7 @@ from report_generation.nutritional_summary import custnutrition
 from report_generation.graphs import generate_pie_chart
 from report_generation.invoice import InvoiceCustomer, Items
 from report_generation.reportgen import CustReport, customer_report, StaffReport, staff_report
-from account_management.forms import CreateUserForm, RegistrationForm
+from account_management.forms import CreateUserForm, RegistrationForm, LoginForm
 import os
 
 app = Flask(__name__)
@@ -161,6 +161,105 @@ def logout():
     flash('Logged out successfully!', 'success')
     return redirect(url_for('login'))
 
+
+# Staff assist with customer account (Create)
+
+@app.route('/createCustomers', methods=['GET', 'POST'])
+def create_user():
+    form = CreateUserForm(request.form)
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        phone_number = request.form['phone_number']
+        address = request.form['address']
+        date_of_birth = request.form['date_of_birth']
+        default_password = "P@ssw0rd"
+
+        try:
+            db, cursor = db_connector()
+            cursor.execute('''
+                INSERT INTO users (name, email, phone_number, address, date_of_birth, password)
+                VALUES (%s, %s, %s, %s, %s, %s)
+            ''', (name, email, phone_number, address, date_of_birth, default_password))
+            db.commit()
+            
+            flash('Account created successfully!', 'success')
+        except pymysql.IntegrityError:
+            flash('Email already registered.', 'danger')
+
+        finally:
+            db.close()
+
+        return redirect(url_for('retrieve_customers'))
+    return render_template('createCustomers.html', form=form)
+
+
+# Staff assist with customer account (Retrieve)
+
+@app.route('/retrieveCustomers')
+def retrieve_customers():
+    
+    db, cursor = db_connector()
+    cursor.execute('SELECT id, name, email, phone_number, address, date_of_birth FROM users')
+
+    users = cursor.fetchall()
+    db.close()
+
+    return render_template('retrieveCustomers.html', count=len(users), users_list=users)
+
+
+# Staff assist with customer account (Update)
+
+
+@app.route('/updateUser/<id>/', methods=['GET', 'POST'])
+def update_user(id):
+    update_user_form = CreateUserForm(request.form)
+    if request.method == 'POST' and update_user_form.validate():
+        name = request.form['name']
+        email = request.form['email']
+        phone_number = request.form['phone_number']
+        address = request.form['address']
+        date_of_birth = request.form['date_of_birth']
+        val = (name, email, phone_number, address, date_of_birth, id)
+        query = """
+UPDATE users
+SET name = %s, email = %s, phone_number = %s, address = %s, date_of_birth = %s
+WHERE id = %s
+"""
+        db, cursor = db_connector()
+
+        cursor.execute(query, val)
+        db.commit()
+        db.close()
+
+        flash('Profile updated successfully!', 'success')
+
+        return redirect(url_for('retrieve_customers'))
+    else:
+        db, cursor = db_connector()
+        cursor.execute('SELECT * FROM users WHERE id = %s', (id))
+        user = cursor.fetchone()
+        db.close()
+
+        update_user_form.name.data = user['name']
+        update_user_form.email.data = user['email']
+        update_user_form.phone_number.data = user['phone_number']
+        update_user_form.address.data = user['address']
+        update_user_form.date_of_birth.data = user['date_of_birth']
+
+        return render_template('updateCustomers.html', form=update_user_form)
+
+
+# Staff assist with customer account (Delete)
+
+@app.route('/deleteUser/<id>', methods=['POST'])
+def delete_user(id):
+    db, cursor = db_connector()
+    cursor.execute('DELETE FROM users WHERE id = %s', (id))
+    db.commit()
+    db.close()
+    flash('User deleted successfully!', 'success')
+    return redirect(url_for('retrieve_customers'))
 
 
 
