@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-4">
+    <h1 class="mb-4">Shopping Cart</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart_items %}
+                <tr>
+                    <td>{{ item.name }}</td>
+                    <td>
+                        <form action="{{ url_for('update_cart_item', product_id=item.product_id) }}" method="POST" class="update-form">
+                            <input type="hidden" name="customer_id" value="{{ customer_id }}">
+                            <input type="number" name="quantity" value="{{ item.quantity }}" min="1" class="form-control quantity-input" data-discounted-price="{{ item.discounted_price }}">
+                            <button type="submit" class="btn btn-warning mt-2">Update</button>
+                        </form>
+                    </td>
+                    <td class="price">${{item.discounted_price * item.quantity }}</td>
+                    <td>
+                        <!-- Form to delete cart item -->
+                        <form action="{{ url_for('delete_cart_item', product_id=item.product_id) }}" method="POST">
+                            <input type="hidden" name="customer_id" value="{{ customer_id }}">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <form action="{{ url_for('clear_cart') }}" method="POST">
+        <input type="hidden" name="customer_id" value="{{ customer_id }}">
+        <button type="submit" class="btn btn-danger">Clear Cart</button>
+    </form>
+    <a href="{{ url_for('products') }}" class="btn btn-secondary mt-2">Back to Products</a>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const quantityInputs = document.querySelectorAll('.quantity-input');
+
+        quantityInputs.forEach(input => {
+            input.addEventListener('input', function() {
+                const quantity = parseFloat(this.value);  // Convert quantity to a float
+                const discountedPrice = parseFloat(this.dataset.discountedPrice);  // Convert discountedPrice to a float
+                const priceElement = this.closest('tr').querySelector('.price');
+                const totalPrice = (quantity * discountedPrice).toFixed(2);  // Calculate and format to 2 decimal places
+                priceElement.textContent = `$${totalPrice}`;  // Display the total price with a dollar sign
+            });
+
+            // Initialize price display on page load
+            const quantity = parseFloat(input.value);
+            const discountedPrice = parseFloat(input.dataset.discountedPrice);
+            const priceElement = input.closest('tr').querySelector('.price');
+            const totalPrice = (quantity * discountedPrice).toFixed(2);
+            priceElement.textContent = `$${totalPrice}`;
+        });
+    });
+</script>
+</body>
+</html>
