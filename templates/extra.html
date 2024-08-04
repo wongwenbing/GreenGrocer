@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Shop</title>
+  <!-- Bootstrap 4 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons (Bootstrap 4 does not include icons by default, so using a separate CDN) -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container-fluid py-5">
+    <div class="container">
+      <h1 class="mb-4">Grocery Shop</h1>
+
+      <!-- Dynamic Breadcrumb Navigation -->
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="/products">All Categories</a></li>
+          {% if selected_category_name and selected_category_name != 'All Categories' %}
+            <li class="breadcrumb-item active" aria-current="page">{{ selected_category_name }}</li>
+          {% endif %}
+        </ol>
+      </nav>
+
+      <div class="row mb-4">
+        <!-- Search and Sorting -->
+        <div class="col-lg-12">
+          <div class="row">
+            <div class="col-xl-3 mb-3">
+              <div class="input-group">
+                <input type="search" class="form-control" placeholder="Search keywords" aria-label="Search keywords">
+                <div class="input-group-append">
+                  <span class="input-group-text"><i class="fas fa-search"></i></span>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 mb-3">
+              <div class="bg-light p-3 rounded d-flex justify-content-between">
+                <label for="sorting">Default Sorting:</label>
+                <select id="sorting" class="form-control">
+                  <option value="nothing">Nothing</option>
+                  <option value="popularity">Popularity</option>
+                  <option value="organic">Organic</option>
+                  <option value="fantastic">Fantastic</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <!-- Sidebar for Categories -->
+          <div class="col-lg-3 mb-4">
+            <div class="sidebar">
+              <h4>Categories</h4>
+              <ul class="list-unstyled">
+                <!-- Main Categories -->
+                {% for category in main_categories %}
+                  <li>
+                    <a href="/Products?category_id={{ category.category_id }}">{{ category.category_name }}</a>
+                    <!-- Subcategories for this main category -->
+                    {% if category.category_id in subcategories %}
+                      <ul class="list-unstyled ml-3">
+                        {% for subcategory in subcategories[category.category_id] %}
+                          <li>
+                            <a href="/Products?category_id={{ subcategory.category_id }}">{{ subcategory.category_name }}</a>
+                          </li>
+                        {% endfor %}
+                      </ul>
+                    {% endif %}
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+
+          <!-- Product Cards -->
+          <div class="col-lg-9">
+            <div class="row">
+
+              <!-- Jinja Loop to Display Products -->
+              {% for product in products %}
+                <div class="col-md-4 mb-4">
+                  <div class="card position-relative">
+                    
+                    <!-- Display Discount if Available -->
+                    {% if product.discount_percentage %}
+                      <span class="badge badge-danger position-absolute" style="top: 0; left: 0; margin: 0.5rem;">{{ product.discount_percentage }}% OFF</span>
+                    {% endif %}
+
+                    <!-- Link to Product Detail Page -->
+                    <a href="{{ url_for('product_detail', product_ID=product.product_ID) }}" class="stretched-link">
+                      <img src="{{ product.image_url or 'https://via.placeholder.com/150' }}" class="card-img-top" alt="{{ product.name }}">
+                    </a>
+                    <div class="card-body">
+                      <h5 class="card-title">{{ product.name }}</h5>
+                      <p class="card-text">
+                        <span class="font-weight-bold">{{ product.discounted_price }} SGD</span>
+                        {% if product.discount_percentage %}
+                          <span class="text-muted text-decoration-line-through">{{ product.usual_price }} SGD</span>
+                        {% endif %}
+                      </p>
+                      <p class="card-text"><small class="text-muted">{{ product.tags }}</small></p>
+                      <form action="{{ url_for('add_to_cart') }}" method="post">
+                        <input type="hidden" name="product_id" value="{{ product.product_ID }}">
+                        <input type="number" name="quantity" class="form-control mb-2" value="1" min="1" style="width: auto; display: inline-block;">
+                        <button type="submit" class="btn btn-primary">Add to Cart</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap 4 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+import pymysql
+import uuid
+timeout = 10
+
+def db_connector(): 
+  db = pymysql.connect(
+  charset="utf8mb4",
+  connect_timeout=timeout,
+  cursorclass=pymysql.cursors.DictCursor,
+  db="greengrocerdb",
+  host="mysql-1698fa8f-wongwenbing0718-aaf0.e.aivencloud.com",
+  password="AVNS_iBl4eOysp6UaiypUdJd",
+  read_timeout=timeout,
+  port=19222,
+  user="avnadmin",
+  write_timeout=timeout,
+  )
+  
+  cursor = db.cursor()
+  return db, cursor
+
+
+class Product:
+    def __init__(self, product_ID, name, uom, usual_price, discounted_price, discount_percentage, category_id, supplier_id, country_of_origin, eco_info, ingredients, tags):
+        self.product_ID = product_ID
+        self.name = name
+        self.uom = uom
+        self.usual_price = usual_price
+        self.discounted_price = discounted_price
+        self.discount_percentage = discount_percentage
+        self.category_id = category_id
+        self.supplier_id = supplier_id
+        self.country_of_origin = country_of_origin
+        self.eco_info = eco_info
+        self.ingredients = ingredients
+        self.tags = tags     
+
+class Database:
+    def __init__(self):
+        self.db, self.cursor = db_connector()
+
+    def fetch_all_products(self):
+        query = """
+        SELECT p.product_ID, p.name, p.uom, p.usual_price, p.category_id, p.supplier_id, p.country_of_origin, p.eco_info, p.ingredients, p.tags,
+               d.discounted_price, d.discount_percentage
+        FROM Products p
+        LEFT JOIN Discount d ON p.product_ID = d.product_id
+        """
+        self.cursor.execute(query)
+        rows = self.cursor.fetchall()
+        return [Product(**row) for row in rows]
+
+    def fetch_product_details(self, product_ID):
+        query = """
+        SELECT p.product_ID, p.name, p.uom, p.usual_price, p.category_id, p.supplier_id, p.country_of_origin, p.eco_info, p.ingredients, p.tags,
+               d.discounted_price, d.discount_percentage
+        FROM Products p
+        LEFT JOIN Discount d ON p.product_ID = d.product_id
+        WHERE p.product_ID = %s
+        """
+        self.cursor.execute(query, (product_ID,))
+        row = self.cursor.fetchone()
+        return Product(**row) if row else None
+
+    def fetch_related_products(self, product_ID):
+        query = """
+        SELECT p.product_ID, p.name, p.uom, p.usual_price, p.category_id, p.supplier_id, p.country_of_origin, p.eco_info, p.ingredients, p.tags,
+               d.discounted_price, d.discount_percentage
+        FROM Products p
+        LEFT JOIN Discount d ON p.product_ID = d.product_id
+        WHERE p.category_id = (
+            SELECT category_id FROM Products WHERE product_ID = %s
+        )
+        AND p.product_ID != %s
+        """
+        self.cursor.execute(query, (product_ID, product_ID))
+        rows = self.cursor.fetchall()
+        return [Product(**row) for row in rows]
+

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Product</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Edit Product</h2>
+        {% if flash_messages %}
+            {% for category, message in flash_messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        <form method="POST" action="{{ url_for('admin_edit_product', product_id=product.product_ID) }}">
+            <div class="form-group">
+                <label for="category_id">Category ID</label>
+                <input type="text" class="form-control" id="category_id" name="category_id" value="{{ product.category_id }}" required>
+            </div>
+            <div class="form-group">
+                <label for="supplier_id">Supplier ID</label>
+                <input type="text" class="form-control" id="supplier_id" name="supplier_id" value="{{ product.supplier_id }}" required>
+            </div>
+            <div class="form-group">
+                <label for="name">Product Name</label>
+                <input type="text" class="form-control" id="name" name="name" value="{{ product.name }}" required>
+            </div>
+            <div class="form-group">
+                <label for="uom">Unit of Measure</label>
+                <input type="text" class="form-control" id="uom" name="uom" value="{{ product.uom }}" required>
+            </div>
+            <div class="form-group">
+                <label for="usual_price">Usual Price</label>
+                <input type="number" step="0.01" class="form-control" id="usual_price" name="usual_price" value="{{ product.usual_price }}" required>
+            </div>
+            <div class="form-group">
+                <label for="country_of_origin">Country of Origin</label>
+                <input type="text" class="form-control" id="country_of_origin" name="country_of_origin" value="{{ product.country_of_origin }}" required>
+            </div>
+            <div class="form-group">
+                <label for="eco_info">Eco Info</label>
+                <textarea class="form-control" id="eco_info" name="eco_info">{{ product.eco_info }}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="ingredients">Ingredients</label>
+                <textarea class="form-control" id="ingredients" name="ingredients">{{ product.ingredients }}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="tags">Tags</label>
+                <input type="text" class="form-control" id="tags" name="tags" value="{{ product.tags }}" required>
+            </div>
+            <div class="form-group">
+                <label for="discount_id">Discount ID</label>
+                <input type="number" class="form-control" id="discount_id" name="discount_id" value="{{ product.discount_id }}" required>
+            </div>
+            <div class="form-group">
+                <label for="status">Status</label>
+                <input type="text" class="form-control" id="status" name="status" value="{{ product.status }}" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Update Product</button>
+        </form>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

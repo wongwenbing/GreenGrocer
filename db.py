@@ -1,5 +1,5 @@
 import pymysql
-
+import uuid
 timeout = 10
 
 def db_connector(): 
@@ -17,7 +17,7 @@ def db_connector():
   )
   
   cursor = db.cursor()
-  return db, cursor
+  return db
 
 #def establish_connection(connection): 
   #connection = connection.cursor()
