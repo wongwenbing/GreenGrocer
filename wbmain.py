@@ -4,17 +4,18 @@ from report_generation.nutritional_summary import custnutrition
 from report_generation.graphs import generate_pie_chart
 from report_generation.invoice import InvoiceCustomer, Items
 from report_generation.reportgen import CustReport, customer_report, StaffReport, staff_report
-
+from report_generation.customer_report import PurchasingReport
+import os
 
 app = Flask(__name__)
 
-# app.secret_key = os.urandom(24)  # Generates a random secret key each time
+app.secret_key = os.urandom(24)  # Generates a random secret key each time
 
 db, cursor = db_connector()
 
 
 # Insert Report Generaation here
-@app.route('/')
+@app.route('/nutrition')
 def view_nutrition():
     # Fetch data from database
     cursor.execute("SELECT nut_id, cust_id, month, total_calories, protein, carbs, vitamins FROM Customer_Nutrition")
@@ -23,11 +24,16 @@ def view_nutrition():
     return render_template('nutritionsummary.html', count=len(nutrition_objects), customers=nutrition_objects)
 
 
-@app.route('/reports')
+@app.route('/graphs')
 def reports():
-    graph_json = generate_pie_chart(cursor)
-
-    return render_template('graphs.html', graph_json=graph_json)
+    report_data = session.get('report_data')
+    report = PurchasingReport(report_data['start_date'], report_data['end_date'],
+                            report_data['description'])
+    print(report.get_info())
+    report.get_average_order_spending()
+    report.get_total_amount()
+    report.get_mostpurchased_category()
+    return render_template('graphs.html', report=report)
 
 
 @app.route('/invoice')
@@ -54,7 +60,7 @@ def invoicing():
     return render_template('invoice.html', products=products, subtotal=total, gst=gst, grandtotal=grandtotal)
 
 
-@app.route('/customer/reportgen', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def cust_generate_report():
     form = CustReport(request.form)
     if request.method == "POST" and form.validate():
@@ -63,6 +69,16 @@ def cust_generate_report():
                                     form.type_of_report.data)
         print(newreport.info())
         # For example, save the data or generate a report
+        if newreport.report_type == "Purchases":
+            # Store the necessary data in session
+            session['report_data'] = {
+                'start_date': str(newreport.startdate),
+                'end_date': str(newreport.end_date),
+                'description': newreport.report_type,
+                'type_of_report': newreport.report_type
+            }
+            print(session)
+            return redirect(url_for('reports'))
         return redirect(url_for('success'))
     return render_template('custreportgen.html', form=form)
 

@@ -1,14 +1,40 @@
 {% extends "base.html" %}
 {% block title %} My Nutrition Summary {% endblock %} 
-{% block content %} 
-<h1>Graphs</h1>
+{% block content %}
 
-<div id="pie-chart">
-    <script type="text/javascript">
-        var graph = {{ graph_json | safe }}; 
-
-        Plotly.plot('pie-chart', graph, {} );
-    </script>
+<h1>My Purchasing Report from {{report.startdate}} to {{report.enddate}}</h1>
+<p>{{report.description}}</p>
+<div class="d-flex justify-content-center">
+    <div class="card col-3" style="margin: 8px 8px">
+        <div class="card-header">
+            <h4>Total Number of Orders</h4>
+        </div>
+        <div class="card-body">
+            <h2>{{report.totalorders}}</h2>
+        </div>
+    </div>
+    <div class="card col-3" style="margin: 8px 8px">
+        <div class="card-header">
+            <h4>Average Spending Per Order</h4>
+        </div>
+        <div class="card-body">
+            <h2>{{report.average}}</h2>
+        </div>
+    </div>
+    <div class="card col-3" style="margin: 8px 8px">
+        <div class="card-header">
+            <h4>HI CARD</h4>
+        </div>
+        <div class="card-body">
+            <h2>CARD B</h2>
+        </div>
+    </div>
 </div>
+
+<div id="bar-chart">
+    {{ report.chart | safe }}
+
+</div>
+
 
 {% endblock %}

@@ -35,7 +35,7 @@ class StaffReport(Report):
         ('Inventory', 'Inventory')
     ])
 
-class staff_report():
+class staff_report:
     def __init__(self, startdate, end_date, description, reporttype):
         self.startdate = startdate
         self.end_date = end_date
