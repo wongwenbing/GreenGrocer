@@ -4,3 +4,5 @@ cryptography==43.0.0
 WTForms==3.1.2
 pandas
 plotly
+email-validator
+flask-wtf

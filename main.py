@@ -7,10 +7,6 @@ from report_generation.invoice import InvoiceCustomer, Items
 from report_generation.reportgen import CustReport, customer_report, StaffReport, staff_report
 from account_management.forms import CreateUserForm, RegistrationForm
 import os
-from products.dao import DAO
-from db import *
-from decimal import Decimal 
-
 
 app = Flask(__name__)
 
@@ -74,40 +70,49 @@ def login():
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
-    if request.method == 'POST':
-        name = request.form['name']
-        email = request.form['email']
-        phone_number = request.form['phone_number']
-        address = request.form['address']
-        date_of_birth = request.form['date_of_birth']
-        password = request.form['password']
+    form = RegistrationForm()
+    
+    if request.method == "POST":
+        if form.validate_on_submit():
+            name = request.form['name']
+            email = request.form['email']
+            phone_number = request.form['phone_number']
+            address = request.form['address']
+            date_of_birth = request.form['date_of_birth']
+            password = request.form['password']
 
+            # Log the form data for debugging
+            print(f"Received signup data: {name}, {email}, {phone_number}, {address}, {date_of_birth}, {password}")
+            
+            if not email or not password:
+                flash('Email and Password are required fields.', 'danger')
+                return render_template('signup_bootstrap.html', form=form)
 
+            try:
+                db, cursor = db_connector()
+                cursor.execute('''
+                    INSERT INTO users (name, email, phone_number, address, date_of_birth, password)
+                    VALUES (%s, %s, %s, %s, %s, %s)
+                ''', (name, email, phone_number, address, date_of_birth, password))
+                db.commit()
+                flash('Account created successfully! Please login.', 'success')
+                print('success')
+                return redirect(url_for('login'))
+            except pymysql.IntegrityError:
+                flash('Email already registered.', 'danger')
+            except Exception as e:
+                flash(f'An error occurred: {str(e)}', 'danger')
+            finally:
+                db.close()
+        else:
+            errors = []
+            for field, field_errors in form.errors.items():
+                for error in field_errors:
+                    errors.append(f"{field.capitalize()}: {error}")
+            return render_template('signup_bootstrap.html', form=form, errors=" ".join(errors))
         
-        # Log the form data for debugging
-        print(f"Received signup data: {name}, {email}, {phone_number}, {address}, {date_of_birth}, {password}")
-        
-        if not email or not password:
-            flash('Email and Password are required fields.', 'danger')
-            return render_template('signup_bootstrap.html')
+    return render_template('signup_bootstrap.html', form=form)
 
-        try:
-            db, cursor = db_connector()
-            cursor.execute('''
-                INSERT INTO users (name, email, phone_number, address, date_of_birth, password)
-                VALUES (%s, %s, %s, %s, %s, %s)
-            ''', (name, email, phone_number, address, date_of_birth, password))
-            db.commit()
-            flash('Account created successfully! Please login.', 'success')
-            print('success')
-            return redirect(url_for('login'))
-        except pymysql.IntegrityError:
-            flash('Email already registered.', 'danger')
-        except Exception as e:
-            flash(f'An error occurred: {str(e)}', 'danger')
-        finally:
-            db.close()
-    return render_template('signup_bootstrap.html')
 
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
@@ -157,8 +162,12 @@ def logout():
     return redirect(url_for('login'))
 
 
-dao = DAO()
+
+
 #Insert Transaction Processing here
+
+# dao = DAO()
+
 @app.route('/products')
 def products():
     search_query = request.args.get('search', '')
