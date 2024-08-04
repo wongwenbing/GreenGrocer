@@ -24,8 +24,8 @@ def view_nutrition():
     return render_template('nutritionsummary.html', count=len(nutrition_objects), customers=nutrition_objects)
 
 
-@app.route('/graphs')
-def reports():
+@app.route('/staff/purchasing_report')
+def purchasing_report():
     report_data = session.get('report_data')
     report = PurchasingReport(report_data['start_date'], report_data['end_date'],
                             report_data['description'])
