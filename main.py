@@ -7,7 +7,7 @@ from report_generation.invoice import InvoiceCustomer, Items
 from report_generation.reportgen import CustReport, customer_report, StaffReport, staff_report
 from account_management.forms import CreateUserForm, RegistrationForm
 import os
-from dao import DAO
+from products.dao import DAO
 from db import *
 from decimal import Decimal 
 
