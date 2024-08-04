@@ -5,13 +5,12 @@ from report_generation.nutritional_summary import custnutrition
 from report_generation.graphs import generate_pie_chart
 from report_generation.invoice import InvoiceCustomer, Items
 from report_generation.reportgen import CustReport, customer_report, StaffReport, staff_report
-from account_management.forms import CreateUserForm
+from account_management.forms import CreateUserForm, RegistrationForm
 import os
 
 app = Flask(__name__)
 
 app.secret_key = os.urandom(24)  # Generates a random secret key each time
-
 
 db, cursor = db_connector()
 
@@ -45,12 +44,23 @@ def login():
         password = request.form['password']
         
         db, cursor = db_connector()
+
         cursor.execute('SELECT * FROM users WHERE email = %s', (email))
         user = cursor.fetchone()
+
+        if not user:
+            cursor.execute('SELECT * FROM staff WHERE email = %s', (email))
+            user = cursor.fetchone()
+            role = 'staff' if user else None
+        else:
+            role = 'users'
+
+        
         db.close()
         
         if user and user['password'] == password:
             session['id'] = user['id']
+            session['role'] = role
             flash('Logged in successfully!', 'success')
             return redirect(url_for('profile'))
         else:
@@ -67,6 +77,8 @@ def signup():
         address = request.form['address']
         date_of_birth = request.form['date_of_birth']
         password = request.form['password']
+
+
         
         # Log the form data for debugging
         print(f"Received signup data: {name}, {email}, {phone_number}, {address}, {date_of_birth}, {password}")
@@ -100,11 +112,13 @@ def profile():
         return redirect(url_for('login'))
     
     id = session['id']
+    role = session['role']
+
     db, cursor = db_connector()
 
     if request.method == 'POST':
         if 'delete_account' in request.form:
-            cursor.execute('DELETE FROM users WHERE id = %s', (id))
+            cursor.execute(f'DELETE FROM {role} WHERE id = %s', (id))
             db.commit()
             db.close()
             session.pop('id', None)
@@ -117,16 +131,16 @@ def profile():
             address = request.form['address']
             date_of_birth = request.form['date_of_birth']
             val = (name, email , phone_number, address, date_of_birth, id)
-            query = """
-UPDATE users
-SET name = %s, email  = %s, phone_number = %s, address = %s, date_of_birth = %s
+            query = f"""
+UPDATE {role}
+SET name = %s, email = %s, phone_number = %s, address = %s, date_of_birth = %s
 WHERE id = %s
 """
             cursor.execute(query, val)
             db.commit()
             flash('Profile updated successfully!', 'success')
     
-    cursor.execute('SELECT * FROM users WHERE id = %s', (id))
+    cursor.execute(f'SELECT * FROM {role} WHERE id = %s', (id))
     user = cursor.fetchone()
     db.close()
     
