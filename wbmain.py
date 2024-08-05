@@ -115,7 +115,7 @@ def invoicing():
                            products=products)
 
 
-@app.route('/cust/generate_report/', methods=['GET', 'POST'])
+@app.route('/generate_report', methods=['GET', 'POST'])
 def cust_generate_report():
     form = CustReport(request.form)
     if request.method == "POST" and form.validate():

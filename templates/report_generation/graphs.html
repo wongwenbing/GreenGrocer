@@ -5,28 +5,20 @@
 <h1>My Purchasing Report from {{report.startdate}} to {{report.enddate}}</h1>
 <!--<p>{{report.description}}</p>-->
 <div class="d-flex justify-content-center">
-    <div class="card col-3" style="margin: 8px 8px">
-        <div class="card-header">
+    <div class="card" style="margin: 10px 10px">
+        <div class="card-header text-center">
             <h4>Total Number of Orders</h4>
         </div>
-        <div class="card-body">
+        <div class="card-body text-center">
             <h2>{{report.totalorders}}</h2>
         </div>
     </div>
-    <div class="card col-3" style="margin: 8px 8px">
-        <div class="card-header">
+    <div class="card" style="margin: 10px 10px">
+        <div class="card-header text-center">
             <h4>Average Spending Per Order</h4>
         </div>
-        <div class="card-body">
+        <div class="card-body text-center">
             <h2>{{report.average}}</h2>
-        </div>
-    </div>
-    <div class="card col-3" style="margin: 8px 8px">
-        <div class="card-header">
-            <h4>HI CARD</h4>
-        </div>
-        <div class="card-body">
-            <h2>CARD B</h2>
         </div>
     </div>
 </div>
