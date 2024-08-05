@@ -5,14 +5,21 @@ from report_generation.nutritional_summary import custnutrition
 from report_generation.graphs import generate_pie_chart
 from report_generation.invoice import InvoiceCustomer, Items
 from report_generation.reportgen import CustReport, customer_report, StaffReport, staff_report
-from account_management.forms import CreateUserForm, RegistrationForm, LoginForm
+from account_management.forms import CreateUserForm, RegistrationForm
 import os
+from werkzeug.security import generate_password_hash, check_password_hash
+
+
 
 app = Flask(__name__)
 
+
 app.secret_key = os.urandom(24)  # Generates a random secret key each time
 
+
 db, cursor = db_connector()
+
+
 
 
 @app.route('/home')
@@ -20,33 +27,43 @@ def home():
     return render_template('custhome.html')
 
 
+
+
 @app.route('/customer')
 def customer_login():
     return render_template('customer.html')
+
+
 
 
 @app.route('/staff')
 def staff_login():
     return render_template('staff.html')
 
+
 # Insert Account Generation here
 
+
 # Login, Sign up, Profile
+
 
 @app.route('/')
 def index():
     return redirect(url_for('login'))
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
-        
+       
         db, cursor = db_connector()
+
 
         cursor.execute('SELECT * FROM users WHERE email = %s', (email))
         user = cursor.fetchone()
+
 
         if not user:
             cursor.execute('SELECT * FROM staff WHERE email = %s', (email))
@@ -55,23 +72,24 @@ def login():
         else:
             role = 'users'
 
-        
+
         db.close()
-        
-        if user and user['password'] == password:
+       
+        if user and check_password_hash(user['password'], password):
             session['id'] = user['id']
             session['role'] = role
             flash('Logged in successfully!', 'success')
             return redirect(url_for('profile'))
         else:
             flash('Invalid email or password', 'danger')
-    
+   
     return render_template('login_bootstrap.html')
+
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     form = RegistrationForm()
-    
+   
     if request.method == "POST":
         if form.validate_on_submit():
             name = request.form['name']
@@ -81,19 +99,22 @@ def signup():
             date_of_birth = request.form['date_of_birth']
             password = request.form['password']
 
+            hashed_password = generate_password_hash(password)
+
             # Log the form data for debugging
             print(f"Received signup data: {name}, {email}, {phone_number}, {address}, {date_of_birth}, {password}")
-            
+           
             if not email or not password:
                 flash('Email and Password are required fields.', 'danger')
                 return render_template('signup_bootstrap.html', form=form)
+
 
             try:
                 db, cursor = db_connector()
                 cursor.execute('''
                     INSERT INTO users (name, email, phone_number, address, date_of_birth, password)
                     VALUES (%s, %s, %s, %s, %s, %s)
-                ''', (name, email, phone_number, address, date_of_birth, password))
+                ''', (name, email, phone_number, address, date_of_birth, hashed_password))
                 db.commit()
                 flash('Account created successfully! Please login.', 'success')
                 print('success')
@@ -110,7 +131,7 @@ def signup():
                 for error in field_errors:
                     errors.append(f"{field.capitalize()}: {error}")
             return render_template('signup_bootstrap.html', form=form, errors=" ".join(errors))
-        
+       
     return render_template('signup_bootstrap.html', form=form)
 
 
@@ -119,11 +140,13 @@ def profile():
     if 'id' not in session:
         flash('You are not logged in!', 'danger')
         return redirect(url_for('login'))
-    
+   
     id = session['id']
     role = session['role']
 
+
     db, cursor = db_connector()
+
 
     if request.method == 'POST':
         if 'delete_account' in request.form:
@@ -148,12 +171,13 @@ WHERE id = %s
             cursor.execute(query, val)
             db.commit()
             flash('Profile updated successfully!', 'success')
-    
+   
     cursor.execute(f'SELECT * FROM {role} WHERE id = %s', (id))
     user = cursor.fetchone()
     db.close()
-    
+   
     return render_template('profile.html', user=user)
+
 
 @app.route('/logout')
 def logout():
@@ -162,7 +186,10 @@ def logout():
     return redirect(url_for('login'))
 
 
+
+
 # Staff assist with customer account (Create)
+
 
 @app.route('/createCustomers', methods=['GET', 'POST'])
 def create_user():
@@ -175,6 +202,7 @@ def create_user():
         date_of_birth = request.form['date_of_birth']
         default_password = "P@ssw0rd"
 
+
         try:
             db, cursor = db_connector()
             cursor.execute('''
@@ -182,33 +210,44 @@ def create_user():
                 VALUES (%s, %s, %s, %s, %s, %s)
             ''', (name, email, phone_number, address, date_of_birth, default_password))
             db.commit()
-            
+           
             flash('Account created successfully!', 'success')
         except pymysql.IntegrityError:
             flash('Email already registered.', 'danger')
 
+
         finally:
             db.close()
+
 
         return redirect(url_for('retrieve_customers'))
     return render_template('createCustomers.html', form=form)
 
 
+
+
 # Staff assist with customer account (Retrieve)
+
 
 @app.route('/retrieveCustomers')
 def retrieve_customers():
-    
+   
     db, cursor = db_connector()
     cursor.execute('SELECT id, name, email, phone_number, address, date_of_birth FROM users')
+
 
     users = cursor.fetchall()
     db.close()
 
+
     return render_template('retrieveCustomers.html', count=len(users), users_list=users)
 
 
+
+
 # Staff assist with customer account (Update)
+
+
 
 
 @app.route('/updateUser/<id>/', methods=['GET', 'POST'])
@@ -228,11 +267,14 @@ WHERE id = %s
 """
         db, cursor = db_connector()
 
+
         cursor.execute(query, val)
         db.commit()
         db.close()
 
+
         flash('Profile updated successfully!', 'success')
+
 
         return redirect(url_for('retrieve_customers'))
     else:
@@ -241,16 +283,21 @@ WHERE id = %s
         user = cursor.fetchone()
         db.close()
 
+
         update_user_form.name.data = user['name']
         update_user_form.email.data = user['email']
         update_user_form.phone_number.data = user['phone_number']
         update_user_form.address.data = user['address']
         update_user_form.date_of_birth.data = user['date_of_birth']
 
+
         return render_template('updateCustomers.html', form=update_user_form)
 
 
+
+
 # Staff assist with customer account (Delete)
+
 
 @app.route('/deleteUser/<id>', methods=['POST'])
 def delete_user(id):

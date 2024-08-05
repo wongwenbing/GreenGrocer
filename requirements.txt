@@ -6,3 +6,4 @@ pandas
 plotly
 email-validator
 flask-wtf
+werkzeug
