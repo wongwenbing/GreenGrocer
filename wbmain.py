@@ -67,18 +67,18 @@ def cust_generate_report():
         # Handle the form submission logic here
         newreport = customer_report(form.start_date.data, form.end_date.data, form.description.data,
                                     form.type_of_report.data)
-        print(newreport.info())
+        session['report_data'] = {
+            'start_date': str(newreport.startdate),
+            'end_date': str(newreport.end_date),
+            'description': newreport.report_type,
+            'type_of_report': newreport.report_type
+        }
         # For example, save the data or generate a report
         if newreport.report_type == "Purchases":
             # Store the necessary data in session
-            session['report_data'] = {
-                'start_date': str(newreport.startdate),
-                'end_date': str(newreport.end_date),
-                'description': newreport.report_type,
-                'type_of_report': newreport.report_type
-            }
-            print(session)
             return redirect(url_for('reports'))
+        elif newreport.report_type == "Sustainability":
+            return redirect
         return redirect(url_for('success'))
     return render_template('custreportgen.html', form=form)
 
