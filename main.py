@@ -27,7 +27,7 @@ def customer_login():
 
 @app.route('/staff')
 def staff_login():
-    return render_template('/staff.html')
+    return render_template('staff.html')
 
 # Insert Account Generation here
 
@@ -487,7 +487,7 @@ def admin_edit_product(product_id):
     suppliers = dao.get_all_suppliers()
     discounts = dao.get_all_discounts_from_products()
 
-    return render_template('admin_edit_product.html', product=product, categories=categories, suppliers=suppliers, discounts=discounts)
+    return render_template('transaction_processing/admin_edit_product.html', product=product, categories=categories, suppliers=suppliers, discounts=discounts)
 
 
 @app.route('/admin/delete_product/<product_id>', methods=['POST'])
