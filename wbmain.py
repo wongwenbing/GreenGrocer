@@ -30,19 +30,21 @@ def view_nutrition():
     nutrition_objects = [custnutrition(**entry) for entry in result]
     return render_template('report_generation/nutritionsummary.html', count=len(nutrition_objects), customers=nutrition_objects)
 
+
 @app.route('/view_reports')
 def view_reports():
     #Fetch Data from db
     query = """SELECT * FROM Customer_Report WHERE customer_id = %s """
     cust_id = session.get('user_id')
-    print(cust_id)
     cursor.execute(query, cust_id)
     result = cursor.fetchall()
+    print(result)
     reports = []
     for r in result:
         report = Retrieve_Customer_Report(r['cust_report_id'], r['customer_id'], r['coverage_start'], r['coverage_end'], r['report_type'])
         reports.append(report)
     return render_template('report_generation/reports_summary.html', reports=reports)
+
 
 @app.route('/retrieve_report', methods=['POST'])
 def retrieve_report():
@@ -57,6 +59,16 @@ def retrieve_report():
     }
     if result['report_type'] == "Purchasing":
         return redirect(url_for('purchasing_report'))
+
+
+@app.route('/delete_report', methods=['POST'])
+def delete_report():
+    report_id = request.form.get('report_id')
+    query = """DELETE FROM Customer_Report WHERE cust_report_id = %s """
+    cursor.execute(query, report_id)
+
+    return redirect(url_for('view_reports'))
+
 
 @app.route('/purchasing_report')
 def purchasing_report():

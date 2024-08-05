@@ -23,7 +23,13 @@
                     <form action="{{ url_for('retrieve_report') }}" method="post">
                         <input type="hidden" name="report_id" value="{{ r.reportid }}">
                     <button type="submit">View Report</button>
+                    </form>
+                    <form action="{{ url_for('delete_report') }}" method="post">
+                        <input type="hidden" name="report_id" value="{{ r.reportid }}">
+                    <button type="submit">Delete Report</button>
                 </form></td>
+
+                </td>
             </tr>
             {% endfor %}
         </tbody>
