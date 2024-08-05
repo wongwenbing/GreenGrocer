@@ -83,7 +83,7 @@ def login():
         else:
             flash('Invalid email or password', 'danger')
    
-    return render_template('login_bootstrap.html')
+    return render_template('/account_management/login_bootstrap.html')
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -130,9 +130,9 @@ def signup():
             for field, field_errors in form.errors.items():
                 for error in field_errors:
                     errors.append(f"{field.capitalize()}: {error}")
-            return render_template('signup_bootstrap.html', form=form, errors=" ".join(errors))
+            return render_template('/account_management/signup_bootstrap.html', form=form, errors=" ".join(errors))
        
-    return render_template('signup_bootstrap.html', form=form)
+    return render_template('/account_management/signup_bootstrap.html', form=form)
 
 
 @app.route('/profile', methods=['GET', 'POST'])
@@ -176,7 +176,7 @@ WHERE id = %s
     user = cursor.fetchone()
     db.close()
    
-    return render_template('profile.html', user=user)
+    return render_template('/account_management/profile.html', user=user)
 
 
 @app.route('/logout')
@@ -221,7 +221,7 @@ def create_user():
 
 
         return redirect(url_for('retrieve_customers'))
-    return render_template('createCustomers.html', form=form)
+    return render_template('/account_management/createCustomers.html', form=form)
 
 
 
@@ -240,7 +240,7 @@ def retrieve_customers():
     db.close()
 
 
-    return render_template('retrieveCustomers.html', count=len(users), users_list=users)
+    return render_template('/account_management/retrieveCustomers.html', count=len(users), users_list=users)
 
 
 
@@ -291,7 +291,7 @@ WHERE id = %s
         update_user_form.date_of_birth.data = user['date_of_birth']
 
 
-        return render_template('updateCustomers.html', form=update_user_form)
+        return render_template('/account_management/updateCustomers.html', form=update_user_form)
 
 
 
