@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %} My Nutrition Summary {% endblock %} 
+{% block content %} 
+<h1>My Invoice Summary</h1>
+
+<div>
+    <table class="table table=striped">
+        <thead>
+            <tr>
+                <th>Invoice ID</th>
+                <th>Invoice Date</th>
+                <th>Total Amount</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in invoices %}
+            <tr>
+                <td>{{i.invoice_id}}</td>
+                <td>{{i.invoice_date}}</td>
+                <td>{{ "%0.2f" | format( i.grandtotal | float) }}</td>
+                <td>
+                    <form action="{{ url_for('retrieve_invoice') }}" method="post">
+                        <input type="hidden" name="invoice_id" value="{{ i.invoice_id }}">
+                    <button type="submit">View Invoice</button>
+                </form></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

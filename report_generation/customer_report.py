@@ -9,16 +9,15 @@ import plotly.io as pio
 
 db, cursor = db_connector()
 class PurchasingReport:
-    def __init__(self, startdate, enddate, description):
+    def __init__(self, startdate, enddate):
         self.startdate = startdate
         self.enddate = enddate
-        self.description = description
         self.totalorders = ""
         self.chart = ""
         self.average = ""
 
     def get_info(self):
-        return f"start{self.startdate}, end{self.enddate}, description{self.description}"
+        return f"start: {self.startdate}, end: {self.enddate}"
 
     def get_total_amount(self):
         query = """

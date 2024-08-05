@@ -9,15 +9,15 @@
     <div class="">
         <p>To:
             <br>
-            Address:<br>
-            Postal Code:  <br>
+            Customer Name: {{invoice.name}} <br>
+            Address: {{invoice.address}} <br>
+            Email: {{invoice.email}} <br>
         </p>
 </div>
 <div class="">
     Invoice
-    ID: <br>
-    Issue Date: <br>
-    Status: <br>
+    ID: {{invoice.invoice_id}} <br>
+    Issue Date: {{invoice.invoice_date}} <br>
 </div>
 </div>
 <table class="table">
@@ -46,21 +46,21 @@
         <td></td>
         <td></td>
         <td>Subtotal</td>
-        <td>{{ "%0.2f" | format(subtotal | float) }}</td>
+        <td>{{ "%0.2f" | format(invoice.subtotal | float) }}</td>
     </tr>
         <tr>
         <td></td>
         <td></td>
         <td></td>
         <td>GST (9%)</td>
-        <td>{{ "%0.2f" | format(gst | float) }}</td>
+        <td>{{ "%0.2f" | format( invoice.gst | float) }}</td>
     </tr>
         <tr>
         <td></td>
         <td></td>
         <td></td>
         <td>Total Amount</td>
-        <td>{{ "%0.2f" | format(grandtotal | float) }}</td>
+        <td>{{ "%0.2f" | format( invoice.grandtotal | float) }}</td>
     </tr>
     </tbody>
 </table>
