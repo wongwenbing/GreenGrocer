@@ -67,6 +67,8 @@ def delete_report():
     query = """DELETE FROM Customer_Report WHERE cust_report_id = %s """
     cursor.execute(query, report_id)
 
+    # db.commit()
+
     return redirect(url_for('view_reports'))
 
 
