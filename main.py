@@ -2,9 +2,9 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from db import db_connector
 import pymysql
 from report_generation.nutritional_summary import custnutrition
-from report_generation.graphs import generate_pie_chart
-from report_generation.invoice import InvoiceCustomer, Items
-from report_generation.reportgen import CustReport, customer_report, StaffReport, staff_report
+from report_generation.invoice import Invoice, InvoiceCustomer, invoice_summary
+from report_generation.reportgen import CustReport, customer_report, StaffReport, staff_report, Retrieve_Customer_Report
+from report_generation.customer_report import PurchasingReport
 from account_management.forms import CreateUserForm, RegistrationForm
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -43,11 +43,7 @@ def staff_login():
 
 
 # Insert Account Generation here
-
-
 # Login, Sign up, Profile
-
-
 @app.route('/')
 def index():
     return redirect(url_for('login'))
@@ -815,68 +811,99 @@ def thank_you():
 
 
 #Insert Report Generaation here
-@app.route('/nutritionn')
-def view_nutrition():
-    # Fetch data from database
-    cursor.execute("SELECT nut_id, cust_id, month, total_calories, protein, carbs, vitamins FROM Customer_Nutrition")
+@app.route('/view_reports')
+def view_reports():
+    #Fetch Data from db
+    query = """SELECT * FROM Customer_Report WHERE customer_id = %s """
+    cust_id = session.get('user_id')
+    cursor.execute(query, cust_id)
     result = cursor.fetchall()
-    nutrition_objects = [custnutrition(**entry) for entry in result]
-    return render_template('nutritionsummary.html', count=len(nutrition_objects), customers=nutrition_objects)
+    print(result)
+    reports = []
+    for r in result:
+        report = Retrieve_Customer_Report(r['cust_report_id'], r['customer_id'], r['coverage_start'], r['coverage_end'], r['report_type'])
+        reports.append(report)
+    return render_template('report_generation/reports_summary.html', reports=reports)
 
 
-@app.route('/reports')
-def reports():
-    graph_json = generate_pie_chart(cursor)
+@app.route('/retrieve_report', methods=['POST'])
+def retrieve_report():
+    report_id = request.form.get('report_id')
+    query = """SELECT * FROM Customer_Report WHERE cust_report_id = %s """
+    cursor.execute(query, report_id)
+    result = cursor.fetchone()
+    session['report_data'] = {
+        'start_date': result['coverage_start'],
+        'end_date': result['coverage_end'],
+        'type_of_report': result['report_type']
+    }
+    if result['report_type'] == "Purchasing":
+        return redirect(url_for('purchasing_report'))
 
-    return render_template('graphs.html', graph_json=graph_json)
+
+@app.route('/delete_report', methods=['POST'])
+def delete_report():
+    report_id = request.form.get('report_id')
+    query = """DELETE FROM Customer_Report WHERE cust_report_id = %s """
+    cursor.execute(query, report_id)
+
+    return redirect(url_for('view_reports'))
+
+
+@app.route('/purchasing_report')
+def purchasing_report():
+    report_data = session.get('report_data')
+    report = PurchasingReport(report_data['start_date'], report_data['end_date'])
+    print(report.get_info())
+    report.get_average_order_spending()
+    report.get_total_amount()
+    report.get_mostpurchased_category()
+    return render_template('report_generation/graphs.html', report=report)
+
+
+@app.route('/view_invoices')
+def view_invoice():
+    cust_id = session['user_id']
+    query = "SELECT * FROM Invoice WHERE user_id = %s"
+    cursor.execute(query, cust_id)
+    rows = cursor.fetchall()
+    invoices = []
+    for row in rows:
+        invoice = Invoice(row['ID'], row['Invoiced_date'], row['order_id'])
+        invoice_summary(invoice)
+        invoices.append(invoice)
+    return render_template('report_generation/invoice_summary.html', invoices=invoices)
+
+
+@app.route('/retrieve_invoice', methods=['POST'])
+def retrieve_invoice():
+    invoice_id = request.form.get('invoice_id')
+    query = "SELECT * FROM Invoice WHERE ID = %s"
+    cursor.execute(query, invoice_id)
+    row = cursor.fetchone()
+    invoice = Invoice(row['ID'], row['Invoiced_date'], row['order_id'])
+    session['invoice'] = invoice_id
+    return redirect(url_for('invoicing'))
 
 
 @app.route('/invoice')
 def invoicing():
-    prod = """
-    SELECT p.usual_price, p.name, o.quantity
-    FROM Products p
-    INNER JOIN OrderDetails o
-    ON p.product_id = o.product_id
-    WHERE order_id = %s
+    invoice_data = session.get('invoice')
+    query = """
+    SELECT i.ID, i.Invoiced_date, i.order_id, i.user_id, u.name, u.email, u.phone_number, u.address
+    FROM Invoice i INNER JOIN users u
+    ON i.user_id = u.id
+    WHERE i.ID = %s
     """
-    customer_id = 'OR101'
-    cursor.execute(prod, customer_id)
-    rows = cursor.fetchall()
-    products = []
-    total = 0
-    for entry in rows:
-        item = Items(entry['name'], entry['usual_price'], entry['quantity'])
-        products.append(item)
-        print(item.info())
-    total = float(sum(item.get_total() for item in products))
-    gst = float(0.09) * total
-    grandtotal = gst + total
-    return render_template('invoice.html', products=products, subtotal=total, gst=gst, grandtotal=grandtotal)
-
-
-@app.route('/customer/reportgen', methods=['GET', 'POST'])
-def cust_generate_report():
-    form = CustReport(request.form)
-    if request.method == "POST" and form.validate():
-        # Handle the form submission logic here
-        newreport = customer_report(form.start_date.data, form.end_date.data, form.description.data, form.type_of_report.data)
-        print(newreport.info())
-        # For example, save the data or generate a report
-        return redirect(url_for('success'))
-    return render_template('custreportgen.html', form=form)
-
-
-@app.route('/staffreport', methods=['GET', 'POST'])
-def staff_generate_report():
-    form = StaffReport(request.form)
-    if request.method == "POST" and form.validate():
-        # Handle the form submission logic here
-        newreport = staff_report(form.start_date.data, form.end_date.data, form.description.data, form.type_of_report.data)
-        print(newreport.info())
-        # For example, save the data or generate a report
-        return redirect(url_for('success'))
-    return render_template('custreportgen.html', form=form)
+    cursor.execute(query, invoice_data)
+    row = cursor.fetchone()
+    print(row)
+    invoice = InvoiceCustomer(row['ID'], row['Invoiced_date'], row['order_id'], row['name'],
+                              row['email'], row['phone_number'], row['address'])
+    invoice_summary(invoice)
+    products = invoice.products
+    return render_template('report_generation/invoice.html', invoice=invoice,
+                           products=products)
 
 @app.route('/success')
 def success():
