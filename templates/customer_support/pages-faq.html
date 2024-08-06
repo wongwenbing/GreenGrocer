@@ -1,0 +1,73 @@
+{% extends "index.html" %}
+{% block title %}pages-faq{% endblock %}
+<main id="main" class="main">
+  {% block content %}
+  <div class="pagetitle">
+    <h1>Frequently Asked Questions</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="">Home</a></li>
+        <li class="breadcrumb-item">Customer Support</li>
+        <li class="breadcrumb-item active">Frequently Asked Questions</li>
+      </ol>
+    </nav>
+  </div><!-- End Page Title -->
+
+  <section class="section faq">
+    <div class="row">
+      <div class="col-lg-6">
+
+        <!-- F.A.Q Group 1 -->
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">~ FAQ ~</h5>
+
+            {% for faq in faqs %}
+            <div class="faq-item">
+              <div class="faq-header">
+                <h5 class="faq-question">{{ faq.get_question() }}</h5>
+                <button class="faq-toggle-btn">+</button>
+              </div>
+              <div class="faq-answer">
+                {{ faq.get_answer() }}
+              </div>
+            </div>
+            {% endfor %}
+
+          </div>
+        </div>
+      </div><!-- End F.A.Q Group 1 -->
+
+    </div>
+
+    </div>
+  </section>
+
+</main><!-- End #main -->
+
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+    class="bi bi-arrow-up-short"></i></a>
+
+<!-- Vendor JS Files -->
+<script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/static/vendor/php-email-form/validate.js"></script>
+<script src="/static/vendor/quill/quill.min.js"></script>
+<script src="/static/vendor/tinymce/tinymce.min.js"></script>
+<script src="/static/vendor/simple-datatables/simple-datatables.js"></script>
+<script src="/static/vendor/chart.js/chart.min.js"></script>
+<script src="/static/vendor/apexcharts/apexcharts.min.js"></script>
+<script src="/static/vendor/echarts/echarts.min.js"></script>
+
+<!-- Template Main JS File -->
+<script src="/static/js/main.js"></script>
+<script>
+  document.querySelectorAll('.faq-toggle-btn').forEach(button => {
+    button.addEventListener('click', () => {
+      const answer = button.parentElement.nextElementSibling;
+      const isVisible = answer.style.display === 'block';
+      answer.style.display = isVisible ? 'none' : 'block';
+      button.textContent = isVisible ? '+' : '-';
+    });
+  });
+</script>
+{% endblock %}

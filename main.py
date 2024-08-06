@@ -8,7 +8,8 @@ from report_generation.reportgen import CustReport, customer_report, StaffReport
 from account_management.forms import CreateUserForm, RegistrationForm
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
-
+from customer_support.forms import TicketForm
+from customer_support.faqclass import FAQ
 
 
 app = Flask(__name__)
@@ -548,7 +549,234 @@ if __name__ == '__main__':
 
 
 #Insert Customer Support Herre
+@app.route('/create_ticket', methods=['GET', 'POST'])
+def raise_a_ticket():
+    form = TicketForm(request.form)
+    if request.method == 'POST':
+        username = request.form['username']
+        email = request.form['email']
+        date = request.form['date']
+        time = request.form['time']
+        issue = request.form['issue']
+        topic = request.form['topic']
 
+        db = db_connector()
+        try:
+            cursor = get_cursor(db)
+            cursor.execute(
+                'INSERT INTO tickets (username, email, date, time, issue, topic) VALUES (%s, %s, %s, %s, %s, %s)',
+                (username, email, date, time, issue, topic)
+            )
+            db.commit()
+        finally:
+            cursor.close()
+            db.close()
+
+        return render_template('thankyou_page.html')
+
+    return render_template('create_ticket.html', form=form)
+
+
+@app.route('/retrieve_ticket', methods=['GET'])
+def view_tickets():
+    db = db_connector()
+    tickets = []
+    try:
+        cursor = get_cursor(db)
+        cursor.execute('SELECT id, username, email, date, time, issue, topic FROM tickets')
+        tickets = cursor.fetchall()
+        print(tickets)  # Debugging line
+    finally:
+        cursor.close()
+        db.close()
+
+    return render_template('retrieve_ticket.html', tickets=tickets)
+
+
+
+@app.route('/update_ticket/<int:ticket_id>', methods=['GET', 'POST'])
+def update_ticket(ticket_id):
+    db = db_connector()
+    ticket = None
+    try:
+        cursor = get_cursor(db)
+        cursor.execute('SELECT username, email, date, time, issue, topic FROM tickets WHERE id = %s', (ticket_id,))
+        ticket = cursor.fetchone()
+
+        if request.method == 'POST':
+            username = request.form['username']
+            email = request.form['email']
+            date = request.form['date']
+            time = request.form['time']
+            issue = request.form['issue']
+            topic = request.form['topic']
+
+            cursor.execute(
+                'UPDATE tickets SET username = %s, email = %s, date = %s, time = %s, issue = %s, topic = %s WHERE id = %s',
+                (username, email, date, time, issue, topic, ticket_id)
+            )
+            db.commit()
+            return redirect(url_for('view_tickets'))
+    finally:
+        cursor.close()
+        db.close()
+
+    form = TicketForm(request.form)
+    form.username.data = ticket['username']
+    form.email.data = ticket['email']
+    form.date.data = ticket['date']
+    form.time.data = ticket['time']
+    form.issue.data = ticket['issue']
+    form.topic.data = ticket['topic']
+
+    return render_template('update_ticket.html', form=form, ticket_id=ticket_id)
+
+
+@app.route('/delete_ticket', methods=['POST'])
+def delete_ticket():
+    ticket_id = request.form['ticket_id']
+
+    db = db_connector()
+    try:
+        cursor = get_cursor(db)
+        cursor.execute('DELETE FROM tickets WHERE id = %s', (ticket_id,))
+        db.commit()
+    finally:
+        cursor.close()
+        db.close()
+
+    return redirect(url_for('view_tickets'))
+
+@app.route('/staff_assignees')
+def index():
+    db = db_connector()
+    try:
+        with db.cursor() as cursor:
+            cursor.execute("SELECT id, name, email, role, tickets_solved FROM staff")
+            assignees = cursor.fetchall()
+            # Sanitize email for safe HTML IDs
+            for assignee in assignees:
+                assignee['email_id'] = sanitize_email(assignee['email'])
+    finally:
+        db.close()
+    return render_template('staff_assignees.html', assignees=assignees)
+
+
+@app.route('/edit_assignee/<string:email>', methods=['GET', 'POST'])
+def edit_assignee(email):
+    db = db_connector()
+    if request.method == 'POST':
+        name = request.form.get('name')
+        new_email = request.form.get('email')
+        role = request.form.get('role')
+        tickets_solved = request.form.get('tickets_solved')
+        try:
+            with db.cursor() as cursor:
+                sql = """UPDATE staff
+                         SET name = %s, email = %s, role = %s, tickets_solved = %s
+                         WHERE email = %s"""
+                cursor.execute(sql, (name, new_email, role, tickets_solved, email))
+                db.commit()
+        except Exception as e:
+            db.rollback()
+            print("Error:", e)
+        finally:
+            db.close()
+        return redirect(url_for('index'))
+
+    try:
+        with db.cursor() as cursor:
+            cursor.execute("SELECT * FROM staff WHERE email = %s", (email,))
+            assignee = cursor.fetchone()
+    finally:
+        db.close()
+    return render_template('edit_assignees.html', assignee=assignee)
+
+@app.route('/add_assignee', methods=['GET', 'POST'])
+def add_assignee():
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        role = request.form['role']
+        tickets_solved = request.form['tickets_solved']
+
+        db = db_connector()
+        try:
+            with db.cursor() as cursor:
+                cursor.execute(
+                    'INSERT INTO staff (name, email, role, tickets_solved) VALUES (%s, %s, %s, %s)',
+                    (name, email, role, tickets_solved)
+                )
+                db.commit()
+        except Exception as e:
+            db.rollback()
+            print("Error:", e)
+        finally:
+            db.close()
+
+        return redirect(url_for('index'))
+
+    return render_template('add_assignees.html')
+
+@app.route('/delete_assignee/<string:email>', methods=['POST'])
+def delete_assignee(email):
+    db = db_connector()
+    try:
+        with db.cursor() as cursor:
+            sql = "DELETE FROM staff WHERE email = %s"
+            cursor.execute(sql, (email,))
+            db.commit()
+    except Exception as e:
+        db.rollback()
+        print("Error:", e)
+    finally:
+        db.close()
+    return redirect(url_for('index'))
+
+@app.route('/staff_mytickets')
+def tickets():
+    db = db_connector()
+    try:
+        with db.cursor() as cursor:
+            query = """
+            SELECT ticketid, username, description, status, priority, created_at, updated_at
+            FROM SupportTickets
+            WHERE status != 'In Progress'
+            """
+            cursor.execute(query)
+            tickets = cursor.fetchall()
+    finally:
+        db.close()
+    return render_template('staff_mytickets.html', tickets=tickets)
+
+
+@app.route('/update_ticket/<string:ticketid>', methods=['POST'])
+def update_ticket(ticketid):
+    description = request.form.get('description')
+    priority = request.form.get('priority')
+    status = request.form.get('status')
+
+    db = db_connector()
+    try:
+        with db.cursor() as cursor:
+            # Modify SQL query to handle string `ticketid`
+            sql = """UPDATE SupportTickets
+                     SET description = %s, priority = %s, status = %s, updated_at = NOW()
+                     WHERE ticketid = %s"""
+            cursor.execute(sql, (description, priority, status, ticketid))
+            db.commit()
+    except Exception as e:
+        db.rollback()
+        print("Error:", e)
+    finally:
+        db.close()
+    return redirect(url_for('tickets'))
+
+
+
+@app.route('/thank_you')
+def thank_you():
+    return 'Thank you for your feedback!'
 
 
 

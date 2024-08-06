@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Assignee</title>
+</head>
+
+<body>
+    <h1>Add Assignee</h1>
+    <form method="POST" action="/add_assignee">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br><br>
+
+        <label for="role">Role:</label>
+        <input type="text" id="role" name="role" required><br><br>
+
+        <label for="tickets_solved">Tickets Solved:</label>
+        <input type="number" id="tickets_solved" name="tickets_solved" required><br><br>
+
+        <button type="submit">Add Assignee</button>
+    </form>
+</body>
+
+</html>
