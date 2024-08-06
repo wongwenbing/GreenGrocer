@@ -1,10 +1,11 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask, render_template, request, redirect, url_for, flash, session, send_file
 from db import db_connector
 from report_generation.nutritional_summary import custnutrition
 from report_generation.invoice import Invoice, InvoiceCustomer, invoice_summary
 from report_generation.reportgen import CustReport, customer_report, StaffReport, staff_report, Retrieve_Customer_Report
 from report_generation.customer_report import PurchasingReport
 import os
+from weasyprint import HTML
 
 app = Flask(__name__)
 
@@ -108,6 +109,30 @@ def retrieve_invoice():
     session['invoice'] = invoice_id
     return redirect(url_for('invoicing'))
 
+@app.route('/print_invoice', methods=['POST'])
+def print_invoice():
+    invoice_id = request.form.get('invoice_id')
+    query = """
+        SELECT i.ID, i.Invoiced_date, i.order_id, i.user_id, u.name, u.email, u.phone_number, u.address
+        FROM Invoice i INNER JOIN users u
+        ON i.user_id = u.id
+        WHERE i.ID = %s
+        """
+    cursor.execute(query, invoice_id)
+    row = cursor.fetchone()
+    print(row)
+    invoice = InvoiceCustomer(row['ID'], row['Invoiced_date'], row['order_id'], row['name'],
+                              row['email'], row['phone_number'], row['address'])
+    invoice_summary(invoice)
+    products = invoice.products
+    html = render_template('report_generation/invoice.html', invoice=invoice,
+                           products=products)
+    pdf = HTML(string=html).write_pdf()
+    filename = f"Invoice#{invoice_id}.pdf"
+    with open(f'static/{filename}','wb') as f:
+        f.write(pdf)
+    return send_file(f"static/{filename}", mimetype='application/pdf', as_attachment=True)
+
 
 @app.route('/invoice')
 def invoicing():
@@ -149,6 +174,7 @@ def cust_generate_report():
             return redirect
         return redirect(url_for('success'))
     return render_template('report_generation/custreportgen.html', form=form)
+
 
 
 @app.route('/staffreport', methods=['GET', 'POST'])
