@@ -549,6 +549,39 @@ if __name__ == '__main__':
 
 
 #Insert Customer Support Herre
+@app.route('/pages-contact')
+def contact_us():
+    return render_template('pages-contact.html')
+
+
+@app.route('faq/')
+def faq():
+    faq_objects = []
+    connection = None
+    try:
+        connection = db_connector()
+        if connection is None:
+            raise Exception("Failed to establish a database connection.")
+
+        with get_cursor(connection) as cursor:
+            cursor.execute("SELECT question, answer FROM FAQs LIMIT 10")
+            faqs = cursor.fetchall()
+            if not faqs:
+                print("No FAQs found in the database.")
+            for faq in faqs:
+                faq_obj = FAQ(faq['question'], faq['answer'])
+                faq_objects.append(faq_obj)
+    except pymysql.MySQLError as e:
+        print(f"Database error: {e}")
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+    finally:
+        if connection:
+            connection.close()
+
+    return render_template('pages-faq.html', faqs=faq_objects)
+
+
 @app.route('/create_ticket', methods=['GET', 'POST'])
 def raise_a_ticket():
     form = TicketForm(request.form)
