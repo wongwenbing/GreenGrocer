@@ -10,6 +10,7 @@ import os
 from werkzeug.security import generate_password_hash, check_password_hash
 from customer_support.forms import TicketForm
 from customer_support.faqclass import FAQ
+from account_management.forms import RegistrationForm, CreateUserForm, LoginForm
 from products.dao import DAO
 
 
@@ -88,8 +89,6 @@ def signup():
             flash('Email and Password are required fields.', 'danger')
             return render_template('signup_bootstrap.html', form=form)
 
-<<<<<<< HEAD
-
         try:
             db, cursor = db_connector()
             cursor.execute('''
@@ -112,30 +111,7 @@ def signup():
             for error in field_errors:
                 errors.append(f"{field.capitalize()}: {error}")
         return render_template('/account_management/signup_bootstrap.html', form=form, errors=" ".join(errors))
-=======
-            try:
-                db, cursor = db_connector()
-                cursor.execute('''
-                    INSERT INTO users (name, email, phone_number, address, date_of_birth, password)
-                    VALUES (%s, %s, %s, %s, %s, %s)
-                ''', (name, email, phone_number, address, date_of_birth, hashed_password))
-                db.commit()
-                flash('Account created successfully! Please login.', 'success')
-                print('success')
-                return redirect(url_for('login'))
-            except pymysql.IntegrityError:
-                flash('Email already registered.', 'danger')
-            except Exception as e:
-                flash(f'An error occurred: {str(e)}', 'danger')
-            finally:
-                db.close()
-        else:
-            errors = []
-            for field, field_errors in form.errors.items():
-                for error in field_errors:
-                    errors.append(f"{field.capitalize()}: {error}")
-            return render_template('/account_management/signup_bootstrap.html', form=form, errors=" ".join(errors))
->>>>>>> ea8236cd49e8d34627ad5ff3a652bde732b3cd7b
+
        
     return render_template('/account_management/signup_bootstrap.html', form=form)
 
@@ -177,6 +153,8 @@ WHERE id = %s
     db.close()
    
     return render_template('/account_management/profile.html', user=user)
+
+
 
 @app.route('/logout')
 def logout():
