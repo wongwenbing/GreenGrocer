@@ -48,15 +48,16 @@ def cust_retrieve_report():
     query = """SELECT * FROM Customer_Report WHERE cust_report_id = %s """
     cursor.execute(query, report_id)
     result = cursor.fetchone()
+    print(session)
     session['cust_report_data'] = {
         'start_date': result['coverage_start'],
         'end_date': result['coverage_end'],
         'type_of_report': result['report_type']
     }
-    if result['report_type'] == "Purchasing":
+    if result['report_type'] == 'Purchasing':
         return redirect(url_for('purchasing_report'))
-    elif result['report_type'] == "Sustainability":
-        return redirect(url_for("sustainability_report"))
+    elif result['report_type'] == 'Sustainability':
+        return redirect(url_for('sustainability_report'))
     else:
         return redirect(url_for("success"))
 
@@ -91,32 +92,9 @@ def cust_generate_report():
             return redirect(url_for('purchasing_report'))
         elif newreport.report_type == "Sustainability":
             return redirect(url_for('sustainability_report'))
-
-        return redirect(url_for('success'))
+        else:
+            return redirect(url_for('success'))
     return render_template('report_generation/custreportgen.html', form=form)
-
-
-@app.route('/purchasing_report')
-def purchasing_report():
-    report_data = session.get('cust_report_data')
-    report = PurchasingReport(report_data['start_date'], report_data['end_date'])
-    print(report.get_info())
-    report.get_average_order_spending()
-    report.get_total_amount()
-    report.get_mostpurchased_category()
-    return render_template('report_generation/graphs.html', report=report)
-
-
-@app.route('/sustainability_report')
-def sustainability_report():
-    report_data = session.get('cust_report_data')
-    cust_id = session['user_id']
-    report = SustainabilityReport(cust_id, report_data['start_date'], report_data['end_date'])
-    report.carbon_emissions()
-    report.graph_organic()
-    report.line_carbonemissions()
-    return render_template('report_generation/sustainability_report.html', report=report)
-
 
 
 @app.route('/cust_report_update', methods=['POST'])
@@ -153,6 +131,30 @@ def cust_update_report2():
         update.end_date.data = datetime.strptime(report.end_date, '%Y-%m-%d')
         update.type_of_report.data = report.report_type
         return render_template('report_generation/custupdatereport.html', form=update)
+
+
+@app.route('/purchasing_report')
+def purchasing_report():
+    report_data = session.get('cust_report_data')
+    report = PurchasingReport(report_data['start_date'], report_data['end_date'])
+    print(report.get_info())
+    report.get_average_order_spending()
+    report.get_total_amount()
+    report.get_mostpurchased_category()
+    return render_template('report_generation/graphs.html', report=report)
+
+
+@app.route('/sustainability_report')
+def sustainability_report():
+    report_data = session.get('cust_report_data')
+    cust_id = session['user_id']
+    report = SustainabilityReport(cust_id, report_data['start_date'], report_data['end_date'])
+    report.carbon_emissions()
+    report.graph_organic()
+    report.line_carbonemissions()
+    return render_template('report_generation/sustainability_report.html', report=report)
+
+
 
 #STAFF
 @app.route('/staff_generate_report', methods=['GET', 'POST'])

@@ -12,29 +12,18 @@ from customer_support.faqclass import FAQ
 
 
 app = Flask(__name__)
-
-
 app.secret_key = os.urandom(24)  # Generates a random secret key each time
 
 
 db, cursor = db_connector()
 
-
-
-
 @app.route('/home')
 def home():
     return render_template('custhome.html')
 
-
-
-
 @app.route('/customer')
 def customer_login():
     return render_template('account_management/signup_bootstrap.html')
-
-
-
 
 @app.route('/staff')
 def staff_login():
@@ -53,9 +42,8 @@ def login():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
-       
+    
         db, cursor = db_connector()
-
 
         cursor.execute('SELECT * FROM users WHERE email = %s', (email))
         user = cursor.fetchone()
