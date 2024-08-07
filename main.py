@@ -13,7 +13,6 @@ import os
 from werkzeug.security import generate_password_hash, check_password_hash
 from customer_support.forms import TicketForm
 from customer_support.faqclass import FAQ
-from account_management.forms import RegistrationForm, CreateUserForm, LoginForm
 from account_management.forms import RegistrationForm, CreateUserForm
 from products.dao import DAO
 from decimal import Decimal, InvalidOperation
@@ -45,14 +44,17 @@ def index():
 
 
 @app.route('/login', methods=['GET', 'POST'])
+
 def login():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
+        db, cursor = db_connector()
         cursor.execute('SELECT * FROM users WHERE email = %s', (email))
         user = cursor.fetchone()
 
         if not user:
+            db, cursor = db_connector()
             cursor.execute('SELECT * FROM staff WHERE email = %s', (email))
             user = cursor.fetchone()
             role = 'staff' if user else None
@@ -130,6 +132,7 @@ def profile():
 
     if request.method == 'POST':
         if 'delete_account' in request.form:
+            db, cursor = db_connector()
             cursor.execute(f'DELETE FROM {role} WHERE id = %s', (id))
             db.commit()
             session.pop('id', None)
@@ -147,10 +150,11 @@ UPDATE {role}
 SET name = %s, email = %s, phone_number = %s, address = %s, date_of_birth = %s
 WHERE id = %s
 """
+            db, cursor = db_connector()
             cursor.execute(query, val)
             db.commit()
             flash('Profile updated successfully!', 'success')
-   
+    db, cursor = db_connector()
     cursor.execute(f'SELECT * FROM {role} WHERE id = %s', (id))
     user = cursor.fetchone()
     db.close()
@@ -180,6 +184,7 @@ def create_user():
         default_password = "P@ssw0rd"
 
         try:
+            db, cursor = db_connector()
             cursor.execute('''
                 INSERT INTO users (name, email, phone_number, address, date_of_birth, password)
                 VALUES (%s, %s, %s, %s, %s, %s)
@@ -200,6 +205,7 @@ def create_user():
 # Staff assist with customer account (Retrieve)
 @app.route('/retrieveCustomers')
 def retrieve_customers():
+    db, cursor = db_connector()
     cursor.execute('SELECT id, name, email, phone_number, address, date_of_birth FROM users')
 
     users = cursor.fetchall()
