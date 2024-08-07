@@ -1,3 +1,8 @@
+{% extends "base.html" %}
+
+{% block title %}Products{% endblock %}
+
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,38 +12,30 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 <body>
-    <nav class="navbar navbar-light bg-light">
-        <a class="navbar-brand" href="#">
-            <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="Logo" style="width: 20px;">
-            GreenGrocer
-        </a>
-        <div class="container">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('admin_products') }}">View Products</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('admin_add_product') }}">Add Product</a>
-                </li>
-                <!-- Other links as needed -->
-            </ul>
-        </div>
-    </nav>
-
     <div class="container mt-4">
         <h1 class="mb-4">Add New Product</h1>
         <form action="{{ url_for('admin_add_product') }}" method="POST">
             <div class="form-group">
                 <label for="product_id">Product ID</label>
-                <input type="text" class="form-control" id="product_id" name="product_id" required placeholder="Enter product ID">
+                <input type="text" class="form-control" id="product_id" name="product_id" value="PR" required placeholder="Enter product ID">
             </div>
             <div class="form-group">
-                <label for="category_id">Category ID</label>
-                <input type="text" class="form-control" id="category_id" name="category_id" required placeholder="Enter category ID">
+                <label for="category">Category</label>
+                <select class="form-control" id="category" name="category_id" required>
+                    <option value="" disabled selected>Select a Category</option>
+                    {% for category in categories %}
+                    <option value="{{ category.category_id }}">{{ category.category_name }}</option>
+                    {% endfor %}
+                </select>
             </div>
             <div class="form-group">
-                <label for="supplier_id">Supplier ID</label>
-                <input type="text" class="form-control" id="supplier_id" name="supplier_id" required placeholder="Enter supplier ID">
+                <label for="supplier">Supplier</label>
+                <select class="form-control" id="supplier" name="supplier_id" required>
+                    <option value="" disabled selected>Select a Supplier</option>
+                    {% for supplier in suppliers %}
+                    <option value="{{ supplier.supplier_id }}">{{ supplier.supplier_name }}</option>
+                    {% endfor %}
+                </select>
             </div>
             <div class="form-group">
                 <label for="name">Product Name</label>
@@ -46,7 +43,12 @@
             </div>
             <div class="form-group">
                 <label for="uom">Unit of Measure</label>
-                <input type="text" class="form-control" id="uom" name="uom" required placeholder="Enter unit of measure">
+                <select class="form-control" id="uom" name="uom" required>
+                    <option value="" disabled selected>Select a Unit of Measure</option>
+                    {% for uom in uoms %}
+                    <option value="{{ uom }}">{{ uom }}</option>
+                    {% endfor %}
+                </select>
             </div>
             <div class="form-group">
                 <label for="price">Price</label>
@@ -76,12 +78,13 @@
                     <option value="{{ discount.discount_id }}">{{ discount.discount_percentage }}%</option>
                     {% endfor %}
                 </select>
-            </div>
+            </div> 
             <div class="form-group">
                 <label for="status">Status</label>
                 <select class="form-control" id="status" name="status" required>
                     <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
+                    <option value="drafts">Drafts</option>
+                    <option value="archive">Archive</option>
                 </select>
             </div>
             <button type="submit" class="btn btn-primary">Add Product</button>
@@ -104,3 +107,4 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>
+{% endblock %}

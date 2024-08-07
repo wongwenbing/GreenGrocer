@@ -1,3 +1,9 @@
+{% extends "base.html" %}
+
+{% block title %}Products{% endblock %}
+
+{% block content %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,17 +12,25 @@
     <title>Admin Products</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
-<body>
+<body> 
 <div class="container mt-4">
     <h1 class="mb-4">Manage Products</h1>
     <a href="{{ url_for('admin_add_product') }}" class="btn btn-primary mb-3">Add New Product</a>
     
     <!-- Status Filter Bar -->
     <div class="btn-group mb-3" role="group" aria-label="Status Filter">
-        <a href="{{ url_for('admin_products') }}" class="btn btn-secondary {% if not status_filter %}active{% endif %}">All Products</a>
-        <a href="{{ url_for('admin_products', status='active') }}" class="btn btn-success {% if status_filter == 'active' %}active{% endif %}">Active</a>
-        <a href="{{ url_for('admin_products', status='drafts') }}" class="btn btn-warning {% if status_filter == 'drafts' %}active{% endif %}">Drafts</a>
-        <a href="{{ url_for('admin_products', status='archive') }}" class="btn btn-dark {% if status_filter == 'archive' %}active{% endif %}">Archive</a>
+        <a href="{{ url_for('admin_products') }}" class="btn btn-secondary {% if not status_filter %}active{% endif %}">
+            All Products ({{ total_all }})
+        </a>
+        <a href="{{ url_for('admin_products', status='active') }}" class="btn btn-success {% if status_filter == 'active' %}active{% endif %}">
+            Active ({{ total_active }})
+        </a>
+        <a href="{{ url_for('admin_products', status='drafts') }}" class="btn btn-warning {% if status_filter == 'drafts' %}active{% endif %}">
+            Drafts ({{ total_drafts }})
+        </a>
+        <a href="{{ url_for('admin_products', status='archive') }}" class="btn btn-dark {% if status_filter == 'archive' %}active{% endif %}">
+            Archive ({{ total_archive }})
+        </a>
     </div>
     
     <!-- Products Table -->
@@ -58,3 +72,4 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>
+{% endblock %}

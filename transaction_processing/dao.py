@@ -1,6 +1,6 @@
 import pymysql
 from db import db_connector
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 
 
 class DAO:
@@ -10,6 +10,29 @@ class DAO:
     def __del__(self):
         if self.connection:
             self.connection.close()
+    
+    def get_total_products(self):
+        cursor = None
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute("SELECT COUNT(*) AS total FROM Products")
+            result = cursor.fetchone()
+            return result['total']
+        finally:
+            if cursor:
+                cursor.close()
+
+    def count_products_by_status(self, status):
+        cursor = None
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute("SELECT COUNT(*) AS count FROM Products WHERE status = %s", (status,))
+            result = cursor.fetchone()
+            return result['count']
+        finally:
+            if cursor:
+                cursor.close()
+    
     
     # Product Methods
     def get_all_products(self, status_filter=None):
@@ -278,20 +301,17 @@ class DAO:
         cursor = None
         try:
             cursor = self.connection.cursor(pymysql.cursors.DictCursor)
-            # Select distinct supplier_name, and fetch their IDs if needed
+            # Select distinct supplier names from Suppliers
             query = """
-            SELECT supplier_id, supplier_name 
+            SELECT DISTINCT supplier_name
             FROM Suppliers
-            WHERE supplier_name IN (
-                SELECT DISTINCT supplier_name
-                FROM Suppliers
-            )
             """
             cursor.execute(query)
             return cursor.fetchall()
         finally:
-                if cursor:
-                    cursor.close()
+            if cursor:
+                cursor.close()
+
     
     def get_all_discounts_from_products(self, status_filter=None):
         cursor = None

@@ -10,6 +10,8 @@ import os
 from werkzeug.security import generate_password_hash, check_password_hash
 from customer_support.forms import TicketForm
 from customer_support.faqclass import FAQ
+from transaction_processing.dao import DAO
+from decimal import Decimal, InvalidOperation
 
 
 app = Flask(__name__)
@@ -309,7 +311,7 @@ def delete_user(id):
 
 #Insert Transaction Processing here
 
-# dao = DAO()
+dao = DAO()
 
 @app.route('/products')
 def products():
@@ -347,7 +349,7 @@ def products():
             if parent_category:
                 parent_category_name = parent_category['category_name']
 
-    return render_template('index.html', products=products, categories=categories,
+    return render_template('/transaction_processing/index.html', products=products, categories=categories,
                            selected_category_name=selected_category_name,
                            parent_category_name=parent_category_name)
 
@@ -362,7 +364,7 @@ def product_detail(product_id):
     category_id = product['category_id']
     featured_products = dao.get_products_by_category(category_id)
 
-    return render_template('product_detail.html', product=product, featured_products=featured_products)
+    return render_template('/transaction_processing/product_detail.html', product=product, featured_products=featured_products)
 
 @app.route('/add_to_cart', methods=['POST'])
 def add_to_cart():
@@ -376,7 +378,7 @@ def add_to_cart():
 def view_cart():
     customer_id = request.args.get('customer_id', '1')  # For simplicity, hardcoded customer_id
     cart_items = dao.get_cart_by_customer_id(customer_id)
-    return render_template('cart.html', cart_items=cart_items, customer_id=customer_id)
+    return render_template('/transaction_processing/cart.html', cart_items=cart_items, customer_id=customer_id)
 
 @app.route('/update_cart_item/<product_id>', methods=['POST'])
 def update_cart_item(product_id):
@@ -416,7 +418,15 @@ def admin_products():
     print(f"Status Filter: {status_filter}")
     print(f"Products: {products}")
 
-    return render_template('admin_products.html', products=products, status_filter=status_filter)
+    # Get totals
+    total_all = dao.get_total_products()
+    total_active = dao.count_products_by_status('active')
+    total_drafts = dao.count_products_by_status('drafts')
+    total_archive = dao.count_products_by_status('archive')
+    return render_template('/transaction_processing/admin_products.html', products=products, status_filter=status_filter,total_all=total_all,
+        total_active=total_active,
+        total_drafts=total_drafts,
+        total_archive=total_archive)
 
 
 @app.route('/admin/product/<product_id>')
@@ -425,7 +435,7 @@ def admin_product_detail(product_id):
     if not product:
         flash('Product not found', 'danger')
         return redirect(url_for('admin_products'))
-    return render_template('admin_product_detail.html', product=product)
+    return render_template('/transaction_processing/admin_product_detail.html', product=product)
 
 ## Admin add product
 @app.route('/admin/add_product', methods=['GET', 'POST'])
@@ -468,7 +478,10 @@ def admin_add_product():
     suppliers = dao.get_all_suppliers()
     discounts = dao.get_all_discounts_from_products()
 
-    return render_template('admin_add_product.html', categories=categories, suppliers=suppliers, discounts=discounts)
+
+    uoms = ['kg', 'g', 'l', 'ml', 'pcs']
+
+    return render_template('/transaction_processing/admin_add_product.html', categories=categories, suppliers=suppliers, discounts=discounts, uoms=uoms)
 
 
 
@@ -530,8 +543,9 @@ def admin_edit_product(product_id):
     categories = dao.get_all_categories()
     suppliers = dao.get_all_suppliers()
     discounts = dao.get_all_discounts_from_products()
+    uoms = ['kg', 'g', 'l', 'ml', 'pcs']
 
-    return render_template('transaction_processing/admin_edit_product.html', product=product, categories=categories, suppliers=suppliers, discounts=discounts)
+    return render_template('/transaction_processing/admin_edit_product.html', product=product, categories=categories, suppliers=suppliers, discounts=discounts, uoms=uoms)
 
 
 @app.route('/admin/delete_product/<product_id>', methods=['POST'])
