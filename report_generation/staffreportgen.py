@@ -8,7 +8,7 @@ import pandas as pd
 import plotly.io as pio
 
 
-class PurchasingReport:
+class SalesReport:
     def __init__(self, startdate, enddate):
         self.startdate = startdate
         self.enddate = enddate
@@ -116,3 +116,8 @@ class InventoryReport:
         cursor.execute(query)
         rows = cursor.fetchall()
         self.avg_stock = f"{rows[0]['AVG(stock_quantity)']:.2f}"
+
+class CategoryReport:
+
+    def __init__(self):
+        self.category = ""

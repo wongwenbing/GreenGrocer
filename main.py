@@ -811,6 +811,15 @@ def thank_you():
 
 
 #Insert Report Generaation here
+@app.route('/nutrition')
+def view_nutrition():
+    # Fetch data from database
+    cursor.execute("SELECT nut_id, cust_id, month, total_calories, protein, carbs, vitamins FROM Customer_Nutrition")
+    result = cursor.fetchall()
+    nutrition_objects = [custnutrition(**entry) for entry in result]
+    return render_template('report_generation/nutritionsummary.html', count=len(nutrition_objects), customers=nutrition_objects)
+
+
 @app.route('/view_reports')
 def view_reports():
     #Fetch Data from db
@@ -847,20 +856,10 @@ def delete_report():
     query = """DELETE FROM Customer_Report WHERE cust_report_id = %s """
     cursor.execute(query, report_id)
 
-    # db.commit()
+    db.commit()
 
     return redirect(url_for('view_reports'))
 
-
-@app.route('/purchasing_report')
-def purchasing_report():
-    report_data = session.get('report_data')
-    report = PurchasingReport(report_data['start_date'], report_data['end_date'])
-    print(report.get_info())
-    report.get_average_order_spending()
-    report.get_total_amount()
-    report.get_mostpurchased_category()
-    return render_template('report_generation/graphs.html', report=report)
 
 
 @app.route('/view_invoices')
@@ -886,26 +885,6 @@ def retrieve_invoice():
     invoice = Invoice(row['ID'], row['Invoiced_date'], row['order_id'])
     session['invoice'] = invoice_id
     return redirect(url_for('invoicing'))
-
-
-@app.route('/invoice')
-def invoicing():
-    invoice_data = session.get('invoice')
-    query = """
-    SELECT i.ID, i.Invoiced_date, i.order_id, i.user_id, u.name, u.email, u.phone_number, u.address
-    FROM Invoice i INNER JOIN users u
-    ON i.user_id = u.id
-    WHERE i.ID = %s
-    """
-    cursor.execute(query, invoice_data)
-    row = cursor.fetchone()
-    print(row)
-    invoice = InvoiceCustomer(row['ID'], row['Invoiced_date'], row['order_id'], row['name'],
-                              row['email'], row['phone_number'], row['address'])
-    invoice_summary(invoice)
-    products = invoice.products
-    return render_template('report_generation/invoice.html', invoice=invoice,
-                           products=products)
 
 @app.route('/success')
 def success():

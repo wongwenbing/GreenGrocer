@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %} Generate Reports {% endblock %}
+{% block title %} Update Reports {% endblock %}
 {% block content %}
  <h1>Customer Report</h1>
         <form method="POST" action="">
@@ -11,6 +11,7 @@
             <div>
                 <label for="fields_needed">Fields Needed</label>
                 {{ form.type_of_report() }}
+
             </div>
             <div>
                 <input type="submit" value="Submit">
