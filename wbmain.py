@@ -4,9 +4,10 @@ from report_generation.nutritional_summary import custnutrition
 from report_generation.invoice import Invoice, InvoiceCustomer, invoice_summary
 from report_generation.reportgen import CustReport, customer_report, StaffReport, staff_report, Retrieve_Customer_Report
 from report_generation.customer_report import PurchasingReport
+from report_generation.staffreportgen import InventoryReport
 import os
-import asyncio
-from playwright.async_api import async_playwright
+from xhtml2pdf import pisa
+from io import BytesIO
 
 
 app = Flask(__name__)
@@ -18,7 +19,7 @@ print(db, cursor)
 
 # Insert Report Generaation here
 
-@app.route('/')
+@app.route('/index')
 def index():
     # Set session data in a route where a request context is active
     session['user_id'] = 1
@@ -85,6 +86,14 @@ def purchasing_report():
     report.get_mostpurchased_category()
     return render_template('report_generation/graphs.html', report=report)
 
+@app.route('/')
+def inventory_report():
+    # report_data = session.get('report_data')
+    report = InventoryReport()
+    report.get_totalinventoryvalue_bycategory()
+    report.get_totalinventory()
+    report.get_average_stock()
+    return render_template('report_generation/inventory_report.html', report=report)
 
 
 @app.route('/view_invoices')
@@ -112,7 +121,7 @@ def retrieve_invoice():
     return redirect(url_for('invoicing'))
 
 @app.route('/print_invoice', methods=['POST'])
-async def print_invoice():
+def print_invoice():
     invoice_id = request.form.get('invoice_id')
     query = """
         SELECT i.ID, i.Invoiced_date, i.order_id, i.user_id, u.name, u.email, u.phone_number, u.address
@@ -127,16 +136,14 @@ async def print_invoice():
                               row['email'], row['phone_number'], row['address'])
     invoice_summary(invoice)
     products = invoice.products
-    html = render_template('report_generation/invoice.html', invoice=invoice,
+    html = render_template('report_generation/print_invoices.html', invoice=invoice,
                            products=products)
     filename = f"Invoice#{invoice_id}.pdf"
-    async with async_playwright() as p:
-        browser = await p.chromium.launch()
-        page = await browser.new_page()
-        await page.set_content(html_content)
-        await page.pdf(path=output_path)
-        await browser.close()
-    return send_file(f"static/{filename}", mimetype='application/pdf', as_attachment=True)
+    pdf_output = BytesIO()
+
+    pisa.CreatePDF(html, dest=pdf_output, encoding='utf-8')
+    pdf_output.seek(0)
+    return send_file(pdf_output,as_attachment=True, mimetype='application/pdf', download_name=filename)
 
 
 @app.route('/invoice')
@@ -159,14 +166,14 @@ def invoicing():
                            products=products)
 
 
-@app.route('/generate_report', methods=['GET', 'POST'])
+@app.route('/cust_generate_report', methods=['GET', 'POST'])
 def cust_generate_report():
     form = CustReport(request.form)
     if request.method == "POST" and form.validate():
         # Handle the form submission logic here
         newreport = customer_report(form.start_date.data, form.end_date.data,
                                     form.type_of_report.data)
-        session['report_data'] = {
+        session['cust_report_data'] = {
             'start_date': str(newreport.startdate),
             'end_date': str(newreport.end_date),
             'type_of_report': newreport.report_type
@@ -182,14 +189,18 @@ def cust_generate_report():
 
 
 
-@app.route('/staffreport', methods=['GET', 'POST'])
+@app.route('/staff_generate_report', methods=['GET', 'POST'])
 def staff_generate_report():
     form = StaffReport(request.form)
     if request.method == "POST" and form.validate():
         # Handle the form submission logic here
-        newreport = staff_report(form.start_date.data, form.end_date.data, form.description.data,
-                                 form.type_of_report.data)
+        newreport = staff_report(form.start_date.data, form.end_date.data, form.type_of_report.data)
         print(newreport.info())
+        session['staff_report_data'] = {
+            'start_date': str(newreport.startdate),
+            'end_date': str(newreport.end_date),
+            'type_of_report': newreport.report_type
+        }
         # For example, save the data or generate a report
         return redirect(url_for('success'))
     return render_template('custreportgen.html', form=form)

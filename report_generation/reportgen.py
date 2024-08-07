@@ -19,7 +19,6 @@ class customer_report:
 class Report(Form):
     start_date = DateField('Start Date', format='%Y-%m-%d', validators=[DataRequired()])
     end_date = DateField('End Date', format='%Y-%m-%d', validators=[DataRequired()])
-    description = TextAreaField('Description', validators=[DataRequired()])
 
 class CustReport(Report):
     type_of_report =  RadioField('Report Type', choices=[
@@ -38,7 +37,6 @@ class staff_report:
     def __init__(self, startdate, end_date, description, reporttype):
         self.startdate = startdate
         self.end_date = end_date
-        self.description = description
         self.report_type = reporttype
 
     def to_db(self):
