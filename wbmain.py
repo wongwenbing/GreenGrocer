@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, send_file
+from flask import Flask, render_template, request, redirect, url_for, session, send_file, Response
 from db import db_connector
 from datetime import datetime
 from report_generation.invoice import Invoice, InvoiceCustomer, invoice_summary
@@ -7,7 +7,11 @@ from report_generation.customer_report import PurchasingReport, SustainabilityRe
 from report_generation.staffreportgen import InventoryReport, SalesReport
 import os
 from xhtml2pdf import pisa
-from io import BytesIO
+from io import BytesIO, StringIO
+import pandas as pd
+import smtplib
+from email.message import EmailMessage
+
 
 
 app = Flask(__name__)
@@ -24,7 +28,7 @@ def index():
     # Set session data in a route where a request context is active
     session['user_id'] = 1
     print(session['user_id'])
-    return redirect(url_for('view_invoices'))
+    return redirect(url_for('inventory_report'))
 
 
 @app.route('/cust_view_reports')
@@ -238,6 +242,44 @@ def inventory_report():
     report.get_totalinventory()
     report.get_average_stock()
     return render_template('report_generation/inventory_report.html', report=report)
+
+@app.route('/download_inventory_report')
+def download_inventory_report():
+    query = """
+    SELECT p.name, i.stock_quantity, i.reorder_level, s.stock_status
+    FROM Inventory i
+    INNER JOIN Products p ON i.product_id = p.product_id
+    INNER JOIN StockStatus s ON i.stock_status_id = s.stock_status_id
+    """
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    rows = pd.DataFrame(rows)
+    # Convert DataFrame to CSV
+    csv_buffer = StringIO()
+    rows.to_csv(csv_buffer, index=False)
+    csv_buffer.seek(0)
+
+    # Create a response object and set headers
+    response = Response(
+        csv_buffer.getvalue(),
+        mimetype='text/csv',
+        headers={"Content-Disposition": "attachment;filename=inventory_report.csv"}
+    )
+
+    EMAIL_ADDRESS = 'staff.greengrocerr@gmail.com'
+    EMAIL_PASSWORD = 'fjad oapl nsac lkfa'
+
+    msg = EmailMessage()
+    msg['Subject'] = 'Report Generated Successfully!'
+    msg['From'] = EMAIL_ADDRESS
+    msg['To'] = 'aniskyguy331@gmail.com'
+    msg.set_content('This is to inform you that the Inventory report has been generated successfully.')
+
+    with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+        smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
+        smtp.send_message(msg)
+
+    return response
 
 
 @app.route('/sales_report')

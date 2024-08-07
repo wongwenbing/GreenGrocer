@@ -47,13 +47,13 @@ def index():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        email = request.form['email']
+        email = str(request.form['email'])
         password = request.form['password']
-        cursor.execute('SELECT * FROM users WHERE email = %s', (email))
+        cursor.execute('SELECT * FROM users WHERE email = %s', email)
         user = cursor.fetchone()
 
         if not user:
-            cursor.execute('SELECT * FROM staff WHERE email = %s', (email))
+            cursor.execute('SELECT * FROM staff WHERE email = %s', email)
             user = cursor.fetchone()
             role = 'staff' if user else None
         else:
