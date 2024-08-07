@@ -9,6 +9,26 @@
         </a>
       </li><!-- End Customer Nav -->
 
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#manage-customer-accounts-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-people"></i><span>Manage Customer Accounts</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="manage-customer-accounts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="{{ url_for('create_user') }}">
+              <i class="bi bi-circle"></i><span>Create Customer</span>
+            </a>
+          </li>
+          <li>
+            <a href="{{ url_for('retrieve_customers') }}">
+              <i class="bi bi-circle"></i><span>View Customers</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End Manage Customer Accounts Nav -->
+
+
       <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#products-nav" data-bs-toggle="collapse" href="#">
           <i class="bi bi-cart-plus"></i><span>Products</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -102,17 +122,11 @@
       </li><!-- End Help Nav -->
 
       <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#logout-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-box-arrow-left"></i><span>Log Out</span><i class="bi bi-chevron-down ms-auto"></i>
+        <a class="nav-link collapsed" href="{{ url_for('logout') }}">
+          <i class="bi bi-box-arrow-left"></i>
+          <span>Log Out</span>
         </a>
-        <ul id="logout-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="tables-general.html">
-              <i class="bi bi-circle"></i><span>Log out?</span>
-            </a>
-          </li>
-        </ul>
-      </li><!-- End Tables Nav (Ash to add) -->
+      </li><!-- End Log Out Nav -->
 
     </ul>
 
