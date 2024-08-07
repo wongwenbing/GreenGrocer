@@ -361,3 +361,14 @@ class DAO:
         finally:
             if cursor:
                 cursor.close()
+    
+    def get_reviews_by_product_id(self, product_id):
+        query = """
+        SELECT f.feedback_id, f.customer_id, f.feeedback_text, f.created_at, f.updated_at, f.ratings, f.product_id, c.name AS reviewer_name
+        FROM Feedback f
+        LEFT JOIN Customers c ON f.customer_id = c.customer_id
+        WHERE f.product_id = %s
+        """
+        self.cursor.execute(query, (product_id,))
+        return self.cursor.fetchall()
+

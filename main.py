@@ -363,8 +363,9 @@ def product_detail(product_id):
     
     category_id = product['category_id']
     featured_products = dao.get_products_by_category(category_id)
+    reviews = dao.get_reviews_by_product_id(product_id)
 
-    return render_template('/transaction_processing/product_detail.html', product=product, featured_products=featured_products)
+    return render_template('/transaction_processing/product_detail.html', product=product, featured_products=featured_products, reviews=reviews)
 
 @app.route('/add_to_cart', methods=['POST'])
 def add_to_cart():
