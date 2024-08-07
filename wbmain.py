@@ -5,7 +5,9 @@ from report_generation.invoice import Invoice, InvoiceCustomer, invoice_summary
 from report_generation.reportgen import CustReport, customer_report, StaffReport, staff_report, Retrieve_Customer_Report
 from report_generation.customer_report import PurchasingReport
 import os
-from weasyprint import HTML
+import asyncio
+from playwright.async_api import async_playwright
+
 
 app = Flask(__name__)
 
@@ -110,7 +112,7 @@ def retrieve_invoice():
     return redirect(url_for('invoicing'))
 
 @app.route('/print_invoice', methods=['POST'])
-def print_invoice():
+async def print_invoice():
     invoice_id = request.form.get('invoice_id')
     query = """
         SELECT i.ID, i.Invoiced_date, i.order_id, i.user_id, u.name, u.email, u.phone_number, u.address
@@ -127,10 +129,13 @@ def print_invoice():
     products = invoice.products
     html = render_template('report_generation/invoice.html', invoice=invoice,
                            products=products)
-    pdf = HTML(string=html).write_pdf()
     filename = f"Invoice#{invoice_id}.pdf"
-    with open(f'static/{filename}','wb') as f:
-        f.write(pdf)
+    async with async_playwright() as p:
+        browser = await p.chromium.launch()
+        page = await browser.new_page()
+        await page.set_content(html_content)
+        await page.pdf(path=output_path)
+        await browser.close()
     return send_file(f"static/{filename}", mimetype='application/pdf', as_attachment=True)
 
 
