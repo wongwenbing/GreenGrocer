@@ -32,7 +32,7 @@ def home():
 
 @app.route('/customer')
 def customer_login():
-    return render_template('customer.html')
+    return render_template('account_management/signup_bootstrap.html')
 
 
 
