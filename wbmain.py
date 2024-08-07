@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, send_file
 from db import db_connector
 from datetime import datetime
-from report_generation.invoice import InvoiceCustomer, invoice_summary
+from report_generation.invoice import Invoice, InvoiceCustomer, invoice_summary
 from report_generation.reportgen import CustReport, customer_report, StaffReport, staff_report, Retrieve_Customer_Report, Retrieve_Staff_Report
 from report_generation.customer_report import PurchasingReport, SustainabilityReport
 from report_generation.staffreportgen import InventoryReport, SalesReport
@@ -24,7 +24,7 @@ def index():
     # Set session data in a route where a request context is active
     session['user_id'] = 1
     print(session['user_id'])
-    return redirect(url_for('cust_view_reports'))
+    return redirect(url_for('view_invoices'))
 
 
 @app.route('/cust_view_reports')
@@ -276,6 +276,30 @@ def staff_delete_report():
     db.commit()
 
     return redirect(url_for('staff_view_reports'))
+
+@app.route('/view_invoices')
+def view_invoices():
+    cust_id = session['user_id']
+    query = "SELECT * FROM Invoice WHERE user_id = %s"
+    cursor.execute(query, cust_id)
+    rows = cursor.fetchall()
+    invoices = []
+    for row in rows:
+        invoice = Invoice(row['ID'], row['Invoiced_date'], row['order_id'])
+        invoice_summary(invoice)
+        invoices.append(invoice)
+    return render_template('report_generation/invoice_summary.html', invoices=invoices)
+
+
+@app.route('/retrieve_invoice', methods=['POST'])
+def retrieve_invoice():
+    invoice_id = request.form.get('invoice_id')
+    query = "SELECT * FROM Invoice WHERE ID = %s"
+    cursor.execute(query, invoice_id)
+    row = cursor.fetchone()
+    invoice = Invoice(row['ID'], row['Invoiced_date'], row['order_id'])
+    session['invoice'] = invoice_id
+    return redirect(url_for('invoicing'))
 
 
 @app.route('/print_invoice', methods=['POST'])

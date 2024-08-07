@@ -1,7 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
+
+from customer_support.flaskStaff import sanitize_email
 from db import db_connector
 import pymysql
 from datetime import datetime
+from report_generation.nutritional_summary import custnutrition
 from report_generation.invoice import InvoiceCustomer, invoice_summary
 from report_generation.reportgen import CustReport, customer_report, StaffReport, staff_report, Retrieve_Customer_Report, Retrieve_Staff_Report
 from report_generation.customer_report import PurchasingReport, SustainabilityReport
@@ -10,9 +13,13 @@ import os
 from werkzeug.security import generate_password_hash, check_password_hash
 from customer_support.forms import TicketForm
 from customer_support.faqclass import FAQ
+<<<<<<< Updated upstream
 from account_management.forms import RegistrationForm, CreateUserForm, LoginForm
+=======
+from account_management.forms import RegistrationForm, CreateUserForm
+>>>>>>> Stashed changes
 from products.dao import DAO
-
+from decimal import Decimal, InvalidOperation
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)  # Generates a random secret key each time
@@ -111,8 +118,34 @@ def signup():
             for error in field_errors:
                 errors.append(f"{field.capitalize()}: {error}")
         return render_template('/account_management/signup_bootstrap.html', form=form, errors=" ".join(errors))
+<<<<<<< Updated upstream
 
        
+=======
+        try:
+            db, cursor = db_connector()
+            cursor.execute('''
+                INSERT INTO users (name, email, phone_number, address, date_of_birth, password)
+                VALUES (%s, %s, %s, %s, %s, %s)
+            ''', (name, email, phone_number, address, date_of_birth, hashed_password))
+            db.commit()
+            flash('Account created successfully! Please login.', 'success')
+            print('success')
+            return redirect(url_for('login'))
+        except pymysql.IntegrityError:
+            flash('Email already registered.', 'danger')
+        except Exception as e:
+            flash(f'An error occurred: {str(e)}', 'danger')
+        finally:
+            db.close()
+        else:
+            errors = []
+            for field, field_errors in form.errors.items():
+                for error in field_errors:
+                    errors.append(f"{field.capitalize()}: {error}")
+            return render_template('/account_management/signup_bootstrap.html', form=form, errors=" ".join(errors))
+
+>>>>>>> Stashed changes
     return render_template('/account_management/signup_bootstrap.html', form=form)
 
 
@@ -507,7 +540,7 @@ def faq():
         if connection is None:
             raise Exception("Failed to establish a database connection.")
 
-        with get_cursor(connection) as cursor:
+        with cursor:
             cursor.execute("SELECT question, answer FROM FAQs LIMIT 10")
             faqs = cursor.fetchall()
             if not faqs:
@@ -537,9 +570,8 @@ def raise_a_ticket():
         issue = request.form['issue']
         topic = request.form['topic']
 
-        db = db_connector()
+        # db, cursor = db_connector()
         try:
-            cursor = get_cursor(db)
             cursor.execute(
                 'INSERT INTO tickets (username, email, date, time, issue, topic) VALUES (%s, %s, %s, %s, %s, %s)',
                 (username, email, date, time, issue, topic)
@@ -559,7 +591,7 @@ def view_tickets():
     db = db_connector()
     tickets = []
     try:
-        cursor = get_cursor(db)
+        # cursor = get_cursor(db)
         cursor.execute('SELECT id, username, email, date, time, issue, topic FROM tickets')
         tickets = cursor.fetchall()
         print(tickets)  # Debugging line
@@ -576,7 +608,7 @@ def update_ticket(ticket_id):
     db = db_connector()
     ticket = None
     try:
-        cursor = get_cursor(db)
+        # cursor = get_cursor(db)
         cursor.execute('SELECT username, email, date, time, issue, topic FROM tickets WHERE id = %s', (ticket_id,))
         ticket = cursor.fetchone()
 
@@ -615,7 +647,7 @@ def delete_ticket():
 
     db = db_connector()
     try:
-        cursor = get_cursor(db)
+        # cursor = get_cursor(db)
         cursor.execute('DELETE FROM tickets WHERE id = %s', (ticket_id,))
         db.commit()
     finally:
