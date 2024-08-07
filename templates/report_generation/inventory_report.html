@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %} Inventory Report {% endblock %}
+{% block content %}
+<a href="/staff_view_reports">View All Reports</a>
+<h1>Inventory Report </h1>
+<!--<p>{{report.description}}</p>-->
+<div class="d-flex justify-content-center">
+    <div class="card" style="margin: 10px 10px">
+        <div class="card-header text-center">
+            <h4>Total Inventory Value</h4>
+        </div>
+        <div class="card-body text-center">
+            <h2>{{report.total_inventory_value}}</h2>
+        </div>
+    </div>
+    <div class="card" style="margin: 10px 10px">
+        <div class="card-header text-center">
+            <h4>Average Number of Stock</h4>
+        </div>
+        <div class="card-body text-center">
+            <h2>{{report.avg_stock}}</h2>
+        </div>
+    </div>
+</div>
+
+<div id="bar-chart">
+    {{ report.chart | safe }}
+
+</div>
+
+
+{% endblock %}
