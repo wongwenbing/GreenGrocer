@@ -1,10 +1,9 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session, send_file
+from flask import Flask, render_template, request, redirect, url_for, session, send_file
 from db import db_connector
 from datetime import datetime
-from report_generation.nutritional_summary import custnutrition
-from report_generation.invoice import Invoice, InvoiceCustomer, invoice_summary
+from report_generation.invoice import InvoiceCustomer, invoice_summary
 from report_generation.reportgen import CustReport, customer_report, StaffReport, staff_report, Retrieve_Customer_Report, Retrieve_Staff_Report
-from report_generation.customer_report import PurchasingReport
+from report_generation.customer_report import PurchasingReport, SustainabilityReport
 from report_generation.staffreportgen import InventoryReport, SalesReport
 import os
 from xhtml2pdf import pisa
@@ -49,13 +48,17 @@ def cust_retrieve_report():
     query = """SELECT * FROM Customer_Report WHERE cust_report_id = %s """
     cursor.execute(query, report_id)
     result = cursor.fetchone()
-    session['report_data'] = {
+    session['cust_report_data'] = {
         'start_date': result['coverage_start'],
         'end_date': result['coverage_end'],
         'type_of_report': result['report_type']
     }
     if result['report_type'] == "Purchasing":
         return redirect(url_for('purchasing_report'))
+    elif result['report_type'] == "Sustainability":
+        return redirect(url_for("sustainability_report"))
+    else:
+        return redirect(url_for("success"))
 
 
 @app.route('/cust_delete_report', methods=['POST'])
@@ -66,7 +69,7 @@ def cust_delete_report():
 
     db.commit()
 
-    return redirect(url_for('view_reports'))
+    return redirect(url_for('cust_view_reports'))
 
 
 @app.route('/cust_generate_report', methods=['GET', 'POST'])
@@ -87,7 +90,7 @@ def cust_generate_report():
             # Store the necessary data in session
             return redirect(url_for('purchasing_report'))
         elif newreport.report_type == "Sustainability":
-            return redirect
+            return redirect(url_for('sustainability_report'))
 
         return redirect(url_for('success'))
     return render_template('report_generation/custreportgen.html', form=form)
@@ -102,6 +105,19 @@ def purchasing_report():
     report.get_total_amount()
     report.get_mostpurchased_category()
     return render_template('report_generation/graphs.html', report=report)
+
+
+@app.route('/sustainability_report')
+def sustainability_report():
+    report_data = session.get('cust_report_data')
+    cust_id = session['user_id']
+    report = SustainabilityReport(cust_id, report_data['start_date'], report_data['end_date'])
+    report.carbon_emissions()
+    report.graph_organic()
+    report.line_carbonemissions()
+    return render_template('report_generation/sustainability_report.html', report=report)
+
+
 
 @app.route('/cust_report_update', methods=['POST'])
 def cust_update_report1():
