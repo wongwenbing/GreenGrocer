@@ -47,14 +47,12 @@ def index():
 
 def login():
     if request.method == 'POST':
-        email = request.form['email']
+        email = str(request.form['email'])
         password = request.form['password']
-        db, cursor = db_connector()
         cursor.execute('SELECT * FROM users WHERE email = %s', (email))
         user = cursor.fetchone()
 
         if not user:
-            db, cursor = db_connector()
             cursor.execute('SELECT * FROM staff WHERE email = %s', (email))
             user = cursor.fetchone()
             role = 'staff' if user else None
