@@ -310,96 +310,105 @@
         </div>
 
         <!-- Add Assignee Modal -->
-        <div class="modal fade" id="addAssigneeModal" tabindex="-1" role="dialog"
-            aria-labelledby="addAssigneeModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="addAssigneeModalLabel">Add Assignee</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <form action="{{ url_for('add_assignee') }}" method="post">
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <label for="name">Name</label>
-                                <input type="text" class="form-control" id="name" name="name" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" class="form-control" id="email" name="email" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="role">Role</label>
-                                <input type="text" class="form-control" id="role" name="role" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="tickets_solved">Tickets Solved</label>
-                                <input type="number" class="form-control" id="tickets_solved" name="tickets_solved"
-                                    required>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Add Assignee</button>
-                        </div>
-                    </form>
+<div class="modal fade" id="addAssigneeModal" tabindex="-1" role="dialog"
+aria-labelledby="addAssigneeModalLabel" aria-hidden="true">
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="addAssigneeModalLabel">Add Assignee</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <form action="{{ url_for('add_assignee') }}" method="post">
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="role">Role</label>
+                    <select class="form-control" id="role" name="role" required>
+                        <option value="">Select Role</option>
+                        <option value="Admin">Admin</option>
+                        <option value="Manager">Manager</option>
+                        <option value="Employee">Employee</option>
+                        <option value="Staff">Staff</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="tickets_solved">Tickets Solved</label>
+                    <input type="number" class="form-control" id="tickets_solved" name="tickets_solved"
+                    min="0" required>
                 </div>
             </div>
-        </div>
-
-
-
-
-        <!-- Edit Assignee Modal -->
-        {% for assignee in assignees %}
-        <div class="modal fade" id="editAssigneeModal_{{ assignee['email_id'] }}" tabindex="-1" role="dialog"
-            aria-labelledby="editAssigneeModalLabel_{{ assignee['email_id'] }}" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="editAssigneeModalLabel_{{ assignee['email_id'] }}">Edit Assignee
-                        </h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <form action="{{ url_for('edit_assignee', email=assignee['email']) }}" method="post">
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <label for="name">Name</label>
-                                <input type="text" class="form-control" id="name" name="name"
-                                    value="{{ assignee['name'] }}" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" class="form-control" id="email" name="email"
-                                    value="{{ assignee['email'] }}" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="role">Role</label>
-                                <input type="text" class="form-control" id="role" name="role"
-                                    value="{{ assignee['role'] }}" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="tickets_solved">Tickets Solved</label>
-                                <input type="number" class="form-control" id="tickets_solved" name="tickets_solved"
-                                    value="{{ assignee['tickets_solved'] }}" required>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Update Assignee</button>
-                        </div>
-                    </form>
-                </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Add Assignee</button>
             </div>
-        </div>
-        {% endfor %}
+        </form>
+    </div>
+</div>
+</div>
 
+
+
+
+       <!-- Edit Assignee Modal -->
+{% for assignee in assignees %}
+<div class="modal fade" id="editAssigneeModal_{{ assignee['email_id'] }}" tabindex="-1" role="dialog"
+    aria-labelledby="editAssigneeModalLabel_{{ assignee['email_id'] }}" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editAssigneeModalLabel_{{ assignee['email_id'] }}">Edit Assignee</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{{ url_for('edit_assignee', email=assignee['email']) }}" method="post">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" id="name" name="name"
+                            value="{{ assignee['name'] }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" name="email"
+                            value="{{ assignee['email'] }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="role">Role</label>
+                        <select class="form-control" id="role" name="role" required>
+                            <option value="Admin" {% if assignee['role'] == 'Admin' %}selected{% endif %}>Admin</option>
+                            <option value="Manager" {% if assignee['role'] == 'Manager' %}selected{% endif %}>Manager</option>
+                            <option value="Employee" {% if assignee['role'] == 'Employee' %}selected{% endif %}>Employee</option>
+                            <option value="Staff" {% if assignee['role'] == 'Staff' %}selected{% endif %}>Staff</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="tickets_solved">Tickets Solved</label>
+                        <input type="number" class="form-control" id="tickets_solved" name="tickets_solved"
+                            value="{{ assignee['tickets_solved'] }}" min="0" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Update Assignee</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endfor %}
 
     </main>
+
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

@@ -258,6 +258,7 @@
       </nav>
     </div><!-- End Page Title -->
 
+
     <div class="container mt-5">
       <div class="d-flex justify-content-between align-items-center mb-4">
         <h4>Total: <b>{{ tickets|length }}</b> Tickets</h4>
@@ -279,8 +280,9 @@
             <p class="description"><strong><b>{{ ticket.description }}</b></strong></p>
             <p class="user">User: {{ ticket.username }}</p>
             <p>Priority: <strong class="priority-{{ ticket.priority|lower }}">{{ ticket.priority }}</strong></p>
-            <p class="timestamp">Created At: <strong>{{ ticket.created_at }}</strong></p>
-            <p class="timestamp">Updated At: <strong>{{ ticket.updated_at }}</strong></p>
+            <p class="timestamp">Created At: {{ ticket.created_at }}</p>
+            <p class="timestamp">Updated At: {{ ticket.updated_at }}</p>
+            <p class="status">Status: <strong>{{ ticket.status }}</strong></p>
 
             <!-- Edit Ticket Modal -->
             <div class="modal fade" id="editTicketModal_{{ ticket.ticketid }}" tabindex="-1"
@@ -302,7 +304,7 @@
                       <div class="form-group">
                         <label for="username_{{ ticket.ticketid }}">Username</label>
                         <input type="text" class="form-control" id="username_{{ ticket.ticketid }}" name="username"
-                          value="{{ ticket.username }}" required readonly>
+                          value="{{ ticket.username }}" readonly>
                       </div>
                       <br>
                       <div class="form-group">
@@ -316,13 +318,13 @@
                       <br>
                       <div class="form-group">
                         <label for="created_at_{{ ticket.ticketid }}">Created At</label>
-                        <input type="datetime" class="form-control" id="created_at_{{ ticket.ticketid }}"
-                          name="created_at" value="{{ ticket.created_at }}" required>
+                        <input type="datetime-local" class="form-control" id="created_at_{{ ticket.ticketid }}"
+                          name="created_at" value="{{ ticket.created_at }}" readonly>
                       </div>
                       <br>
                       <div class="form-group">
                         <label for="updated_at_{{ ticket.ticketid }}">Updated At</label>
-                        <input type="datetime" class="form-control" id="updated_at_{{ ticket.ticketid }}"
+                        <input type="datetime-local" class="form-control" id="updated_at_{{ ticket.ticketid }}"
                           name="updated_at" value="{{ ticket.updated_at }}" required>
                       </div>
                       <br>
@@ -355,6 +357,7 @@
   </main><!-- End #main -->
 
 
+
   <script>
     document.querySelectorAll('.filter-btn').forEach(button => {
       button.addEventListener('click', function () {
@@ -371,6 +374,7 @@
       });
     });
   </script>
+    
 
 
   <!-- Vendor JS Files -->

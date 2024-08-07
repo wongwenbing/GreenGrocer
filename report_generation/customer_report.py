@@ -6,6 +6,7 @@ import json
 import plotly.express as px
 import pandas as pd
 import plotly.io as pio
+import calendar
 
 db, cursor = db_connector()
 class PurchasingReport:

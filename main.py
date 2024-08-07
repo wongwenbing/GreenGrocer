@@ -1,40 +1,31 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from db import db_connector
 import pymysql
-from report_generation.nutritional_summary import custnutrition
-from report_generation.invoice import Invoice, invoice_summary
-from report_generation.reportgen import Retrieve_Customer_Report
-from account_management.forms import CreateUserForm, RegistrationForm
+from datetime import datetime
+from report_generation.invoice import InvoiceCustomer, invoice_summary
+from report_generation.reportgen import CustReport, customer_report, StaffReport, staff_report, Retrieve_Customer_Report, Retrieve_Staff_Report
+from report_generation.customer_report import PurchasingReport, SustainabilityReport
+from report_generation.staffreportgen import InventoryReport, SalesReport
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
 from customer_support.forms import TicketForm
 from customer_support.faqclass import FAQ
+from products.dao import DAO
 
 
 app = Flask(__name__)
-
-
 app.secret_key = os.urandom(24)  # Generates a random secret key each time
 
 
 db, cursor = db_connector()
 
-
-
-
 @app.route('/home')
 def home():
     return render_template('custhome.html')
 
-
-
-
 @app.route('/customer')
 def customer_login():
     return render_template('account_management/signup_bootstrap.html')
-
-
-
 
 @app.route('/staff')
 def staff_login():
@@ -53,13 +44,8 @@ def login():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
-       
-        db, cursor = db_connector()
-
-
         cursor.execute('SELECT * FROM users WHERE email = %s', (email))
         user = cursor.fetchone()
-
 
         if not user:
             cursor.execute('SELECT * FROM staff WHERE email = %s', (email))
@@ -68,9 +54,7 @@ def login():
         else:
             role = 'users'
 
-
         db.close()
-       
         if user and check_password_hash(user['password'], password):
             session['id'] = user['id']
             session['name'] = user['name']
@@ -104,6 +88,7 @@ def signup():
             flash('Email and Password are required fields.', 'danger')
             return render_template('signup_bootstrap.html', form=form)
 
+<<<<<<< HEAD
 
         try:
             db, cursor = db_connector()
@@ -127,6 +112,30 @@ def signup():
             for error in field_errors:
                 errors.append(f"{field.capitalize()}: {error}")
         return render_template('/account_management/signup_bootstrap.html', form=form, errors=" ".join(errors))
+=======
+            try:
+                db, cursor = db_connector()
+                cursor.execute('''
+                    INSERT INTO users (name, email, phone_number, address, date_of_birth, password)
+                    VALUES (%s, %s, %s, %s, %s, %s)
+                ''', (name, email, phone_number, address, date_of_birth, hashed_password))
+                db.commit()
+                flash('Account created successfully! Please login.', 'success')
+                print('success')
+                return redirect(url_for('login'))
+            except pymysql.IntegrityError:
+                flash('Email already registered.', 'danger')
+            except Exception as e:
+                flash(f'An error occurred: {str(e)}', 'danger')
+            finally:
+                db.close()
+        else:
+            errors = []
+            for field, field_errors in form.errors.items():
+                for error in field_errors:
+                    errors.append(f"{field.capitalize()}: {error}")
+            return render_template('/account_management/signup_bootstrap.html', form=form, errors=" ".join(errors))
+>>>>>>> ea8236cd49e8d34627ad5ff3a652bde732b3cd7b
        
     return render_template('/account_management/signup_bootstrap.html', form=form)
 
@@ -140,15 +149,10 @@ def profile():
     id = session['id']
     role = session['role']
 
-
-    db, cursor = db_connector()
-
-
     if request.method == 'POST':
         if 'delete_account' in request.form:
             cursor.execute(f'DELETE FROM {role} WHERE id = %s', (id))
             db.commit()
-            db.close()
             session.pop('id', None)
             flash('Account deleted successfully!', 'success')
             return redirect(url_for('signup'))
@@ -174,7 +178,6 @@ WHERE id = %s
    
     return render_template('/account_management/profile.html', user=user)
 
-
 @app.route('/logout')
 def logout():
     for x in list(session.keys()):
@@ -183,11 +186,7 @@ def logout():
     return redirect(url_for('login'))
 
 
-
-
 # Staff assist with customer account (Create)
-
-
 @app.route('/createCustomers', methods=['GET', 'POST'])
 def create_user():
     form = CreateUserForm(request.form)
@@ -199,9 +198,7 @@ def create_user():
         date_of_birth = request.form['date_of_birth']
         default_password = "P@ssw0rd"
 
-
         try:
-            db, cursor = db_connector()
             cursor.execute('''
                 INSERT INTO users (name, email, phone_number, address, date_of_birth, password)
                 VALUES (%s, %s, %s, %s, %s, %s)
@@ -212,41 +209,23 @@ def create_user():
         except pymysql.IntegrityError:
             flash('Email already registered.', 'danger')
 
-
         finally:
             db.close()
-
 
         return redirect(url_for('retrieve_customers'))
     return render_template('/account_management/createCustomers.html', form=form)
 
 
-
-
 # Staff assist with customer account (Retrieve)
-
-
 @app.route('/retrieveCustomers')
 def retrieve_customers():
-   
-    db, cursor = db_connector()
     cursor.execute('SELECT id, name, email, phone_number, address, date_of_birth FROM users')
-
 
     users = cursor.fetchall()
     db.close()
-
-
     return render_template('/account_management/retrieveCustomers.html', count=len(users), users_list=users)
 
-
-
-
 # Staff assist with customer account (Update)
-
-
-
-
 @app.route('/updateUser/<id>/', methods=['GET', 'POST'])
 def update_user(id):
     update_user_form = CreateUserForm(request.form)
@@ -264,7 +243,6 @@ WHERE id = %s
 """
         db, cursor = db_connector()
 
-
         cursor.execute(query, val)
         db.commit()
         db.close()
@@ -280,22 +258,16 @@ WHERE id = %s
         user = cursor.fetchone()
         db.close()
 
-
         update_user_form.name.data = user['name']
         update_user_form.email.data = user['email']
         update_user_form.phone_number.data = user['phone_number']
         update_user_form.address.data = user['address']
         update_user_form.date_of_birth.data = user['date_of_birth']
 
-
         return render_template('/account_management/updateCustomers.html', form=update_user_form)
 
 
-
-
 # Staff assist with customer account (Delete)
-
-
 @app.route('/deleteUser/<id>', methods=['POST'])
 def delete_user(id):
     db, cursor = db_connector()
@@ -309,13 +281,11 @@ def delete_user(id):
 
 #Insert Transaction Processing here
 
-# dao = DAO()
-
+dao = DAO()
 @app.route('/products')
 def products():
     search_query = request.args.get('search', '')
     category_id = request.args.get('category_id')
-
     # Ensure `products` is always defined
     products = []
 
@@ -820,8 +790,8 @@ def view_nutrition():
     return render_template('report_generation/nutritionsummary.html', count=len(nutrition_objects), customers=nutrition_objects)
 
 
-@app.route('/view_reports')
-def view_reports():
+@app.route('/cust_view_reports')
+def cust_view_reports():
     #Fetch Data from db
     query = """SELECT * FROM Customer_Report WHERE customer_id = %s """
     cust_id = session.get('user_id')
@@ -835,10 +805,219 @@ def view_reports():
     return render_template('report_generation/reports_summary.html', reports=reports)
 
 
-@app.route('/retrieve_report', methods=['POST'])
-def retrieve_report():
+@app.route('/cust_retrieve_report', methods=['POST'])
+def cust_retrieve_report():
     report_id = request.form.get('report_id')
     query = """SELECT * FROM Customer_Report WHERE cust_report_id = %s """
+    cursor.execute(query, report_id)
+    result = cursor.fetchone()
+    print(session)
+    session['cust_report_data'] = {
+        'start_date': result['coverage_start'],
+        'end_date': result['coverage_end'],
+        'type_of_report': result['report_type']
+    }
+    if result['report_type'] == 'Purchasing':
+        return redirect(url_for('purchasing_report'))
+    elif result['report_type'] == 'Sustainability':
+        return redirect(url_for('sustainability_report'))
+    else:
+        return redirect(url_for("success"))
+
+
+@app.route('/cust_delete_report', methods=['POST'])
+def cust_delete_report():
+    report_id = request.form.get('report_id')
+    query = """DELETE FROM Customer_Report WHERE cust_report_id = %s """
+    cursor.execute(query, report_id)
+
+    db.commit()
+
+    return redirect(url_for('cust_view_reports'))
+
+
+@app.route('/cust_generate_report', methods=['GET', 'POST'])
+def cust_generate_report():
+    form = CustReport(request.form)
+    if request.method == "POST" and form.validate():
+        # Handle the form submission logic here
+        newreport = customer_report(session['user_id'], form.start_date.data, form.end_date.data,
+                                    form.type_of_report.data)
+        session['cust_report_data'] = {
+            'start_date': str(newreport.startdate),
+            'end_date': str(newreport.end_date),
+            'type_of_report': newreport.report_type
+        }
+        # For example, save the data or generate a report
+        newreport.to_db()
+        if newreport.report_type == "Purchasing":
+            # Store the necessary data in session
+            return redirect(url_for('purchasing_report'))
+        elif newreport.report_type == "Sustainability":
+            return redirect(url_for('sustainability_report'))
+        else:
+            return redirect(url_for('success'))
+    return render_template('report_generation/custreportgen.html', form=form)
+
+
+@app.route('/cust_report_update', methods=['POST'])
+def cust_update_report1():
+    report_id = request.form.get('report_id')
+    session['cust_report_id'] = report_id
+    print(report_id)
+    return redirect(url_for('cust_update_report2'))
+
+@app.route('/cust_update_report', methods=['GET','POST'])
+def cust_update_report2():
+    update = CustReport(request.form)
+    report_id = session['cust_report_id']
+    if request.method == 'POST':
+        report = customer_report(session['user_id'], update.start_date.data, update.end_date.data, update.type_of_report.data)
+        query = """
+        UPDATE Customer_Report
+        SET customer_id = %s, coverage_start = %s, coverage_end = %s, report_type = %s
+        WHERE cust_report_id = %s
+        """
+        statement = (report.custid, report.startdate, report.end_date, report.report_type, report_id)
+        cursor.execute(query, statement)
+        db.commit()
+        return redirect(url_for('cust_view_reports'))
+    else:
+        query = "SELECT * FROM Customer_Report WHERE cust_report_id = %s"
+        report_id = report_id
+        print(report_id)
+        cursor.execute(query, report_id)
+        r = cursor.fetchone()
+        report = Retrieve_Customer_Report(r['cust_report_id'], r['customer_id'], r['coverage_start'], r['coverage_end'],
+                                       r['report_type'])
+        update.start_date.data = datetime.strptime(report.start_date, '%Y-%m-%d')
+        update.end_date.data = datetime.strptime(report.end_date, '%Y-%m-%d')
+        update.type_of_report.data = report.report_type
+        return render_template('report_generation/custupdatereport.html', form=update)
+
+
+@app.route('/purchasing_report')
+def purchasing_report():
+    report_data = session.get('cust_report_data')
+    report = PurchasingReport(report_data['start_date'], report_data['end_date'])
+    print(report.get_info())
+    report.get_average_order_spending()
+    report.get_total_amount()
+    report.get_mostpurchased_category()
+    return render_template('report_generation/graphs.html', report=report)
+
+
+@app.route('/sustainability_report')
+def sustainability_report():
+    report_data = session.get('cust_report_data')
+    cust_id = session['user_id']
+    report = SustainabilityReport(cust_id, report_data['start_date'], report_data['end_date'])
+    report.carbon_emissions()
+    report.graph_organic()
+    report.line_carbonemissions()
+    return render_template('report_generation/sustainability_report.html', report=report)
+
+
+
+#STAFF
+@app.route('/staff_generate_report', methods=['GET', 'POST'])
+def staff_generate_report():
+    form = StaffReport(request.form)
+    if request.method == "POST" and form.validate():
+        # Handle the form submission logic here
+        newreport = staff_report(session['user_id'],form.start_date.data, form.end_date.data, form.type_of_report.data)
+        print(newreport.info())
+        session['staff_report_data'] = {
+            'start_date': str(newreport.startdate),
+            'end_date': str(newreport.end_date),
+            'type_of_report': newreport.report_type
+        }
+        newreport.to_db()
+        # For example, save the data or generate a report
+        if newreport.report_type == "Inventory":
+            # Store the necessary data in session
+            return redirect(url_for('inventory_report'))
+        elif newreport.report_type == "Sales":
+            return redirect(url_for('sales_report'))
+        elif newreport.report_type == "Category":
+            return redirect(url_for('success'))
+    return render_template('report_generation/staffreportgen.html', form=form)
+
+@app.route('/staff_view_reports')
+def staff_view_reports():
+    #Fetch Data from db
+    query = """SELECT * FROM Staff_Report WHERE staff_id = %s """
+    staff_id = session.get('user_id')
+    cursor.execute(query, staff_id)
+    result = cursor.fetchall()
+    print(result)
+    reports = []
+    for r in result:
+        report = Retrieve_Staff_Report(r['staff_report_id'], r['staff_id'], r['coverage_start'], r['coverage_end'], r['report_type'])
+        reports.append(report)
+    return render_template('report_generation/staff_reports_summary.html', reports=reports)
+
+
+@app.route('/staff_report_update', methods=['POST'])
+def staff_update_report1():
+    report_id = request.form.get('report_id')
+    session['staff_report_id'] = report_id
+    print(report_id)
+    return redirect(url_for('staff_update_report2'))
+
+@app.route('/staff_update_report', methods=['GET','POST'])
+def staff_update_report2():
+    update = StaffReport(request.form)
+    report_id = session['staff_report_id']
+    if request.method == 'POST':
+        report = staff_report(session['user_id'], update.start_date.data, update.end_date.data, update.type_of_report.data)
+        query = """
+        UPDATE Staff_Report
+        SET staff_id = %s, coverage_start = %s, coverage_end = %s, report_type = %s
+        WHERE staff_report_id = %s
+        """
+        statement = (report.staffid, report.startdate, report.end_date, report.report_type, report_id)
+        cursor.execute(query, statement)
+        db.commit()
+        return redirect(url_for('staff_view_reports'))
+    else:
+        query = "SELECT * FROM Staff_Report WHERE staff_report_id = %s"
+        report_id = report_id
+        print(report_id)
+        cursor.execute(query, report_id)
+        r = cursor.fetchone()
+        report = Retrieve_Staff_Report(r['staff_report_id'], r['staff_id'], r['coverage_start'], r['coverage_end'],
+                                       r['report_type'])
+        update.start_date.data = datetime.strptime(report.start_date, '%Y-%m-%d')
+        update.end_date.data = datetime.strptime(report.end_date, '%Y-%m-%d')
+        update.type_of_report.data = report.report_type
+        return render_template('report_generation/staffupdatereport.html', form=update)
+
+@app.route('/inventory_report')
+def inventory_report():
+    # report_data = session.get('report_data')
+    report = InventoryReport()
+    report.get_totalinventoryvalue_bycategory()
+    report.get_totalinventory()
+    report.get_average_stock()
+    return render_template('report_generation/inventory_report.html', report=report)
+
+
+@app.route('/sales_report')
+def sales_report():
+    report_data = session.get('staff_report_data')
+    report = SalesReport(report_data['start_date'], report_data['end_date'])
+    print(report.get_info())
+    report.get_average_order_spending()
+    report.get_total_amount()
+    report.get_mostpurchased_category()
+    return render_template('report_generation/graphs.html', report=report)
+
+
+@app.route('/staff_retrieve_report', methods=['POST'])
+def staff_retrieve_report():
+    report_id = request.form.get('report_id')
+    query = """SELECT * FROM Staff_Report WHERE staff_report_id = %s """
     cursor.execute(query, report_id)
     result = cursor.fetchone()
     session['report_data'] = {
@@ -850,15 +1029,37 @@ def retrieve_report():
         return redirect(url_for('purchasing_report'))
 
 
-@app.route('/delete_report', methods=['POST'])
-def delete_report():
+@app.route('/staff_delete_report', methods=['POST'])
+def staff_delete_report():
     report_id = request.form.get('report_id')
-    query = """DELETE FROM Customer_Report WHERE cust_report_id = %s """
+    print(report_id)
+    query = """DELETE FROM Staff_Report WHERE staff_report_id = %s """
     cursor.execute(query, report_id)
 
     db.commit()
 
-    return redirect(url_for('view_reports'))
+    return redirect(url_for('staff_view_reports'))
+
+
+@app.route('/invoice')
+def invoicing():
+    invoice_data = session.get('invoice')
+    query = """
+    SELECT i.ID, i.Invoiced_date, i.order_id, i.user_id, u.name, u.email, u.phone_number, u.address
+    FROM Invoice i INNER JOIN users u
+    ON i.user_id = u.id
+    WHERE i.ID = %s
+    """
+    cursor.execute(query, invoice_data)
+    row = cursor.fetchone()
+    print(row)
+    invoice = InvoiceCustomer(row['ID'], row['Invoiced_date'], row['order_id'], row['name'],
+                              row['email'], row['phone_number'], row['address'])
+    invoice_summary(invoice)
+    products = invoice.products
+    return render_template('report_generation/invoice.html', invoice=invoice,
+                           products=products)
+
 
 
 
