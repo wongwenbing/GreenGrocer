@@ -7,7 +7,7 @@ from wtforms.validators import DataRequired, Email, EqualTo
 
 class RegistrationForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
-    email = EmailField('Email', validators=[DataRequired(), Email()])
+    email = EmailField('Email', validators=[DataRequired()])
     phone_number = StringField('Phone', validators=[DataRequired()])
     address = StringField('Address', validators=[DataRequired()])
     date_of_birth = DateField('Date of Birth', validators=[DataRequired()])
@@ -17,13 +17,13 @@ class RegistrationForm(FlaskForm):
 
 
 class LoginForm(FlaskForm):
-    email = EmailField('Email', validators=[DataRequired(), Email()])
+    email = EmailField('Email', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Login')
 
 class CreateUserForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
-    email = EmailField('Email', validators=[DataRequired(), Email()])
+    email = EmailField('Email', validators=[DataRequired()])
     phone_number = StringField('Phone', validators=[DataRequired()])
     address = StringField('Address', validators=[DataRequired()])
     date_of_birth = DateField('Date of Birth', validators=[DataRequired()])

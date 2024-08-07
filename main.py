@@ -73,6 +73,7 @@ def login():
        
         if user and check_password_hash(user['password'], password):
             session['id'] = user['id']
+            session['name'] = user['name']
             session['role'] = role
             flash('Logged in successfully!', 'success')
             return redirect(url_for('profile'))
@@ -86,47 +87,46 @@ def login():
 def signup():
     form = RegistrationForm()
    
-    if request.method == "POST":
-        if form.validate_on_submit():
-            name = request.form['name']
-            email = request.form['email']
-            phone_number = request.form['phone_number']
-            address = request.form['address']
-            date_of_birth = request.form['date_of_birth']
-            password = request.form['password']
+    if request.method == "POST" and form.validate():
+        name = request.form['name']
+        email = request.form['email']
+        phone_number = request.form['phone_number']
+        address = request.form['address']
+        date_of_birth = request.form['date_of_birth']
+        password = request.form['password']
 
-            hashed_password = generate_password_hash(password)
+        hashed_password = generate_password_hash(password)
 
-            # Log the form data for debugging
-            print(f"Received signup data: {name}, {email}, {phone_number}, {address}, {date_of_birth}, {password}")
-           
-            if not email or not password:
-                flash('Email and Password are required fields.', 'danger')
-                return render_template('signup_bootstrap.html', form=form)
+        # Log the form data for debugging
+        print(f"Received signup data: {name}, {email}, {phone_number}, {address}, {date_of_birth}, {password}")
+        
+        if not email or not password:
+            flash('Email and Password are required fields.', 'danger')
+            return render_template('signup_bootstrap.html', form=form)
 
 
-            try:
-                db, cursor = db_connector()
-                cursor.execute('''
-                    INSERT INTO users (name, email, phone_number, address, date_of_birth, password)
-                    VALUES (%s, %s, %s, %s, %s, %s)
-                ''', (name, email, phone_number, address, date_of_birth, hashed_password))
-                db.commit()
-                flash('Account created successfully! Please login.', 'success')
-                print('success')
-                return redirect(url_for('login'))
-            except pymysql.IntegrityError:
-                flash('Email already registered.', 'danger')
-            except Exception as e:
-                flash(f'An error occurred: {str(e)}', 'danger')
-            finally:
-                db.close()
-        else:
-            errors = []
-            for field, field_errors in form.errors.items():
-                for error in field_errors:
-                    errors.append(f"{field.capitalize()}: {error}")
-            return render_template('/account_management/signup_bootstrap.html', form=form, errors=" ".join(errors))
+        try:
+            db, cursor = db_connector()
+            cursor.execute('''
+                INSERT INTO users (name, email, phone_number, address, date_of_birth, password)
+                VALUES (%s, %s, %s, %s, %s, %s)
+            ''', (name, email, phone_number, address, date_of_birth, hashed_password))
+            db.commit()
+            flash('Account created successfully! Please login.', 'success')
+            print('success')
+            return redirect(url_for('login'))
+        except pymysql.IntegrityError:
+            flash('Email already registered.', 'danger')
+        except Exception as e:
+            flash(f'An error occurred: {str(e)}', 'danger')
+        finally:
+            db.close()
+    else:
+        errors = []
+        for field, field_errors in form.errors.items():
+            for error in field_errors:
+                errors.append(f"{field.capitalize()}: {error}")
+        return render_template('/account_management/signup_bootstrap.html', form=form, errors=" ".join(errors))
        
     return render_template('/account_management/signup_bootstrap.html', form=form)
 
@@ -177,7 +177,8 @@ WHERE id = %s
 
 @app.route('/logout')
 def logout():
-    session.pop('id', None)
+    for x in list(session.keys()):
+            session.pop(x, None)
     flash('Logged out successfully!', 'success')
     return redirect(url_for('login'))
 
@@ -249,7 +250,7 @@ def retrieve_customers():
 @app.route('/updateUser/<id>/', methods=['GET', 'POST'])
 def update_user(id):
     update_user_form = CreateUserForm(request.form)
-    if request.method == 'POST' and update_user_form.validate():
+    if request.method == 'POST':
         name = request.form['name']
         email = request.form['email']
         phone_number = request.form['phone_number']
