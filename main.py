@@ -5,7 +5,7 @@ from db import db_connector
 import pymysql
 from datetime import datetime
 from report_generation.nutritional_summary import custnutrition
-from report_generation.invoice import InvoiceCustomer, invoice_summary
+from report_generation.invoice import Invoice, InvoiceCustomer, invoice_summary
 from report_generation.reportgen import CustReport, customer_report, StaffReport, staff_report, Retrieve_Customer_Report, Retrieve_Staff_Report
 from report_generation.customer_report import PurchasingReport, SustainabilityReport
 from report_generation.staffreportgen import InventoryReport, SalesReport
@@ -13,11 +13,8 @@ import os
 from werkzeug.security import generate_password_hash, check_password_hash
 from customer_support.forms import TicketForm
 from customer_support.faqclass import FAQ
-<<<<<<< Updated upstream
 from account_management.forms import RegistrationForm, CreateUserForm, LoginForm
-=======
 from account_management.forms import RegistrationForm, CreateUserForm
->>>>>>> Stashed changes
 from products.dao import DAO
 from decimal import Decimal, InvalidOperation
 
@@ -118,35 +115,8 @@ def signup():
             for error in field_errors:
                 errors.append(f"{field.capitalize()}: {error}")
         return render_template('/account_management/signup_bootstrap.html', form=form, errors=" ".join(errors))
-<<<<<<< Updated upstream
 
-       
-=======
-        try:
-            db, cursor = db_connector()
-            cursor.execute('''
-                INSERT INTO users (name, email, phone_number, address, date_of_birth, password)
-                VALUES (%s, %s, %s, %s, %s, %s)
-            ''', (name, email, phone_number, address, date_of_birth, hashed_password))
-            db.commit()
-            flash('Account created successfully! Please login.', 'success')
-            print('success')
-            return redirect(url_for('login'))
-        except pymysql.IntegrityError:
-            flash('Email already registered.', 'danger')
-        except Exception as e:
-            flash(f'An error occurred: {str(e)}', 'danger')
-        finally:
-            db.close()
-        else:
-            errors = []
-            for field, field_errors in form.errors.items():
-                for error in field_errors:
-                    errors.append(f"{field.capitalize()}: {error}")
-            return render_template('/account_management/signup_bootstrap.html', form=form, errors=" ".join(errors))
 
->>>>>>> Stashed changes
-    return render_template('/account_management/signup_bootstrap.html', form=form)
 
 
 @app.route('/profile', methods=['GET', 'POST'])
