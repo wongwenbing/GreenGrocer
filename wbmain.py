@@ -28,7 +28,7 @@ def index():
     # Set session data in a route where a request context is active
     session['user_id'] = 1
     print(session['user_id'])
-    return redirect(url_for('inventory_report'))
+    return redirect(url_for('staff_view_reports'))
 
 
 @app.route('/cust_view_reports')

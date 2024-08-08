@@ -23,9 +23,17 @@ app.secret_key = os.urandom(24)  # Generates a random secret key each time
 
 db, cursor = db_connector()
 
+@app.route('/')
+def index():
+    # Set session data in a route where a request context is active
+    session['user_id'] = 1
+    print(session['user_id'])
+    return redirect(url_for('staff_assignees'))
+
+
 @app.route('/home')
 def home():
-    return render_template('custhome.html')
+    return render_template('')
 
 @app.route('/customer')
 def customer_login():
@@ -38,13 +46,7 @@ def staff_login():
 
 # Insert Account Generation here
 # Login, Sign up, Profile
-@app.route('/')
-def index():
-    return redirect(url_for('login'))
-
-
 @app.route('/login', methods=['GET', 'POST'])
-
 def login():
     if request.method == 'POST':
         email = str(request.form['email'])
@@ -65,11 +67,13 @@ def login():
             session['name'] = user['name']
             session['role'] = role
             flash('Logged in successfully!', 'success')
-            return redirect(url_for('profile'))
+
+        if role == 'users':
+            return redirect(url_for('products'))
         else:
             flash('Invalid email or password', 'danger')
    
-    return render_template('/account_management/login_bootstrap.html')
+    return render_template('account_management/login_bootstrap.html')
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -114,9 +118,7 @@ def signup():
         for field, field_errors in form.errors.items():
             for error in field_errors:
                 errors.append(f"{field.capitalize()}: {error}")
-        return render_template('/account_management/signup_bootstrap.html', form=form, errors=" ".join(errors))
-
-
+        return render_template('account_management/signup_bootstrap.html', form=form, errors=" ".join(errors))
 
 
 @app.route('/profile', methods=['GET', 'POST'])
@@ -157,7 +159,7 @@ WHERE id = %s
     user = cursor.fetchone()
     db.close()
    
-    return render_template('/account_management/profile.html', user=user)
+    return render_template('account_management/profile.html', user=user)
 
 
 
@@ -197,7 +199,7 @@ def create_user():
             db.close()
 
         return redirect(url_for('retrieve_customers'))
-    return render_template('/account_management/createCustomers.html', form=form)
+    return render_template('account_management/createCustomers.html', form=form)
 
 
 # Staff assist with customer account (Retrieve)
@@ -208,7 +210,7 @@ def retrieve_customers():
 
     users = cursor.fetchall()
     db.close()
-    return render_template('/account_management/retrieveCustomers.html', count=len(users), users_list=users)
+    return render_template('account_management/retrieveCustomers.html', count=len(users), users_list=users)
 
 # Staff assist with customer account (Update)
 @app.route('/updateUser/<id>/', methods=['GET', 'POST'])
@@ -227,14 +229,10 @@ SET name = %s, email = %s, phone_number = %s, address = %s, date_of_birth = %s
 WHERE id = %s
 """
         db, cursor = db_connector()
-
         cursor.execute(query, val)
         db.commit()
-        db.close()
-
 
         flash('Profile updated successfully!', 'success')
-
 
         return redirect(url_for('retrieve_customers'))
     else:
@@ -249,7 +247,7 @@ WHERE id = %s
         update_user_form.address.data = user['address']
         update_user_form.date_of_birth.data = user['date_of_birth']
 
-        return render_template('/account_management/updateCustomers.html', form=update_user_form)
+        return render_template('account_management/updateCustomers.html', form=update_user_form)
 
 
 # Staff assist with customer account (Delete)
@@ -302,7 +300,7 @@ def products():
             if parent_category:
                 parent_category_name = parent_category['category_name']
 
-    return render_template('index.html', products=products, categories=categories,
+    return render_template('transaction_processing/index.html', products=products, categories=categories,
                            selected_category_name=selected_category_name,
                            parent_category_name=parent_category_name)
 
@@ -317,7 +315,7 @@ def product_detail(product_id):
     category_id = product['category_id']
     featured_products = dao.get_products_by_category(category_id)
 
-    return render_template('product_detail.html', product=product, featured_products=featured_products)
+    return render_template('transaction_processing/product_detail.html', product=product, featured_products=featured_products)
 
 @app.route('/add_to_cart', methods=['POST'])
 def add_to_cart():
@@ -331,7 +329,7 @@ def add_to_cart():
 def view_cart():
     customer_id = request.args.get('customer_id', '1')  # For simplicity, hardcoded customer_id
     cart_items = dao.get_cart_by_customer_id(customer_id)
-    return render_template('cart.html', cart_items=cart_items, customer_id=customer_id)
+    return render_template('transaction_processing/cart.html', cart_items=cart_items, customer_id=customer_id)
 
 @app.route('/update_cart_item/<product_id>', methods=['POST'])
 def update_cart_item(product_id):
@@ -358,7 +356,7 @@ def clear_cart():
     
     return redirect(url_for('view_cart'))
 
-@app.route('/admin/products', methods=['GET'])
+@app.route('/admin_products', methods=['GET'])
 def admin_products():
     status_filter = request.args.get('status')  # Get filter from request
     
@@ -371,19 +369,19 @@ def admin_products():
     print(f"Status Filter: {status_filter}")
     print(f"Products: {products}")
 
-    return render_template('admin_products.html', products=products, status_filter=status_filter)
+    return render_template('transaction_processing/admin_products.html', products=products, status_filter=status_filter)
 
 
-@app.route('/admin/product/<product_id>')
+@app.route('/admin_product/<product_id>')
 def admin_product_detail(product_id):
     product = dao.get_product_by_id(product_id)
     if not product:
         flash('Product not found', 'danger')
         return redirect(url_for('admin_products'))
-    return render_template('admin_product_detail.html', product=product)
+    return render_template('transaction_processing/admin_product_detail.html', product=product)
 
 ## Admin add product
-@app.route('/admin/add_product', methods=['GET', 'POST'])
+@app.route('/admin_add_product', methods=['GET', 'POST'])
 def admin_add_product():
     if request.method == 'POST':
         product_id = request.form.get('product_id')
@@ -423,11 +421,11 @@ def admin_add_product():
     suppliers = dao.get_all_suppliers()
     discounts = dao.get_all_discounts_from_products()
 
-    return render_template('admin_add_product.html', categories=categories, suppliers=suppliers, discounts=discounts)
+    return render_template('transaction_processing/admin_add_product.html', categories=categories, suppliers=suppliers, discounts=discounts)
 
 
 
-@app.route('/admin/edit_product/<product_id>', methods=['GET', 'POST'])
+@app.route('/admin_edit_product/<product_id>', methods=['GET', 'POST'])
 def admin_edit_product(product_id):
     # Fetch the existing product data
     product = dao.get_product_by_id(product_id)
@@ -502,10 +500,10 @@ if __name__ == '__main__':
 #Insert Customer Support Herre
 @app.route('/pages-contact')
 def contact_us():
-    return render_template('pages-contact.html')
+    return render_template('customer_support/pages-contact.html')
 
 
-@app.route('faq/')
+@app.route('/faq')
 def faq():
     faq_objects = []
     connection = None
@@ -530,7 +528,7 @@ def faq():
         if connection:
             connection.close()
 
-    return render_template('pages-faq.html', faqs=faq_objects)
+    return render_template('customer_support/pages-faq.html', faqs=faq_objects)
 
 
 @app.route('/create_ticket', methods=['GET', 'POST'])
@@ -557,7 +555,7 @@ def raise_a_ticket():
 
         return render_template('thankyou_page.html')
 
-    return render_template('create_ticket.html', form=form)
+    return render_template('customer_support/create_ticket.html', form=form)
 
 
 @app.route('/retrieve_ticket', methods=['GET'])
@@ -573,7 +571,7 @@ def view_tickets():
         cursor.close()
         db.close()
 
-    return render_template('retrieve_ticket.html', tickets=tickets)
+    return render_template('customer_support/retrieve_ticket.html', tickets=tickets)
 
 
 
@@ -612,7 +610,7 @@ def update_ticket(ticket_id):
     form.issue.data = ticket['issue']
     form.topic.data = ticket['topic']
 
-    return render_template('update_ticket.html', form=form, ticket_id=ticket_id)
+    return render_template('customer_support/update_ticket.html', form=form, ticket_id=ticket_id)
 
 
 @app.route('/delete_ticket', methods=['POST'])
@@ -631,18 +629,17 @@ def delete_ticket():
     return redirect(url_for('view_tickets'))
 
 @app.route('/staff_assignees')
-def index():
-    db = db_connector()
+def staff_assignees():
+    db , cursor = db_connector()
     try:
-        with db.cursor() as cursor:
-            cursor.execute("SELECT id, name, email, role, tickets_solved FROM staff")
-            assignees = cursor.fetchall()
-            # Sanitize email for safe HTML IDs
-            for assignee in assignees:
-                assignee['email_id'] = sanitize_email(assignee['email'])
+        cursor.execute("SELECT id, name, email, role, tickets_solved FROM staff")
+        assignees = cursor.fetchall()
+        # Sanitize email for safe HTML IDs
+        for assignee in assignees:
+            assignee['email_id'] = sanitize_email(assignee['email'])
     finally:
         db.close()
-    return render_template('staff_assignees.html', assignees=assignees)
+    return render_template('customer_support/staff_assignees.html', assignees=assignees)
 
 
 @app.route('/edit_assignee/<string:email>', methods=['GET', 'POST'])
@@ -665,7 +662,7 @@ def edit_assignee(email):
             print("Error:", e)
         finally:
             db.close()
-        return redirect(url_for('index'))
+        return redirect(url_for('staff_assignees'))
 
     try:
         with db.cursor() as cursor:
@@ -673,7 +670,7 @@ def edit_assignee(email):
             assignee = cursor.fetchone()
     finally:
         db.close()
-    return render_template('edit_assignees.html', assignee=assignee)
+    return render_template('customer_support/edit_assignees.html', assignee=assignee)
 
 @app.route('/add_assignee', methods=['GET', 'POST'])
 def add_assignee():
@@ -697,9 +694,9 @@ def add_assignee():
         finally:
             db.close()
 
-        return redirect(url_for('index'))
+        return redirect(url_for('staff_assignees'))
 
-    return render_template('add_assignees.html')
+    return render_template('customer_support/add_assignees.html')
 
 @app.route('/delete_assignee/<string:email>', methods=['POST'])
 def delete_assignee(email):
@@ -730,7 +727,7 @@ def tickets():
             tickets = cursor.fetchall()
     finally:
         db.close()
-    return render_template('staff_mytickets.html', tickets=tickets)
+    return render_template('customer_support/staff_mytickets.html', tickets=tickets)
 
 
 @app.route('/update_ticket/<string:ticketid>', methods=['POST'])

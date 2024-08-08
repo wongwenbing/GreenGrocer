@@ -83,6 +83,6 @@ class Retrieve_Staff_Report:
         self.report_type = report_type
 
 
-
-r = staff_report(1, '2023-01-01', '2023-03-31', 'Category')
-r.to_db()
+#
+# r = staff_report(1, '2023-01-01', '2023-03-31', 'Category')
+# r.to_db()

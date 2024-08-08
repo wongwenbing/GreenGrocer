@@ -2,34 +2,6 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
-  <title>GreenGrocer - Tickets</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
-
-  <!-- Favicons -->
-  <link href="/static/img/favicon.png" rel="icon">
-  <link href="/static/img/apple-touch-icon.png" rel="apple-touch-icon">
-
-  <!-- Google Fonts -->
-  <link href="https://fonts.gstatic.com" rel="preconnect">
-  <link
-    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-    rel="stylesheet">
-
-  <!-- Vendor CSS Files -->
-  <link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="/static/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="/static/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-  <link href="/static/vendor/quill/quill.snow.css" rel="stylesheet">
-  <link href="/static/vendor/quill/quill.bubble.css" rel="stylesheet">
-  <link href="/static/vendor/remixicon/remixicon.css" rel="stylesheet">
-  <link href="/static/vendor/simple-datatables/style.css" rel="stylesheet">
-
-  <!-- Template Main CSS File -->
-  <link href="/static/css/style.css" rel="stylesheet">
   <!-- Custom CSS -->
   <style>
     .ticket-card {
@@ -104,148 +76,9 @@
 
 <body>
 
-  <!-- ======= Header ======= -->
-  <header id="header" class="header fixed-top d-flex align-items-center">
-
-    <div class="d-flex align-items-center justify-content-between">
-      <a href="index.html" class="logo d-flex align-items-center">
-        <img src="/static/img/GG Logo.jpg" alt="">
-        <span class="d-none d-lg-block">GreenGrocer</span>
-      </a>
-      <i class="bi bi-list toggle-sidebar-btn"></i>
-    </div><!-- End Logo -->
-
-    <nav class="header-nav ms-auto">
-      <ul class="d-flex align-items-center">
-
-        <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-          <img src="/static/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-          <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
-        </a><!-- End Profile Image Icon -->
-
-      </ul>
-    </nav><!-- End Icons Navigation -->
-
-  </header><!-- End Header -->
-
-
-  <!-- ======= Sidebar ======= -->
-  <aside id="sidebar" class="sidebar">
-
-    <ul class="sidebar-nav" id="sidebar-nav">
-
-      <li class="nav-item">
-        <a class="nav-link " href="index.html">
-          <i class="bi bi-person"></i>
-          <span>Staff</span>
-        </a>
-      </li><!-- End Customer Nav -->
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#products-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-person-circle"></i><span>Accounts</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="products-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="components-buttons.html">
-              <i class="bi bi-circle"></i><span>Buttons</span>
-            </a>
-          </li>
-
-        </ul>
-      </li><!-- End Products Nav (Ash to add)-->
-
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#products-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-cart-plus"></i><span>Products</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="products-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="components-buttons.html">
-              <i class="bi bi-circle"></i><span>Buttons</span>
-            </a>
-          </li>
-
-        </ul>
-      </li><!-- End Products Nav (Tia to add)-->
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#cs-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-person-workspace"></i><span>Customer Support</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="cs-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="staff_mytickets.html">
-              <i class="bi bi-circle"></i><span>My Assigned Tickets</span>
-            </a>
-          </li>
-          <li>
-            <a href="staff_assignees.html">
-              <i class="bi bi-circle"></i><span>Total Assignees</span>
-            </a>
-          </li>
-        </ul>
-      </li><!-- End CS Nav (Rachel to add)-->
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-wallet2"></i><span>Billing</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="tables-general.html">
-              <i class="bi bi-circle"></i><span>Tables</span>
-            </a>
-          </li>
-        </ul>
-      </li><!-- End Tables Nav (WB to add) -->
-
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-bar-chart"></i><span>Analytics</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="tables-general.html">
-              <i class="bi bi-circle"></i><span>Tables</span>
-            </a>
-          </li>
-        </ul>
-      </li><!-- End Tables Nav (WB to add) -->
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#settings-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-gear"></i><span>Settings</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="settings-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="tables-general.html">
-              <i class="bi bi-circle"></i><span>Tables</span>
-            </a>
-          </li>
-
-        </ul>
-      </li><!-- End Settings Nav (Ash to add)-->
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#logout-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-box-arrow-left"></i><span>Log Out</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="logout-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="pages-faq.html">
-              <i class="bi bi-circle"></i><span>Logout</span>
-            </a>
-          </li>
-        </ul>
-      </li><!-- End Logout Nav -->
-
-    </ul>
-
-  </aside><!-- End Sidebar -->
-
+{% extends "basestaff.html" %}
+{% block title %} Reports Summary {% endblock %}
+{% block content %}
   <main id="main" class="main">
     <div class="pagetitle">
       <h1>My Assigned Tickets</h1>
@@ -390,6 +223,4 @@
   <!-- Template Main JS File -->
   <script src="/static/js/main.js"></script>
 
-</body>
-
-</html>
+{% endblock %}
