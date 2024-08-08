@@ -6,8 +6,11 @@
 <form action="{{ url_for('print_invoice') }}" method="post">
                         <input type="hidden" name="invoice_id" value="{{ invoice.invoice_id }}">
                     <button type="submit">Print</button>
-<a href="">Export</a>
-<div class="d-flex justify-content-between">
+</form>
+<form action="{{ url_for('email_invoice') }}" method="post">
+                        <input type="hidden" name="invoice_id" value="{{ invoice.invoice_id }}">
+                    <button type="submit">Receive a Copy</button><div class="d-flex justify-content-between">
+</form>
     <div class="">
         <p>To:
             <br>

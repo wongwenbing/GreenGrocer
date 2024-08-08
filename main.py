@@ -997,13 +997,13 @@ def download_inventory_report():
     rows = cursor.fetchall()
     rows = pd.DataFrame(rows)
     # Convert DataFrame to CSV
-    csv_buffer = StringIO()
-    rows.to_csv(csv_buffer, index=False)
-    csv_buffer.seek(0)
+    output = StringIO()
+    rows.to_csv(output, index=False)
+    output.seek(0)
 
     # Create a response object and set headers
     response = Response(
-        csv_buffer.getvalue(),
+        output.getvalue(),
         mimetype='text/csv',
         headers={"Content-Disposition": "attachment;filename=inventory_report.csv"}
     )
@@ -1016,6 +1016,11 @@ def download_inventory_report():
     msg['From'] = EMAIL_ADDRESS
     msg['To'] = 'aniskyguy331@gmail.com'
     msg.set_content('This is to inform you that the Inventory report has been generated successfully.')
+
+    msg.add_attachment(output.getvalue(),
+                       maintype='application',
+                       subtype='csv',
+                       filename='Inventory_Report.csv')
 
     with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
         smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
@@ -1212,7 +1217,64 @@ def print_invoice():
 
     pisa.CreatePDF(html, dest=pdf_output, encoding='utf-8')
     pdf_output.seek(0)
+
     return send_file(pdf_output,as_attachment=True, mimetype='application/pdf', download_name=filename)
+
+
+@app.route('/email_invoice', methods=['POST'])
+def email_invoice():
+    invoice_id = request.form.get('invoice_id')
+    query = """
+        SELECT i.ID, i.Invoiced_date, i.order_id, i.user_id, u.name, u.email, u.phone_number, u.address
+        FROM Invoice i INNER JOIN users u
+        ON i.user_id = u.id
+        WHERE i.ID = %s
+        """
+    cursor.execute(query, invoice_id)
+    row = cursor.fetchone()
+    print(row)
+    invoice = InvoiceCustomer(row['ID'], row['Invoiced_date'], row['order_id'], row['name'],
+                              row['email'], row['phone_number'], row['address'])
+    invoice_summary(invoice)
+    products = invoice.products
+    html = render_template('report_generation/print_invoices.html', invoice=invoice,
+                           products=products)
+    filename = f"Invoice#{invoice_id}.pdf"
+    pdf_output = BytesIO()
+
+    pisa.CreatePDF(html, dest=pdf_output, encoding='utf-8')
+    pdf_output.seek(0)
+
+    EMAIL_ADDRESS = 'staff.greengrocerr@gmail.com'
+    EMAIL_PASSWORD = 'fjad oapl nsac lkfa'
+
+    msg = EmailMessage()
+    msg['Subject'] = f'Your Invoice#{invoice_id} is Ready!'
+    msg['From'] = EMAIL_ADDRESS
+    msg['To'] = 'aniskyguy331@gmail.com'
+    msg.set_content("""
+    Hi, 
+
+    This is to inform you that your recent purchase has been invoiced.
+
+    Do refer to the attached.
+
+    We look forward to your purchases again!
+
+    Regards, 
+    GreenGrocer Team
+    """)
+
+    msg.add_attachment(pdf_output.getvalue(),
+                       maintype='application',
+                       subtype='pdf',
+                       filename=f'Invoice#{invoice_id}')
+
+    with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+        smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
+        smtp.send_message(msg)
+
+    return send_file(pdf_output, as_attachment=True, mimetype='application/pdf', download_name=filename)
 
 
 @app.route('/invoice')
