@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>GreenGrocer</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="/static/img/favicon.png" rel="icon">
+  <link href="/static/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="../static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../static/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="../static/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="../static/quill/quill.snow.css" rel="stylesheet">
+  <link href="../static/quill/quill.bubble.css" rel="stylesheet">
+  <link href="../static/remixicon/remixicon.css" rel="stylesheet">
+  <link href="../static/simple-datatables/style.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="../static/css/style.css" rel="stylesheet">
+  <style>
+    .faq-item {
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 15px;
+      background-color: #fff;
+    }
+
+    .faq-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 10px;
+    }
+
+    .faq-question {
+      margin: 0;
+      font-weight: bold;
+    }
+
+    .faq-answer {
+      display: none;
+      margin-top: 10px;
+    }
+
+    .faq-toggle-btn {
+      background: #007bff;
+      color: #fff;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      border-radius: 4px;
+      padding: 5px 10px;
+    }
+
+    .faq-toggle-btn:hover {
+      background: #0056b3;
+    }
+
+    .container {
+      max-width: 800px;
+    }
+
+    .card-title {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+
+  {% extends "basestaff.html" %}
+  {% block content %}
+
+
+    <div class="centered-content">
+      <p>Find questions and answers related to the design system, purchase, updates, and support.</p>
+    </div>
+
+    <section>
+      <div class="row">
+        <div>
+          <!-- F.A.Q Group 1 -->
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">~ QNA ~</h5>
+              <div class="accordion" id="faq-group-1">
+                {% for faq in faqs %}
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="heading{{ loop.index }}">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#faq-{{ loop.index }}" aria-expanded="false" aria-controls="faq-{{ loop.index }}">
+                      {{ faq.get_question() }}
+                    </button>
+                  </h2>
+                  <div id="faq-{{ loop.index }}" class="accordion-collapse collapse"
+                    aria-labelledby="heading{{ loop.index }}" data-bs-parent="#faq-group-1">
+                    <div class="accordion-body">
+                      {{ faq.get_answer() }}
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div><!-- End F.A.Q Group 1 -->
+      </div>
+    </section>
+  </main><!-- End #main -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
+
+  {% endblock %}
+
+  <!-- Vendor JS Files -->
+  <script src="../static/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../static/chart.js/chart.umd.js"></script>
+  <script src="../static/echarts/echarts.min.js"></script>
+  <script src="../static/quill/quill.min.js"></script>
+  <script src="../static/simple-datatables/simple-datatables.js"></script>
+  <script src="../static/tinymce/tinymce.min.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="../static/js/main.js"></script>
+
+</body>
+
+</html>

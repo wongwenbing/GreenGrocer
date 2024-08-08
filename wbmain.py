@@ -11,6 +11,9 @@ from io import BytesIO, StringIO
 import pandas as pd
 import smtplib
 from email.message import EmailMessage
+from email.mime.multipart import MIMEMultipart
+from email.mime.application import MIMEApplication
+from email.mime.text import MIMEText
 
 
 
@@ -306,6 +309,8 @@ def staff_retrieve_report():
     }
     if result['report_type'] == "Purchasing":
         return redirect(url_for('purchasing_report'))
+    elif result['report_type'] == "Inventory":
+        return redirect(url_for('inventory_report'))
 
 
 @app.route('/staff_delete_report', methods=['POST'])

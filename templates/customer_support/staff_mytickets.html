@@ -126,7 +126,7 @@
                     <h5 class="modal-title" id="editTicketModalLabel_{{ ticket.ticketid }}">Edit Ticket</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
-                  <form action="{{ url_for('update_ticket', ticketid=ticket.ticketid) }}" method="post">
+                  <form action="{{ url_for('staff_update_ticket', ticketid = ticket.ticketid) }}" method="post">
                     <div class="modal-body">
                       <div class="form-group">
                         <label for="description_{{ ticket.ticketid }}">Description</label>
