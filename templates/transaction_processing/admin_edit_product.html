@@ -1,62 +1,107 @@
 {% extends "basestaff.html" %}
-{% block title %} Edit Product {% endblock %}
+
+{% block title %}Products{% endblock %}
+
 {% block content %}
-    <div class="container mt-5">
-        <h2>Edit Product</h2>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Product - Admin</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="mb-4">Edit Product</h1>
         {% if flash_messages %}
             {% for category, message in flash_messages %}
                 <div class="alert alert-{{ category }}">
                     {{ message }}
                 </div>
-            {% endfor %}
+            {% endfor %} 
         {% endif %}
         <form method="POST" action="{{ url_for('admin_edit_product', product_id=product.product_ID) }}">
             <div class="form-group">
-                <label for="category_id">Category ID</label>
-                <input type="text" class="form-control" id="category_id" name="category_id" value="{{ product.category_id }}" required>
+                <label for="category">Category</label>
+                <select class="form-control" id="category" name="category_id" required>
+                    {% for category in categories %}
+                    <option value="{{ category.category_id }}" {% if category.category_id == product.category_id %}selected{% endif %}>
+                        {{ category.category_name }}
+                    </option>
+                    {% endfor %}
+                </select>
             </div>
             <div class="form-group">
-                <label for="supplier_id">Supplier ID</label>
-                <input type="text" class="form-control" id="supplier_id" name="supplier_id" value="{{ product.supplier_id }}" required>
+                <label for="supplier">Supplier</label>
+                <select class="form-control" id="supplier" name="supplier_id" required>
+                    {% for supplier in suppliers %}
+                    <option value="{{ supplier.supplier_id }}" {% if supplier.supplier_id == product.supplier_id %}selected{% endif %}>
+                        {{ supplier.supplier_name }}
+                    </option>
+                    {% endfor %}
+                </select>
             </div>
             <div class="form-group">
                 <label for="name">Product Name</label>
-                <input type="text" class="form-control" id="name" name="name" value="{{ product.name }}" required>
+                <input type="text" class="form-control" id="name" name="name" value="{{ product.name }}" required placeholder="Enter product name">
             </div>
             <div class="form-group">
-                <label for="uom">Unit of Measure</label>
-                <input type="text" class="form-control" id="uom" name="uom" value="{{ product.uom }}" required>
+                <label for="uom">Unit of Measure (UOM)</label>
+                <select class="form-control" id="uom" name="uom" required>
+                    {% for uom_option in uoms %}
+                        <option value="{{ uom_option }}" {% if product.uom == uom_option %}selected{% endif %}>{{ uom_option }}</option>
+                    {% endfor %}
+                </select>
             </div>
+                     
+            
             <div class="form-group">
-                <label for="usual_price">Usual Price</label>
-                <input type="number" step="0.01" class="form-control" id="usual_price" name="usual_price" value="{{ product.usual_price }}" required>
+                <label for="price">Price</label>
+                <input type="number" class="form-control" id="price" name="usual_price" step="0.01" value="{{ product.usual_price }}" required placeholder="Enter price">
             </div>
             <div class="form-group">
                 <label for="country_of_origin">Country of Origin</label>
-                <input type="text" class="form-control" id="country_of_origin" name="country_of_origin" value="{{ product.country_of_origin }}" required>
+                <input type="text" class="form-control" id="country_of_origin" name="country_of_origin" value="{{ product.country_of_origin }}" placeholder="Enter country of origin">
             </div>
             <div class="form-group">
-                <label for="eco_info">Eco Info</label>
-                <textarea class="form-control" id="eco_info" name="eco_info">{{ product.eco_info }}</textarea>
+                <label for="eco_info">Eco Information</label>
+                <textarea class="form-control" id="eco_info" name="eco_info" placeholder="Enter eco information">{{ product.eco_info }}</textarea>
             </div>
             <div class="form-group">
                 <label for="ingredients">Ingredients</label>
-                <textarea class="form-control" id="ingredients" name="ingredients">{{ product.ingredients }}</textarea>
+                <input type="text" class="form-control" id="ingredients" name="ingredients" value="{{ product.ingredients }}" placeholder="Enter ingredients">
             </div>
             <div class="form-group">
                 <label for="tags">Tags</label>
-                <input type="text" class="form-control" id="tags" name="tags" value="{{ product.tags }}" required>
+                <input type="text" class="form-control" id="tags" name="tags" value="{{ product.tags }}" placeholder="Enter tags">
             </div>
             <div class="form-group">
-                <label for="discount_id">Discount ID</label>
-                <input type="number" class="form-control" id="discount_id" name="discount_id" value="{{ product.discount_id }}" required>
+                <label for="discount_id">Discount</label>
+                <select class="form-control" id="discount_id" name="discount_id">
+                    <option value="">No Discount</option>
+                    {% for discount in discounts %}
+                    <option value="{{ discount.discount_id }}" {% if discount.discount_id == product.discount_id %}selected{% endif %}>
+                        {{ discount.discount_percentage }}%
+                    </option>
+                    {% endfor %}
+                </select>
             </div>
             <div class="form-group">
                 <label for="status">Status</label>
-                <input type="text" class="form-control" id="status" name="status" value="{{ product.status }}" required>
+                <select class="form-control" id="status" name="status" required>
+                    <option value="active" {% if product.status == 'active' %}selected{% endif %}>active</option>
+                    <option value="drafts" {% if product.status == 'drafts' %}selected{% endif %}>drafts</option>
+                    <option value="archive" {% if product.status == 'archive' %}selected{% endif %}>archive</option>
+                </select>
             </div>
             <button type="submit" class="btn btn-primary">Update Product</button>
         </form>
     </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
 {% endblock %}
-

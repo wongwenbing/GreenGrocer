@@ -371,17 +371,25 @@ def clear_cart():
 @app.route('/admin_products', methods=['GET'])
 def admin_products():
     status_filter = request.args.get('status')  # Get filter from request
-
+    
     if status_filter not in ['active', 'drafts', 'archive', None]:
         status_filter = None  # Default to showing all products if the status filter is invalid
 
     products = dao.get_all_products(status_filter=status_filter)
-
+    
     # Debug: Print or log the products and status filter
     print(f"Status Filter: {status_filter}")
     print(f"Products: {products}")
 
-    return render_template('transaction_processing/admin_products.html', products=products, status_filter=status_filter)
+    # Get totals
+    total_all = dao.get_total_products()
+    total_active = dao.count_products_by_status('active')
+    total_drafts = dao.count_products_by_status('drafts')
+    total_archive = dao.count_products_by_status('archive')
+    return render_template('/transaction_processing/admin_products.html', products=products, status_filter=status_filter,total_all=total_all,
+        total_active=total_active,
+        total_drafts=total_drafts,
+        total_archive=total_archive)
 
 
 @app.route('/admin_product/<product_id>')
@@ -437,11 +445,11 @@ def admin_add_product():
 
 
 
-@app.route('/admin_edit_product/<product_id>', methods=['GET', 'POST'])
+@app.route('/admin/edit_product/<product_id>', methods=['GET', 'POST'])
 def admin_edit_product(product_id):
     # Fetch the existing product data
     product = dao.get_product_by_id(product_id)
-
+    
     if request.method == 'POST':
         # Retrieve and convert form data
         category_id = request.form.get('category_id')
@@ -468,7 +476,7 @@ def admin_edit_product(product_id):
         except (ValueError, InvalidOperation):
             flash('Invalid price format', 'danger')
             return redirect(url_for('admin_edit_product', product_id=product_id))
-
+        
         country_of_origin = country_of_origin if country_of_origin else product['country_of_origin']
         eco_info = eco_info if eco_info else product['eco_info']
         ingredients = ingredients if ingredients else product['ingredients']
@@ -495,8 +503,9 @@ def admin_edit_product(product_id):
     categories = dao.get_all_categories()
     suppliers = dao.get_all_suppliers()
     discounts = dao.get_all_discounts_from_products()
+    uoms = ['kg', 'g', 'l', 'ml', 'pcs']
 
-    return render_template('transaction_processing/admin_edit_product.html', product=product, categories=categories, suppliers=suppliers, discounts=discounts)
+    return render_template('/transaction_processing/admin_edit_product.html', product=product, categories=categories, suppliers=suppliers, discounts=discounts, uoms=uoms)
 
 
 @app.route('/admin/delete_product/<product_id>', methods=['POST'])
