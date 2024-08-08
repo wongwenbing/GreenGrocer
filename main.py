@@ -14,7 +14,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from customer_support.forms import TicketForm
 from customer_support.faqclass import FAQ
 from account_management.forms import RegistrationForm, CreateUserForm
-from xhtml2pdf import pisa
+# from xhtml2pdf import pisa
 from io import BytesIO, StringIO
 import io
 import pandas as pd
