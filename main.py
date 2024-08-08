@@ -39,6 +39,7 @@ db, cursor = db_connector()
 
 @app.route('/')
 def home():
+    session['user_id'] = 1
     return render_template('base_browse.html')
 
 @app.route('/customer')
@@ -556,11 +557,7 @@ def raise_a_ticket():
             (username, email, date, time, issue, topic)
         )
         db.commit()
-        cursor.close()
         db.close()
-
-        return redirect('customer_support/thankyou_page.html')
-
     return render_template('customer_support/create_ticket.html', form=form)
 
 

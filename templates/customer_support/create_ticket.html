@@ -85,6 +85,26 @@
 
             <div class="row mb-3">
               <div class="col-sm-10 offset-sm-2">
+                <form action="{{ url_for('raise_a_ticket') }}" method="POST">
+                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="thankYouModal">Submit</button>
+                  <div class="modal fade" id="thankYouModal" tabindex="-1" aria-labelledby="thankYouModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="thankYouModalLabel">Form Successfully Submitted!</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          Thank you for submitting the ticket. We appreciate the concern and will get back to you shortly. Meanwhile,
+                          you can view all your tickets by going to <a href="{{ url_for('view_tickets') }}">My Tickets</a>.
+                        </div>
+                        <div class="modal-footer">
+                          <a href="{{ url_for('view_tickets') }}" class="btn btn-primary">Go to My Tickets</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
                 <button type="submit" class="btn btn-primary">Submit</button>
                 <button type="reset" class="btn btn-secondary">Reset</button>
               </div>
