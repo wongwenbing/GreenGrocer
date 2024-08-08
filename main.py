@@ -560,18 +560,19 @@ def raise_a_ticket():
         issue = request.form['issue']
         topic = request.form['topic']
 
-        # db, cursor = db_connector()
+        db, cursor = db_connector()
         cursor.execute(
             'INSERT INTO tickets (username, email, date, time, issue, topic) VALUES (%s, %s, %s, %s, %s, %s)',
             (username, email, date, time, issue, topic)
         )
         db.commit()
         db.close()
+        return render_template('thankyou_page.html')
     return render_template('customer_support/create_ticket.html', form=form)
 
 
 @app.route('/retrieve_ticket', methods=['GET'])
-def view_tickets():
+def retrieve_tickets():
     db, cursor = db_connector()
     tickets = []
     try:
@@ -650,19 +651,19 @@ def staff_assignees():
             assignee['email_id'] = sanitize_email(assignee['email'])
     finally:
         db.close()
-    return render_template('customer_support/add_assignees.html', assignees=assignees)
+    return render_template('customer_support/staff_assignees.html', assignees=assignees)
 
 
 @app.route('/edit_assignee/<string:email>', methods=['GET', 'POST'])
 def edit_assignee(email):
-    db = db_connector()
+    db, cursor = db_connector()
     if request.method == 'POST':
         name = request.form.get('name')
         new_email = request.form.get('email')
         role = request.form.get('role')
         tickets_solved = request.form.get('tickets_solved')
         try:
-            with db.cursor() as cursor:
+            with cursor:
                 sql = """UPDATE staff
                          SET name = %s, email = %s, role = %s, tickets_solved = %s
                          WHERE email = %s"""
@@ -691,9 +692,9 @@ def add_assignee():
         role = request.form['role']
         tickets_solved = request.form['tickets_solved']
 
-        db = db_connector()
+        db, cursor = db_connector()
         try:
-            with db.cursor() as cursor:
+            with cursor:
                 cursor.execute(
                     'INSERT INTO staff (name, email, role, tickets_solved) VALUES (%s, %s, %s, %s)',
                     (name, email, role, tickets_solved)
@@ -711,9 +712,9 @@ def add_assignee():
 
 @app.route('/delete_assignee/<string:email>', methods=['POST'])
 def delete_assignee(email):
-    db = db_connector()
+    db, cursor = db_connector()
     try:
-        with db.cursor() as cursor:
+        with cursor:
             sql = "DELETE FROM staff WHERE email = %s"
             cursor.execute(sql, (email,))
             db.commit()
@@ -722,7 +723,7 @@ def delete_assignee(email):
         print("Error:", e)
     finally:
         db.close()
-    return redirect(url_for('index'))
+    return redirect(url_for('staff_assignees'))
 
 @app.route('/staff_mytickets')
 def staff_mytickets():
@@ -747,9 +748,9 @@ def staff_update_ticket(ticketid):
     priority = request.form.get('priority')
     status = request.form.get('status')
 
-    db = db_connector()
+    db, cursor = db_connector()
     try:
-        with db.cursor() as cursor:
+        with cursor:
             # Modify SQL query to handle string `ticketid`
             sql = """UPDATE SupportTickets
                      SET description = %s, priority = %s, status = %s, updated_at = NOW()
@@ -761,7 +762,7 @@ def staff_update_ticket(ticketid):
         print("Error:", e)
     finally:
         db.close()
-    return redirect(url_for('staff_mytickets'))
+        return redirect(url_for('staff_mytickets'))
 
 
 
