@@ -1101,6 +1101,33 @@ def download_sales_report():
     # Seek to the beginning of the BytesIO buffer
     output.seek(0)
 
+    EMAIL_ADDRESS = 'staff.greengrocerr@gmail.com'
+    EMAIL_PASSWORD = 'fjad oapl nsac lkfa'
+
+    msg = EmailMessage()
+    msg['Subject'] = 'Sales Report Generated Successfully!'
+    msg['From'] = EMAIL_ADDRESS
+    msg['To'] = 'aniskyguy331@gmail.com'
+    msg.set_content("""
+        Hi, 
+
+        This is to inform you that the Sales Report has been generated successfully. 
+
+        Do refer to the attached.
+
+        Regards, 
+        GreenGrocer Team
+        """)
+
+    msg.add_attachment(output.getvalue(),
+                       maintype='application',
+                       subtype='vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                       filename='SalesReport.xlsx')
+
+    with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+        smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
+        smtp.send_message(msg)
+
     # Send the file to the client
     return send_file(
         output,
