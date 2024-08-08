@@ -1,15 +1,16 @@
-{% extends "base.html" %}
+{% extends "basestaff.html" %}
 {% block title %} Generate Reports {% endblock %}
 {% block content %}
- <h1>Customer Report</h1>
+ <h1>Report Generation</h1>
         <form method="POST" action="">
             <div>
-                <label for="start_date">Report Dates</label>
-                {{ form.start_date() }}
+                <label for="start_date"> Start Date</label>
+                {{ form.start_date() }} <br>
+                <label for="end_date"> End Date</label>
                 {{ form.end_date() }}
             </div>
             <div>
-                <label for="fields_needed">Fields Needed</label>
+                <label for="fields_needed">Type of Report</label>
                 {{ form.type_of_report() }}
 
             </div>
