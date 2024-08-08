@@ -51,10 +51,12 @@ def login():
     if request.method == 'POST':
         email = str(request.form['email'])
         password = request.form['password']
+        db, cursor = db_connector()
         cursor.execute('SELECT * FROM users WHERE email = %s', (email))
         user = cursor.fetchone()
 
         if not user:
+            db, cursor = db_connector()
             cursor.execute('SELECT * FROM staff WHERE email = %s', (email))
             user = cursor.fetchone()
             role = 'staff' if user else None
@@ -67,6 +69,8 @@ def login():
             session['name'] = user['name']
             session['role'] = role
             flash('Logged in successfully!', 'success')
+            return redirect(url_for('profile'))
+
 
         if role == 'users':
             return redirect(url_for('products'))
