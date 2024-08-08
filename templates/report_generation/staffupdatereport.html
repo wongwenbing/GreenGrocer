@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %} Update Reports {% endblock %}
+{% block content %}
+ <h1>Update Report</h1>
+        <form method="POST" action="">
+            <div>
+                <label for="start_date"> Start Date</label>
+                {{ form.start_date() }} <br>
+                <label for="end_date"> End Date</label>
+                {{ form.end_date() }}
+            </div>
+            <div>
+                <label for="fields_needed">Type of Report</label>
+                {{ form.type_of_report() }}
+
+            </div>
+            <div>
+                <input type="submit" value="Submit">
+            </div>
+        </form>
+{% endblock %}

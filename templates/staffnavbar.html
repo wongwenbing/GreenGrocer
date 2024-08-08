@@ -9,21 +9,48 @@
         </a>
       </li><!-- End Customer Nav -->
 
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#manage-customer-accounts-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-people"></i><span>Manage Customer Accounts</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="manage-customer-accounts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="/createCustomers">
+              <i class="bi bi-circle"></i><span>Create Customer</span>
+            </a>
+          </li>
+          <li>
+            <a href="/retrieveCustomers">
+              <i class="bi bi-circle"></i><span>View Customers</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End Manage Customer Accounts Nav -->
+
+
       <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#products-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-cart-plus"></i><span>Product Management</span><i class="bi bi-chevron-down ms-auto"></i>
+          <i class="bi bi-cart-plus"></i><span>Products</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="products-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a href="/admin/products">
-              <i class="bi bi-circle"></i><span>Product List</span>
+            <a href="/admin_products">
+              <i class="bi bi-circle"></i><span>View All Products</span>
             </a>
           </li>
           <li>
-            <a href="/admin/admin_add_product">
-              <i class="bi bi-circle"></i><span>Add a Product</span>
+            <a href="/admin_add_product">
+              <i class="bi bi-circle"></i><span>Add Product</span>
             </a>
           </li>
+          <li>
+            <a href="/admin_add_product">
+              <i class="bi bi-circle"></i><span>Add Product</span>
+            </a>
+          </li>
+
+
         </ul>
       </li><!-- End Procuts Nav (Tia to add)-->
 
@@ -33,18 +60,18 @@
         </a>
         <ul id="cs-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a href="forms-elements.html">
-              <i class="bi bi-circle"></i><span>Form Elements</span>
+            <a href="/staff_assignees">
+              <i class="bi bi-circle"></i><span>View Staff Assignees</span>
             </a>
           </li>
           <li>
-            <a href="forms-layouts.html">
-              <i class="bi bi-circle"></i><span>Form Layouts</span>
+            <a href="/add_assignee">
+              <i class="bi bi-circle"></i><span>Add Assignee</span>
             </a>
           </li>
           <li>
-            <a href="forms-editors.html">
-              <i class="bi bi-circle"></i><span>Form Editors</span>
+            <a href="/staff_mytickets">
+              <i class="bi bi-circle"></i><span>My Tickets</span>
             </a>
           </li>
         </ul>
@@ -56,23 +83,13 @@
         </a>
         <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a href="/nutrition">
-              <i class="bi bi-circle"></i><span>View My Nutrition</span>
-            </a>
-          </li>
-          <li>
-            <a href="tables-general.html">
+            <a href="/staff_generate_report">
               <i class="bi bi-circle"></i><span>Create Report</span>
             </a>
           </li>
           <li>
-            <a href="/view_reports">
+            <a href="/staff_view_reports">
               <i class="bi bi-circle"></i><span>View My Saved Reports</span>
-            </a>
-          </li>
-          <li>
-            <a href="/view_invoices">
-              <i class="bi bi-circle"></i><span>View My Invoices</span>
             </a>
           </li>
         </ul>
@@ -84,8 +101,8 @@
         </a>
         <ul id="settings-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a href="tables-general.html">
-              <i class="bi bi-circle"></i><span>Tables</span>
+            <a href="/profile">
+              <i class="bi bi-circle"></i><span>Profile</span>
             </a>
           </li>
 
@@ -106,17 +123,11 @@
       </li><!-- End Help Nav -->
 
       <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#logout-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-box-arrow-left"></i><span>Log Out</span><i class="bi bi-chevron-down ms-auto"></i>
+        <a class="nav-link collapsed" href="/logout">
+          <i class="bi bi-box-arrow-left"></i>
+          <span>Log Out</span>
         </a>
-        <ul id="logout-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="tables-general.html">
-              <i class="bi bi-circle"></i><span>Log out?</span>
-            </a>
-          </li>
-        </ul>
-      </li><!-- End Tables Nav (Ash to add) -->
+      </li><!-- End Log Out Nav -->
 
     </ul>
 

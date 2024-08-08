@@ -1,0 +1,43 @@
+{% extends "basestaff.html" %}
+{% block title %} Reports Summary {% endblock %}
+{% block content %} 
+<h1>My Reports Summary</h1>
+
+<div>
+    <table class="table table=striped">
+        <thead>
+            <tr>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Report Type</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in reports %}
+            <tr>
+                <td>{{r.start_date}}</td>
+                <td>{{r.end_date}}</td>
+                <td>{{r.report_type}}</td>
+                <td class="d-flex">
+                    <form action="{{ url_for('staff_retrieve_report') }}" method="post">
+                        <input type="hidden" name="report_id" value="{{ r.reportid }}">
+                    <button type="submit" class="btn">View </button>
+                    </form>
+                    <form action="{{ url_for('staff_delete_report') }}" method="POST">
+                        <input type="hidden" name="report_id" value="{{ r.reportid }}">
+                    <button type="submit" class="btn">Delete </button>
+                    </form>
+                    <form action="{{ url_for('staff_update_report1') }}" method="post">
+                        <input type="hidden" name="report_id" value="{{ r.reportid }}">
+                    <button type="submit" class="btn">Update </button>
+                    </form>
+                </td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

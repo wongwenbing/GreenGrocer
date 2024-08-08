@@ -1,7 +1,7 @@
-{% extends "base.html" %}
+{% extends "basestaff.html" %}
 {% block title %} Inventory Report {% endblock %}
 {% block content %}
-
+<a href="/staff_view_reports">View All Reports</a>
 <h1>Inventory Report </h1>
 <!--<p>{{report.description}}</p>-->
 <div class="d-flex justify-content-center">
@@ -28,5 +28,5 @@
 
 </div>
 
-
+<a href="/download_inventory_report" class="btn justify-content-center">Download to CSV</a>
 {% endblock %}

@@ -4,15 +4,14 @@
  <h1>Customer Report</h1>
         <form method="POST" action="">
             <div>
-                <label for="start_date">Report Dates</label>
-                {{ form.start_date() }}
+                <label for="start_date"> Start Date</label>
+                {{ form.start_date() }} <br>
+                <label for="end_date"> End Date</label>
                 {{ form.end_date() }}
             </div>
             <div>
-                <label for="fields_needed">Fields Needed</label>
+                <label for="fields_needed">Type of Report</label>
                 {{ form.type_of_report() }}
-                <label for="description">Report Description</label>
-                {{ form.description() }}
             </div>
             <div>
                 <input type="submit" value="Submit">
