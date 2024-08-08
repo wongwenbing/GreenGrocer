@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask, render_template, request, redirect, url_for, flash, session, send_file, Response
 
 from customer_support.flaskStaff import sanitize_email
 from db import db_connector
@@ -14,6 +14,12 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from customer_support.forms import TicketForm
 from customer_support.faqclass import FAQ
 from account_management.forms import RegistrationForm, CreateUserForm
+from xhtml2pdf import pisa
+from io import BytesIO, StringIO
+import io
+import pandas as pd
+import smtplib
+from email.message import EmailMessage
 # from products.dao import DAO
 # from decimal import Decimal, InvalidOperation
 
@@ -28,7 +34,7 @@ def index():
     # Set session data in a route where a request context is active
     session['user_id'] = 1
     print(session['user_id'])
-    return redirect(url_for('cust_view_reports'))
+    return redirect(url_for('staff_view_reports'))
 
 
 # @app.route('/')
@@ -839,6 +845,7 @@ def cust_generate_report():
     return render_template('report_generation/custreportgen.html', form=form)
 
 
+
 @app.route('/cust_report_update', methods=['POST'])
 def cust_update_report1():
     report_id = request.form.get('report_id')
@@ -885,12 +892,6 @@ def purchasing_report():
     report.get_mostpurchased_category()
     return render_template('report_generation/graphs.html', report=report)
 
-@app.route('/download_purchasing_report')
-def download_purchaing_report():
-    query = """
-    
-    """
-
 
 @app.route('/sustainability_report')
 def sustainability_report():
@@ -901,7 +902,6 @@ def sustainability_report():
     report.graph_organic()
     report.line_carbonemissions()
     return render_template('report_generation/sustainability_report.html', report=report)
-
 
 
 #STAFF
@@ -987,6 +987,43 @@ def inventory_report():
     report.get_average_stock()
     return render_template('report_generation/inventory_report.html', report=report)
 
+@app.route('/download_inventory_report')
+def download_inventory_report():
+    query = """
+    SELECT p.name, i.stock_quantity, i.reorder_level, s.stock_status
+    FROM Inventory i
+    INNER JOIN Products p ON i.product_id = p.product_id
+    INNER JOIN StockStatus s ON i.stock_status_id = s.stock_status_id
+    """
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    rows = pd.DataFrame(rows)
+    # Convert DataFrame to CSV
+    csv_buffer = StringIO()
+    rows.to_csv(csv_buffer, index=False)
+    csv_buffer.seek(0)
+
+    # Create a response object and set headers
+    response = Response(
+        csv_buffer.getvalue(),
+        mimetype='text/csv',
+        headers={"Content-Disposition": "attachment;filename=inventory_report.csv"}
+    )
+
+    EMAIL_ADDRESS = 'staff.greengrocerr@gmail.com'
+    EMAIL_PASSWORD = 'fjad oapl nsac lkfa'
+
+    msg = EmailMessage()
+    msg['Subject'] = 'Report Generated Successfully!'
+    msg['From'] = EMAIL_ADDRESS
+    msg['To'] = 'aniskyguy331@gmail.com'
+    msg.set_content('This is to inform you that the Inventory report has been generated successfully.')
+
+    with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+        smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
+        smtp.send_message(msg)
+
+    return response
 
 @app.route('/sales_report')
 def sales_report():
@@ -996,7 +1033,81 @@ def sales_report():
     report.get_average_order_spending()
     report.get_total_amount()
     report.get_mostpurchased_category()
-    return render_template('report_generation/graphs.html', report=report)
+    return render_template('report_generation/salesgraphs.html', report=report)
+
+
+@app.route('/download_sales_report', methods=['POST'])
+def download_sales_report():
+    startdate = str(request.form.get('startdate'))
+    enddate = str(request.form.get('enddate'))
+    string = (startdate, enddate)
+
+    # Create a BytesIO buffer to hold the Excel file in memory
+    output = io.BytesIO()
+
+    # Database queries
+    # Query 1: Sales by Category
+    query1 = """
+            SELECT od.quantity, c.category_name
+            FROM OrderDetails od
+            INNER JOIN Products p ON od.product_id = p.product_id
+            INNER JOIN Categories c ON p.category_id = c.category_id
+            INNER JOIN Orders o ON od.order_id = o.order_id
+            WHERE o.datetime BETWEEN %s AND %s
+        """
+    cursor.execute(query1, string)
+    rows = cursor.fetchall()
+    df1 = pd.DataFrame(rows, columns=['quantity', 'category_name'])
+    df1 = df1.groupby('category_name', as_index=False)['quantity'].sum()
+    df1 = df1.sort_values(by=['quantity'], ascending=False)
+    df1 = df1.reset_index(drop=True)
+
+    # Query 2: Sales by Product
+    query2 = """
+            SELECT od.quantity, p.name
+            FROM OrderDetails od
+            INNER JOIN Products p ON od.product_id = p.product_id
+            INNER JOIN Orders o ON od.order_id = o.order_id
+            WHERE o.datetime BETWEEN %s AND %s
+        """
+    cursor.execute(query2, string)
+    rows = cursor.fetchall()
+    df2 = pd.DataFrame(rows, columns=['quantity', 'product_name'])
+    df2 = df2.groupby('product_name', as_index=False)['quantity'].sum()
+    df2 = df2.sort_values(by=['quantity'], ascending=False)
+    df2 = df2.reset_index(drop=True)
+
+    # Query 3: Sales by Order
+    query3 = """
+            SELECT o.order_id, SUM(od.quantity * p.usual_price) AS sales
+            FROM OrderDetails od
+            INNER JOIN Products p ON od.product_id = p.product_id
+            INNER JOIN Orders o ON od.order_id = o.order_id
+            WHERE o.datetime BETWEEN %s AND %s
+            GROUP BY o.order_id
+        """
+    cursor.execute(query3, string)
+    rows = cursor.fetchall()
+    df3 = pd.DataFrame(rows, columns=['order_id', 'sales'])
+    df3 = df3.reset_index(drop=True)
+
+    # Write DataFrames to the BytesIO buffer
+    with pd.ExcelWriter(output, engine='openpyxl') as writer:
+        df1.to_excel(writer, sheet_name='Sales by Category', index=False)
+        df2.to_excel(writer, sheet_name='Sales by Product', index=False)
+        df3.to_excel(writer, sheet_name='Sales by Order', index=False)
+
+    # Seek to the beginning of the BytesIO buffer
+    output.seek(0)
+
+    # Send the file to the client
+    return send_file(
+        output,
+        as_attachment=True,
+        download_name='SalesReport.xlsx',
+        mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+
 
 
 @app.route('/staff_retrieve_report', methods=['POST'])
@@ -1005,13 +1116,16 @@ def staff_retrieve_report():
     query = """SELECT * FROM Staff_Report WHERE staff_report_id = %s """
     cursor.execute(query, report_id)
     result = cursor.fetchone()
-    session['report_data'] = {
+    session['staff_report_data'] = {
         'start_date': result['coverage_start'],
         'end_date': result['coverage_end'],
         'type_of_report': result['report_type']
     }
-    if result['report_type'] == "Purchasing":
-        return redirect(url_for('purchasing_report'))
+    if result['report_type'] == "Sales":
+        return redirect(url_for('sales_report'))
+    elif result['report_type'] == "Inventory":
+        return redirect(url_for('inventory_report'))
+    return redirect(url_for('staff_view_reports'))
 
 
 @app.route('/staff_delete_report', methods=['POST'])
@@ -1025,31 +1139,8 @@ def staff_delete_report():
 
     return redirect(url_for('staff_view_reports'))
 
-
-@app.route('/invoice')
-def invoicing():
-    invoice_data = session.get('invoice')
-    query = """
-    SELECT i.ID, i.Invoiced_date, i.order_id, i.user_id, u.name, u.email, u.phone_number, u.address
-    FROM Invoice i INNER JOIN users u
-    ON i.user_id = u.id
-    WHERE i.ID = %s
-    """
-    cursor.execute(query, invoice_data)
-    row = cursor.fetchone()
-    print(row)
-    invoice = InvoiceCustomer(row['ID'], row['Invoiced_date'], row['order_id'], row['name'],
-                              row['email'], row['phone_number'], row['address'])
-    invoice_summary(invoice)
-    products = invoice.products
-    return render_template('report_generation/invoice.html', invoice=invoice,
-                           products=products)
-
-
-
-
 @app.route('/view_invoices')
-def view_invoice():
+def view_invoices():
     cust_id = session['user_id']
     query = "SELECT * FROM Invoice WHERE user_id = %s"
     cursor.execute(query, cust_id)
@@ -1071,6 +1162,53 @@ def retrieve_invoice():
     invoice = Invoice(row['ID'], row['Invoiced_date'], row['order_id'])
     session['invoice'] = invoice_id
     return redirect(url_for('invoicing'))
+
+
+@app.route('/print_invoice', methods=['POST'])
+def print_invoice():
+    invoice_id = request.form.get('invoice_id')
+    query = """
+        SELECT i.ID, i.Invoiced_date, i.order_id, i.user_id, u.name, u.email, u.phone_number, u.address
+        FROM Invoice i INNER JOIN users u
+        ON i.user_id = u.id
+        WHERE i.ID = %s
+        """
+    cursor.execute(query, invoice_id)
+    row = cursor.fetchone()
+    print(row)
+    invoice = InvoiceCustomer(row['ID'], row['Invoiced_date'], row['order_id'], row['name'],
+                              row['email'], row['phone_number'], row['address'])
+    invoice_summary(invoice)
+    products = invoice.products
+    html = render_template('report_generation/print_invoices.html', invoice=invoice,
+                           products=products)
+    filename = f"Invoice#{invoice_id}.pdf"
+    pdf_output = BytesIO()
+
+    pisa.CreatePDF(html, dest=pdf_output, encoding='utf-8')
+    pdf_output.seek(0)
+    return send_file(pdf_output,as_attachment=True, mimetype='application/pdf', download_name=filename)
+
+
+@app.route('/invoice')
+def invoicing():
+    invoice_data = session.get('invoice')
+    query = """
+    SELECT i.ID, i.Invoiced_date, i.order_id, i.user_id, u.name, u.email, u.phone_number, u.address
+    FROM Invoice i INNER JOIN users u
+    ON i.user_id = u.id
+    WHERE i.ID = %s
+    """
+    cursor.execute(query, invoice_data)
+    row = cursor.fetchone()
+    print(row)
+    invoice = InvoiceCustomer(row['ID'], row['Invoiced_date'], row['order_id'], row['name'],
+                              row['email'], row['phone_number'], row['address'])
+    invoice_summary(invoice)
+    products = invoice.products
+    return render_template('report_generation/invoice.html', invoice=invoice,
+                           products=products)
+
 
 @app.route('/success')
 def success():

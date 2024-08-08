@@ -121,3 +121,54 @@ class CategoryReport:
 
     def __init__(self):
         self.category = ""
+
+#
+# query = """
+#         SELECT od.quantity, p.name, c.category_name
+#         FROM Ord        INNER JOIN Products p ON od.product_id = p.product_id
+#         INNER JOIN Categories c ON p.category_id = c.category_id
+#         INNER JOIN Orders o ON od.order_id = o.order_id
+#         WHERE o.datetime BETWEEN %s AND %s
+# """
+# cursor.execute(query,string)
+# rows = cursor.fetchall()
+# df = pd.DataFrame(rows)
+# df = df.groupby('category_name', as_index=False)['quantity'].sum()
+# df = df.sort_values(by=['quantity'], ascending=False)
+# df1 = df.reset_index(drop=True)
+#
+# query = """
+#         SELECT od.quantity, p.name, c.category_name
+#         FROM OrderDetails od
+#         INNER JOIN Products p ON od.product_id = p.product_id
+#         INNER JOIN Orders o ON od.order_id = o.order_id
+#         WHERE o.datetime BETWEEN %s AND %s
+# """
+# cursor.execute(query,string)
+# rows = cursor.fetchall()
+# df = pd.DataFrame(rows)
+# df = df.groupby('category_name', as_index=False)['quantity'].sum()
+# df = df.sort_values(by=['quantity'], ascending=False)
+# df2 = df.reset_index(drop=True)
+#
+#
+# query = """
+# SELECT o.order_id, o.quantity*p.usual_price AS sales
+# FROM OrderDetails o
+# INNER JOIN Products p ON o.product_id = p.product_id
+# INNER JOIN Orders od ON od.order_id = o.order_id
+# WHERE od.datetime BETWEEN %s AND %s
+# """
+# cursor.execute(query, string)
+# result = cursor.fetchall()
+# result = pd.DataFrame(result)
+# df3 = result.groupby('order_id', as_index=False)['sales'].sum()
+#
+# file_path = 'SalesReport.xlsx'
+#
+#
+# # Write DataFrames to the same Excel file, each to a different sheet
+# with pd.ExcelWriter(file_path) as writer:
+#     df1.to_excel(writer, sheet_name='Sales by Category', index=False)
+#     df2.to_excel(writer, sheet_name='Sales by Product', index=False)
+#     df2.to_excel(writer, sheet_name='Sales by Order', index=False)

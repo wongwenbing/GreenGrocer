@@ -8,6 +8,7 @@ from report_generation.staffreportgen import InventoryReport, SalesReport
 import os
 from xhtml2pdf import pisa
 from io import BytesIO, StringIO
+import io
 import pandas as pd
 import smtplib
 from email.message import EmailMessage
@@ -293,7 +294,79 @@ def sales_report():
     report.get_average_order_spending()
     report.get_total_amount()
     report.get_mostpurchased_category()
-    return render_template('report_generation/graphs.html', report=report)
+    return render_template('report_generation/salesgraphs.html', report=report)
+
+@app.route('/download_sales_report', methods=['POST'])
+def download_sales_report():
+    startdate = str(request.form.get('startdate'))
+    enddate = str(request.form.get('enddate'))
+    string = (startdate, enddate)
+
+    # Create a BytesIO buffer to hold the Excel file in memory
+    output = io.BytesIO()
+
+    # Database queries
+    # Query 1: Sales by Category
+    query1 = """
+            SELECT od.quantity, c.category_name
+            FROM OrderDetails od
+            INNER JOIN Products p ON od.product_id = p.product_id
+            INNER JOIN Categories c ON p.category_id = c.category_id
+            INNER JOIN Orders o ON od.order_id = o.order_id
+            WHERE o.datetime BETWEEN %s AND %s
+        """
+    cursor.execute(query1, string)
+    rows = cursor.fetchall()
+    df1 = pd.DataFrame(rows, columns=['quantity', 'category_name'])
+    df1 = df1.groupby('category_name', as_index=False)['quantity'].sum()
+    df1 = df1.sort_values(by=['quantity'], ascending=False)
+    df1 = df1.reset_index(drop=True)
+
+    # Query 2: Sales by Product
+    query2 = """
+            SELECT od.quantity, p.name
+            FROM OrderDetails od
+            INNER JOIN Products p ON od.product_id = p.product_id
+            INNER JOIN Orders o ON od.order_id = o.order_id
+            WHERE o.datetime BETWEEN %s AND %s
+        """
+    cursor.execute(query2, string)
+    rows = cursor.fetchall()
+    df2 = pd.DataFrame(rows, columns=['quantity', 'product_name'])
+    df2 = df2.groupby('product_name', as_index=False)['quantity'].sum()
+    df2 = df2.sort_values(by=['quantity'], ascending=False)
+    df2 = df2.reset_index(drop=True)
+
+    # Query 3: Sales by Order
+    query3 = """
+            SELECT o.order_id, SUM(od.quantity * p.usual_price) AS sales
+            FROM OrderDetails od
+            INNER JOIN Products p ON od.product_id = p.product_id
+            INNER JOIN Orders o ON od.order_id = o.order_id
+            WHERE o.datetime BETWEEN %s AND %s
+            GROUP BY o.order_id
+        """
+    cursor.execute(query3, string)
+    rows = cursor.fetchall()
+    df3 = pd.DataFrame(rows, columns=['order_id', 'sales'])
+    df3 = df3.reset_index(drop=True)
+
+    # Write DataFrames to the BytesIO buffer
+    with pd.ExcelWriter(output, engine='openpyxl') as writer:
+        df1.to_excel(writer, sheet_name='Sales by Category', index=False)
+        df2.to_excel(writer, sheet_name='Sales by Product', index=False)
+        df3.to_excel(writer, sheet_name='Sales by Order', index=False)
+
+    # Seek to the beginning of the BytesIO buffer
+    output.seek(0)
+
+    # Send the file to the client
+    return send_file(
+        output,
+        as_attachment=True,
+        download_name='SalesReport.xlsx',
+        mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
 
 
 @app.route('/staff_retrieve_report', methods=['POST'])
@@ -302,13 +375,13 @@ def staff_retrieve_report():
     query = """SELECT * FROM Staff_Report WHERE staff_report_id = %s """
     cursor.execute(query, report_id)
     result = cursor.fetchone()
-    session['report_data'] = {
+    session['staff_report_data'] = {
         'start_date': result['coverage_start'],
         'end_date': result['coverage_end'],
         'type_of_report': result['report_type']
     }
-    if result['report_type'] == "Purchasing":
-        return redirect(url_for('purchasing_report'))
+    if result['report_type'] == "Sales":
+        return redirect(url_for('sales_report'))
     elif result['report_type'] == "Inventory":
         return redirect(url_for('inventory_report'))
 

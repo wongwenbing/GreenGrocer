@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %} My Purchasing Report {% endblock %}
+{% block content %}
+<a href="/cust_view_reports">View All Reports</a>
+
+<h1>Sales Report from {{report.startdate}} to {{report.enddate}}</h1>
+<!--<p>{{report.description}}</p>-->
+<div class="d-flex justify-content-center">
+    <div class="card" style="margin: 10px 10px">
+        <div class="card-header text-center">
+            <h4>Total Number of Orders</h4>
+        </div>
+        <div class="card-body text-center">
+            <h2>{{report.totalorders}}</h2>
+        </div>
+    </div>
+    <div class="card" style="margin: 10px 10px">
+        <div class="card-header text-center">
+            <h4>Average Spending Per Order</h4>
+        </div>
+        <div class="card-body text-center">
+            <h2>{{report.average}}</h2>
+        </div>
+    </div>
+</div>
+
+<div id="bar-chart">
+    {{ report.chart | safe }}
+
+</div>
+<form action="{{ url_for('download_sales_report') }}" method="post">
+        <input type="hidden" name="startdate" value="{{ report.startdate }}">
+    <input type="hidden" name="enddate" value="{{ report.enddate }}">
+    <button type="submit" class="btn">Download as Excel </button>
+</form>
+
+{% endblock %}
