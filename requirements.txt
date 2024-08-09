@@ -9,3 +9,5 @@ openpyxl
 cryptography
 numpy
 smtplib
+email-validator==2.0.4
+werkzeug==2.3.7
