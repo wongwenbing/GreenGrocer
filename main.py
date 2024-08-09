@@ -1029,10 +1029,10 @@ def download_inventory_report():
     msg['To'] = 'aniskyguy331@gmail.com'
     msg.set_content('This is to inform you that the Inventory report has been generated successfully.')
 
-    msg.add_attachment(output.getvalue(),
-                       maintype='text',
-                       subtype='csv',
-                       filename='Inventory_Report.csv')
+    # msg.add_attachment(output.getvalue(),
+    #                    maintype='text',
+    #                    subtype='csv',
+    #                    filename='Inventory_Report.csv')
 
     with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
         smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
