@@ -42,7 +42,7 @@
                 <td>{{ ticket.topic }}</td>
                 <td>{{ ticket.issue }}</td>
 
-                <td><a href="{{ url_for('cust_update_ticket', ticket_id=ticket.id) }}" class="btn btn-warning">Update</a>
+                <td><a href="{{ url_for('cust_update_ticket', ticket_id=ticket.id) }}" class="btn btn-warning" methods='GET, POST'>Update</a>
                 </td>
 
                 <td>

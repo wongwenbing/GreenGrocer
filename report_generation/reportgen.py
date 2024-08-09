@@ -41,7 +41,6 @@ class CustReport(Report):
 class StaffReport(Report):
     type_of_report = RadioField('Report Type', choices=[
         ('Sales', 'Sales'),
-        ('Category', 'Product Categories'),
         ('Inventory', 'Inventory')
     ])
 

@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session, send_file, Response
-
 from customer_support.flaskStaff import sanitize_email
 from db import db_connector
 import pymysql
@@ -58,19 +57,16 @@ def login():
     if request.method == 'POST':
         email = str(request.form['email'])
         password = request.form['password']
-        db, cursor = db_connector()
         cursor.execute('SELECT * FROM users WHERE email = %s', (email))
         user = cursor.fetchone()
 
         if not user:
-            db, cursor = db_connector()
             cursor.execute('SELECT * FROM staff WHERE email = %s', (email))
             user = cursor.fetchone()
             role = 'staff' if user else None
         else:
             role = 'users'
 
-        db.close()
         if user and check_password_hash(user['password'], password):
             session['id'] = user['id']
             session['name'] = user['name']
@@ -110,7 +106,6 @@ def signup():
             return render_template('signup_bootstrap.html', form=form)
 
         try:
-            db, cursor = db_connector()
             cursor.execute('''
                 INSERT INTO users (name, email, phone_number, address, date_of_birth, password)
                 VALUES (%s, %s, %s, %s, %s, %s)
@@ -144,7 +139,6 @@ def profile():
 
     if request.method == 'POST':
         if 'delete_account' in request.form:
-            db, cursor = db_connector()
             cursor.execute(f'DELETE FROM {role} WHERE id = %s', (id))
             db.commit()
             session.pop('id', None)
@@ -162,11 +156,9 @@ UPDATE {role}
 SET name = %s, email = %s, phone_number = %s, address = %s, date_of_birth = %s
 WHERE id = %s
 """
-            db, cursor = db_connector()
             cursor.execute(query, val)
             db.commit()
             flash('Profile updated successfully!', 'success')
-    db, cursor = db_connector()
     cursor.execute(f'SELECT * FROM {role} WHERE id = %s', (id))
     user = cursor.fetchone()
     db.close()
@@ -196,7 +188,6 @@ def create_user():
         default_password = "P@ssw0rd"
 
         try:
-            db, cursor = db_connector()
             cursor.execute('''
                 INSERT INTO users (name, email, phone_number, address, date_of_birth, password)
                 VALUES (%s, %s, %s, %s, %s, %s)
@@ -208,7 +199,7 @@ def create_user():
             flash('Email already registered.', 'danger')
 
         finally:
-            db.close()
+            print('done')
 
         return redirect(url_for('retrieve_customers'))
     return render_template('account_management/createCustomers.html', form=form)
@@ -217,11 +208,9 @@ def create_user():
 # Staff assist with customer account (Retrieve)
 @app.route('/retrieveCustomers')
 def retrieve_customers():
-    db, cursor = db_connector()
     cursor.execute('SELECT id, name, email, phone_number, address, date_of_birth FROM users')
 
     users = cursor.fetchall()
-    db.close()
     return render_template('account_management/retrieveCustomers.html', count=len(users), users_list=users)
 
 # Staff assist with customer account (Update)
@@ -240,7 +229,6 @@ UPDATE users
 SET name = %s, email = %s, phone_number = %s, address = %s, date_of_birth = %s
 WHERE id = %s
 """
-        db, cursor = db_connector()
         cursor.execute(query, val)
         db.commit()
 
@@ -248,11 +236,8 @@ WHERE id = %s
 
         return redirect(url_for('retrieve_customers'))
     else:
-        db, cursor = db_connector()
         cursor.execute('SELECT * FROM users WHERE id = %s', (id))
         user = cursor.fetchone()
-        db.close()
-
         update_user_form.name.data = user['name']
         update_user_form.email.data = user['email']
         update_user_form.phone_number.data = user['phone_number']
@@ -265,10 +250,8 @@ WHERE id = %s
 # Staff assist with customer account (Delete)
 @app.route('/deleteUser/<id>', methods=['POST'])
 def delete_user(id):
-    db, cursor = db_connector()
     cursor.execute('DELETE FROM users WHERE id = %s', (id))
     db.commit()
-    db.close()
     flash('User deleted successfully!', 'success')
     return redirect(url_for('retrieve_customers'))
 
@@ -526,7 +509,6 @@ def faq():
     faq_objects = []
     connection = None
     try:
-        db, cursor = db_connector()
         if db is None:
             raise Exception("Failed to establish a database connection.")
 
@@ -543,8 +525,7 @@ def faq():
     except Exception as e:
         print(f"Unexpected error: {e}")
     finally:
-        if db:
-            db.close()
+        print('done')
 
     return render_template('customer_support/pages-faq.html', faqs=faq_objects)
 
@@ -560,30 +541,23 @@ def raise_a_ticket():
         issue = request.form['issue']
         topic = request.form['topic']
 
-        db, cursor = db_connector()
-        try:
-            cursor.execute(
-                'INSERT INTO tickets (username, email, date, time, issue, topic) VALUES (%s, %s, %s, %s, %s, %s)',
-                (username, email, date, time, issue, topic)
-            )
-            db.commit()
-        finally:
-            db.close()
+        cursor.execute(
+            'INSERT INTO tickets (username, email, date, time, issue, topic) VALUES (%s, %s, %s, %s, %s, %s)',
+            (username, email, date, time, issue, topic)
+        )
+        db.commit()
         return render_template('customer_support/thankyou_page.html')
     return render_template('customer_support/create_ticket.html', form=form)
 
 
 @app.route('/retrieve_ticket', methods=['GET'])
 def retrieve_tickets():
-    db, cursor = db_connector()
     tickets = []
-    try:
-        # cursor = get_cursor(db)
-        cursor.execute('SELECT id, username, email, date, time, issue, topic FROM tickets')
-        tickets = cursor.fetchall()
-        print(tickets)  # Debugging line
-    finally:
-        db.close()
+    # cursor = get_cursor(db)
+    cursor.execute('SELECT id, username, email, date, time, issue, topic FROM tickets')
+    tickets = cursor.fetchall()
+    print(tickets)  # Debugging line
+
 
     return render_template('customer_support/retrieve_ticket.html', tickets=tickets)
 
@@ -591,30 +565,26 @@ def retrieve_tickets():
 
 @app.route('/cust_update_ticket/<int:ticket_id>', methods=['GET', 'POST'])
 def cust_update_ticket(ticket_id):
-    db = db_connector()
     ticket = None
-    try:
-        # cursor = get_cursor(db)
-        cursor.execute('SELECT username, email, date, time, issue, topic FROM tickets WHERE id = %s', (ticket_id,))
-        ticket = cursor.fetchone()
+    # cursor = get_cursor(db)
+    cursor.execute('SELECT username, email, date, time, issue, topic FROM tickets WHERE id = %s', (ticket_id,))
+    ticket = cursor.fetchone()
 
-        if request.method == 'POST':
-            username = request.form['username']
-            email = request.form['email']
-            date = request.form['date']
-            time = request.form['time']
-            issue = request.form['issue']
-            topic = request.form['topic']
+    if request.method == 'POST':
+        username = request.form['username']
+        email = request.form['email']
+        date = request.form['date']
+        time = request.form['time']
+        issue = request.form['issue']
+        topic = request.form['topic']
 
-            cursor.execute(
-                'UPDATE tickets SET username = %s, email = %s, date = %s, time = %s, issue = %s, topic = %s WHERE id = %s',
-                (username, email, date, time, issue, topic, ticket_id)
-            )
-            db.commit()
-            return redirect(url_for('view_tickets'))
-    finally:
-        cursor.close()
-        db.close()
+        cursor.execute(
+            'UPDATE tickets SET username = %s, email = %s, date = %s, time = %s, issue = %s, topic = %s WHERE id = %s',
+            (username, email, date, time, issue, topic, ticket_id)
+        )
+        db.commit()
+        return redirect(url_for('retrieve_tickets'))
+
 
     form = TicketForm(request.form)
     form.username.data = ticket['username']
@@ -629,36 +599,26 @@ def cust_update_ticket(ticket_id):
 
 @app.route('/delete_ticket', methods=['POST'])
 def delete_ticket():
-    ticket_id = request.form['ticket_id']
+    ticket_id = str(request.form['ticket_id'])
+    print(ticket_id)
+    cursor.execute('DELETE FROM tickets WHERE id = %s', (ticket_id))
+    db.commit()
 
-    db = db_connector()
-    try:
-        # cursor = get_cursor(db)
-        cursor.execute('DELETE FROM tickets WHERE id = %s', (ticket_id,))
-        db.commit()
-    finally:
-        cursor.close()
-        db.close()
-
-    return redirect(url_for('view_tickets'))
+    return redirect(url_for('retrieve_tickets'))
 
 @app.route('/staff_assignees')
 def staff_assignees():
     db , cursor = db_connector()
-    try:
-        cursor.execute("SELECT id, name, email, role, tickets_solved FROM staff")
-        assignees = cursor.fetchall()
-        # Sanitize email for safe HTML IDs
-        for assignee in assignees:
-            assignee['email_id'] = sanitize_email(assignee['email'])
-    finally:
-        db.close()
+    cursor.execute("SELECT id, name, email, role, tickets_solved FROM staff")
+    assignees = cursor.fetchall()
+    # Sanitize email for safe HTML IDs
+    for assignee in assignees:
+        assignee['email_id'] = sanitize_email(assignee['email'])
     return render_template('customer_support/staff_assignees.html', assignees=assignees)
 
 
 @app.route('/edit_assignee/<string:email>', methods=['GET', 'POST'])
 def edit_assignee(email):
-    db, cursor = db_connector()
     if request.method == 'POST':
         name = request.form.get('name')
         new_email = request.form.get('email')
@@ -675,15 +635,11 @@ def edit_assignee(email):
             db.rollback()
             print("Error:", e)
         finally:
-            db.close()
-        return redirect(url_for('staff_assignees'))
+            print('done')
+            return redirect(url_for('staff_assignees'))
 
-    try:
-        with db.cursor() as cursor:
-            cursor.execute("SELECT * FROM staff WHERE email = %s", (email,))
-            assignee = cursor.fetchone()
-    finally:
-        db.close()
+    cursor.execute("SELECT * FROM staff WHERE email = %s", (email,))
+    assignee = cursor.fetchone()
     return render_template('customer_support/edit_assignees.html', assignee=assignee)
 
 @app.route('/add_assignee', methods=['GET', 'POST'])
@@ -694,7 +650,6 @@ def add_assignee():
         role = request.form['role']
         tickets_solved = request.form['tickets_solved']
 
-        db, cursor = db_connector()
         try:
             with cursor:
                 cursor.execute(
@@ -714,7 +669,6 @@ def add_assignee():
 
 @app.route('/delete_assignee/<string:email>', methods=['POST'])
 def delete_assignee(email):
-    db, cursor = db_connector()
     try:
         with cursor:
             sql = "DELETE FROM staff WHERE email = %s"
@@ -729,7 +683,6 @@ def delete_assignee(email):
 
 @app.route('/staff_mytickets')
 def staff_mytickets():
-    db, cursor = db_connector()
     try:
         with cursor:
             query = """
@@ -750,7 +703,6 @@ def staff_update_ticket(ticketid):
     priority = request.form.get('priority')
     status = request.form.get('status')
 
-    db, cursor = db_connector()
     try:
         with cursor:
             # Modify SQL query to handle string `ticketid`
