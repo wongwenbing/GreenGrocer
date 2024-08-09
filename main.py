@@ -14,7 +14,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from customer_support.forms import TicketForm
 from customer_support.faqclass import FAQ
 from account_management.forms import RegistrationForm, CreateUserForm
-# from xhtml2pdf import pisa
+from xhtml2pdf import pisa
 from io import BytesIO, StringIO
 import io
 import pandas as pd
@@ -561,13 +561,15 @@ def raise_a_ticket():
         topic = request.form['topic']
 
         db, cursor = db_connector()
-        cursor.execute(
-            'INSERT INTO tickets (username, email, date, time, issue, topic) VALUES (%s, %s, %s, %s, %s, %s)',
-            (username, email, date, time, issue, topic)
-        )
-        db.commit()
-        db.close()
-        return render_template('thankyou_page.html')
+        try:
+            cursor.execute(
+                'INSERT INTO tickets (username, email, date, time, issue, topic) VALUES (%s, %s, %s, %s, %s, %s)',
+                (username, email, date, time, issue, topic)
+            )
+            db.commit()
+        finally:
+            db.close()
+        return render_template('customer_support/thankyou_page.html')
     return render_template('customer_support/create_ticket.html', form=form)
 
 
@@ -766,7 +768,7 @@ def staff_update_ticket(ticketid):
 
 
 
-@app.route('/thank_you')
+@app.route('/thank_you', methods=['GET', 'POST'])
 def thank_you():
     return render_template('customer_support/thankyou_page.html')
 
@@ -1028,7 +1030,7 @@ def download_inventory_report():
     msg.set_content('This is to inform you that the Inventory report has been generated successfully.')
 
     msg.add_attachment(output.getvalue(),
-                       maintype='application',
+                       maintype='text',
                        subtype='csv',
                        filename='Inventory_Report.csv')
 
@@ -1073,6 +1075,7 @@ def download_sales_report():
     df1 = pd.DataFrame(rows, columns=['quantity', 'category_name'])
     df1 = df1.groupby('category_name', as_index=False)['quantity'].sum()
     df1 = df1.sort_values(by=['quantity'], ascending=False)
+    df1 = df1.rename(columns={"category_name":"category"})
     df1 = df1.reset_index(drop=True)
 
     # Query 2: Sales by Product
@@ -1085,8 +1088,9 @@ def download_sales_report():
         """
     cursor.execute(query2, string)
     rows = cursor.fetchall()
-    df2 = pd.DataFrame(rows, columns=['quantity', 'product_name'])
-    df2 = df2.groupby('product_name', as_index=False)['quantity'].sum()
+    df2 = pd.DataFrame(rows, columns=['quantity', 'name'])
+    df2 = df2.groupby('name', as_index=False)['quantity'].sum()
+    df2 = df2.rename(columns={"name":"product name"})
     df2 = df2.sort_values(by=['quantity'], ascending=False)
     df2 = df2.reset_index(drop=True)
 
@@ -1102,6 +1106,7 @@ def download_sales_report():
     cursor.execute(query3, string)
     rows = cursor.fetchall()
     df3 = pd.DataFrame(rows, columns=['order_id', 'sales'])
+    df3 = df3.sort_values(by=['sales'], ascending=False)
     df3 = df3.reset_index(drop=True)
 
     # Write DataFrames to the BytesIO buffer
