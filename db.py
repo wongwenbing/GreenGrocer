@@ -7,12 +7,12 @@ def db_connector():
   charset="utf8mb4",
   connect_timeout=timeout,
   cursorclass=pymysql.cursors.DictCursor,
-  db="greengrocerdb",
-  host="mysql-1698fa8f-wongwenbing0718-aaf0.e.aivencloud.com",
-  password="AVNS_iBl4eOysp6UaiypUdJd",
+  db="<insert db name>",
+  host="<insert db host>",
+  password="<insert db pw>",
   read_timeout=timeout,
   port=19222,
-  user="avnadmin",
+  user="<insert db user>",
   write_timeout=timeout,
   )
   
