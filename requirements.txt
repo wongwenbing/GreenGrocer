@@ -5,9 +5,8 @@ Werkzeug~=3.0.3
 xhtml2pdf~=0.2.16
 WTForms~=3.1.2
 plotly~=5.23.0
-openpyxl
-cryptography
-numpy
-smtplib
+openpyxl==3.1.5
+cryptography==43.0.0
+numpy==
 email-validator==2.0.4
 werkzeug==2.3.7
