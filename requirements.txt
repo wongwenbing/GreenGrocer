@@ -1,5 +1,5 @@
 PyMySQL~=1.1.1
-pandas~=2.1.4
+pandas~=2.2.3
 Flask~=3.0.3
 Werkzeug~=3.0.3
 xhtml2pdf~=0.2.16
@@ -7,5 +7,5 @@ WTForms~=3.1.2
 plotly~=5.23.0
 openpyxl==3.1.5
 cryptography==43.0.0
-numpy==2.1.2
+numpy==1.9.0
 email-validator==2.1.1
