@@ -8,5 +8,5 @@ plotly~=5.23.0
 openpyxl==3.1.5
 cryptography==43.0.0
 numpy==2.1.2
-email-validator==2.0.4
+email-validator==2.1.1
 werkzeug==2.3.7
